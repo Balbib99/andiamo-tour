@@ -1,0 +1,9 @@
+Imagen de bienvenida de la portada. La web usa la primera que exista, por este orden:
+
+1. bienvenida.mp4  Animación del emperador saludando (la que está ahora). Se reproduce una vez y se puede repetir.
+                   Para cambiarla por otra, guarda aquí un vídeo con este mismo nombre.
+                   Ojo: el vídeo actual trae la marca de agua de PixVerse en la esquina superior derecha; la web
+                   la deja fuera de plano con el encuadre (ver object-position en src/styles.css).
+2. bienvenida.png  Imagen fija, mejor con fondo transparente, de unos 600 x 800 px.
+3. emperador.jpg   Foto de la estatua de Augusto de Prima Porta (Joel Bellviure, CC BY-SA 4.0, Wikimedia Commons).
+                   Es la que sale si no hay ni vídeo ni PNG, y entonces hay que mantener el crédito bajo la foto.

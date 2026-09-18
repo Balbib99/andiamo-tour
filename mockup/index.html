@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roma en ruta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root {
+    --marble: #E9ECE7;
+    --paper: #F7F8F5;
+    --plaque: #FBFBF8;
+    --ink: #15201D;
+    --muted: #55615C;
+    --nasone: #183A32;
+    --porpora: #7A2E6E;
+    --stone: #D8D4C8;
+    --display: "Marcellus", "Times New Roman", serif;
+    --text: "Schibsted Grotesk", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: var(--text);
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--ink);
+    background: var(--marble);
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--porpora); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+
+  /* Layout: mapa arriba en móvil, panel + mapa en escritorio */
+  .app {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: "map" "panel";
+    min-height: 100dvh;
+  }
+  .map { grid-area: map; height: 42dvh; position: sticky; top: 0; z-index: 1; background: var(--stone); }
+  .app[data-view="home"] .map { display: none; }
+  .app[data-view="stop"] .map { height: 24dvh; }
+  .panel { grid-area: panel; background: var(--paper); padding: 24px 16px 48px; }
+  .panel-inner { max-width: 520px; margin: 0 auto; }
+
+  @media (min-width: 900px) {
+    .app { grid-template-columns: 460px 1fr; grid-template-areas: "panel map"; height: 100dvh; }
+    .app[data-view="home"] .map { display: block; }
+    .map, .app[data-view="stop"] .map { height: 100dvh; position: static; }
+    .panel { overflow-y: auto; padding: 40px 32px 56px; border-right: 1px solid var(--stone); }
+  }
+
+  /* Cabecera */
+  h1, h2 { font-family: var(--display); font-weight: 400; margin: 0; letter-spacing: 0.01em; }
+  h1 { font-size: clamp(3.2rem, 14vw, 4.6rem); line-height: 1; }
+  h2 { font-size: 1.9rem; line-height: 1.15; }
+  .lead { color: var(--muted); margin: 12px 0 0; max-width: 34ch; }
+
+  .start {
+    margin: 28px 0 32px;
+    padding: 14px 16px;
+    background: var(--marble);
+    border-radius: 10px;
+  }
+  .start p { margin: 0; }
+  .start-name { font-weight: 600; }
+  .start-label { color: var(--muted); font-size: 0.875rem; }
+  .start-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+
+  .btn {
+    border: 1.5px solid var(--nasone);
+    background: transparent;
+    color: var(--nasone);
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn:hover { background: rgba(24, 58, 50, 0.08); }
+  .btn-primary { background: var(--nasone); color: #fff; }
+  .btn-primary:hover { background: #10291f; }
+  .btn[aria-disabled="true"] { opacity: 0.4; pointer-events: none; }
+
+  /* Placas de día: el elemento memorable */
+  .plaques { display: grid; gap: 14px; padding: 0; margin: 0; list-style: none; }
+  .plaque {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    align-items: stretch;
+    text-align: left;
+    background: var(--plaque);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: inset 0 0 0 4px var(--plaque), inset 0 0 0 5px var(--ink);
+    padding: 0;
+    overflow: hidden;
+  }
+  .plaque:hover { background: #fff; }
+  .rione {
+    display: grid; place-items: center;
+    font-family: var(--display);
+    font-size: 1.6rem;
+    margin: 9px 0 9px 9px;
+    border-right: 1px solid var(--ink);
+  }
+  .plaque-body { padding: 14px 18px 14px 16px; display: grid; gap: 2px; }
+  .plaque-title { font-family: var(--display); font-size: 1.4rem; line-height: 1.15; }
+  .num { font-family: var(--text); font-weight: 500; }
+  .plaque-sub { color: var(--muted); font-size: 0.9375rem; }
+  .plaque-meta { display: flex; gap: 14px; margin-top: 6px; font-size: 0.875rem; font-weight: 500; }
+  .plaque-meta .todo { color: var(--porpora); }
+
+  .note { margin-top: 32px; color: var(--muted); font-size: 0.875rem; max-width: 44ch; }
+
+  /* Vistas de día y parada */
+  .back {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: none; border: 0; padding: 6px 8px 6px 0;
+    color: var(--muted); font-weight: 500; margin-bottom: 14px;
+  }
+  .back:hover { color: var(--ink); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 20px; }
+  .chip {
+    padding: 4px 12px; border-radius: 999px;
+    background: var(--marble); font-size: 0.875rem; font-weight: 500;
+  }
+  .chip.era { background: var(--porpora); color: #fff; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+
+  .empty {
+    padding: 20px; border: 1.5px dashed var(--stone); border-radius: 10px;
+    color: var(--muted);
+  }
+  .empty strong { color: var(--ink); display: block; margin-bottom: 4px; }
+
+  /* Ruta: aquí sí es una secuencia, así que va numerada */
+  .route { list-style: none; margin: 0; padding: 0; }
+  .route li { position: relative; padding-left: 52px; }
+  .route li::before {
+    content: ""; position: absolute; left: 15px; top: 34px; bottom: -6px;
+    width: 2px; background: var(--porpora); opacity: 0.35;
+  }
+  .route li:last-child::before { display: none; }
+  .step {
+    width: 100%; text-align: left; background: none; border: 0;
+    padding: 4px 8px 22px 0; border-radius: 8px; display: block;
+  }
+  .step:hover .step-name { text-decoration: underline; text-underline-offset: 3px; }
+  .step-dot {
+    position: absolute; left: 0; top: 4px;
+    width: 32px; height: 32px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--paper); border: 2px solid var(--nasone);
+    font-weight: 600; font-size: 0.9375rem; color: var(--nasone);
+  }
+  .step-dot.origin { background: var(--nasone); color: #fff; }
+  .step-name { font-family: var(--display); font-size: 1.2rem; line-height: 1.2; display: block; }
+  .step-teaser { color: var(--muted); font-size: 0.9375rem; display: block; margin-top: 2px; }
+  .step-tags { display: flex; gap: 12px; margin-top: 6px; font-size: 0.8125rem; color: var(--porpora); font-weight: 500; }
+  .step-tags span { display: inline-flex; align-items: center; gap: 4px; }
+  .leg { display: block; color: var(--muted); font-size: 0.8125rem; margin-top: 6px; }
+
+  /* Parada */
+  .photos { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; margin: 18px 0 22px; }
+  .photo {
+    background: var(--stone); border-radius: 8px; min-height: 96px;
+    display: grid; place-items: end start; padding: 8px 10px;
+    font-size: 0.75rem; color: var(--muted);
+  }
+  .photo.main { grid-row: span 2; min-height: 200px; }
+
+  .audio {
+    display: grid; grid-template-columns: 52px 1fr; gap: 14px; align-items: center;
+    padding: 14px; border: 1.5px solid var(--porpora); border-radius: 12px;
+    margin-bottom: 24px;
+  }
+  .play {
+    width: 52px; height: 52px; border-radius: 50%; border: 0;
+    background: var(--porpora); color: #fff; display: grid; place-items: center;
+  }
+  .play:hover { background: #64245a; }
+  .audio-title { font-weight: 600; margin: 0; }
+  .audio-sub { margin: 0; color: var(--muted); font-size: 0.875rem; }
+  .wave { display: flex; align-items: center; gap: 2px; height: 22px; margin-top: 6px; }
+  .wave i { flex: 1; background: var(--porpora); opacity: 0.35; border-radius: 2px; min-width: 2px; }
+  .audio.playing .wave i { opacity: 0.9; animation: pulse 0.9s ease-in-out infinite alternate; }
+  @keyframes pulse { from { transform: scaleY(0.4); } to { transform: scaleY(1); } }
+
+  .story p { max-width: 62ch; margin: 0 0 14px; }
+  .next {
+    margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--stone);
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;
+  }
+  .next span { color: var(--muted); font-size: 0.9375rem; }
+
+  /* Visor de foto con puntos de audioguía */
+  .viewer { margin: 0 0 18px; }
+  .viewer-frame {
+    position: relative; overflow: hidden; border-radius: 14px;
+    background: var(--stone); aspect-ratio: 4 / 3;
+  }
+  .viewer-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .viewer figcaption { margin-top: 8px; color: var(--muted); font-size: 0.75rem; }
+  .hot {
+    position: absolute; width: 40px; height: 40px; margin: -20px 0 0 -20px;
+    border-radius: 50%; border: 2px solid #fff;
+    background: var(--nasone); color: #fff; font-weight: 600; font-size: 0.9375rem;
+    display: grid; place-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    transition: transform 0.2s, background 0.2s;
+  }
+  .hot:hover { transform: scale(1.1); }
+  .hot.active { background: var(--porpora); transform: scale(1.15); }
+  .hot.active::after {
+    content: ""; position: absolute; inset: -2px; border-radius: 50%;
+    border: 2px solid #fff; animation: ring 2s ease-out infinite;
+  }
+  @keyframes ring { from { transform: scale(1); opacity: 0.9; } to { transform: scale(2); opacity: 0; } }
+
+  .point { margin-bottom: 18px; }
+  .point h3 { font-family: var(--display); font-weight: 400; font-size: 1.35rem; line-height: 1.2; margin: 0 0 6px; }
+  .point p { margin: 0; max-width: 62ch; }
+  .point-nav { display: flex; gap: 8px; margin-top: 12px; }
+  .btn-small { padding: 6px 14px; font-size: 0.875rem; }
+  .audio-all { margin: -10px 0 24px; }
+
+  .viator {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 14px 16px; border-radius: 12px; background: var(--marble);
+    color: inherit; text-decoration: none; margin-top: 24px;
+  }
+  .viator:hover { background: #dfe3dd; }
+  .viator strong { display: block; }
+  .viator span { color: var(--muted); font-size: 0.875rem; }
+  .viator svg { flex: none; color: var(--nasone); }
+
+  /* Marcadores del mapa */
+  .pin {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--paper); border: 2px solid var(--nasone); color: var(--nasone);
+    font: 600 13px var(--text);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  }
+  .pin.origin { background: var(--nasone); color: #fff; }
+  .pin.active { background: var(--porpora); border-color: var(--porpora); color: #fff; transform: scale(1.2); }
+  .leaflet-container { font-family: var(--text); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .audio.playing .wave i { animation: none; opacity: 0.9; }
+    .hot.active::after { animation: none; display: none; }
+    .hot { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app" data-view="home">
+  <div class="map" id="map" aria-label="Mapa de la ruta"></div>
+
+  <main class="panel" id="panel">
+    <div class="panel-inner">
+
+      <!-- Inicio: itinerario por días -->
+      <section id="view-home">
+        <h1>Roma</h1>
+        <p class="lead">Vuestra guía para noviembre. Elegid un día y seguid la ruta a pie.</p>
+
+        <div class="start">
+          <p class="start-label">Salís desde</p>
+          <p class="start-name" id="lodging-name"></p>
+          <div class="start-actions">
+            <button class="btn" type="button" id="btn-change">Cambiar alojamiento</button>
+            <button class="btn" type="button" id="btn-locate">Usar mi ubicación</button>
+          </div>
+        </div>
+
+        <ul class="plaques" id="plaques"></ul>
+
+        <p class="note">Esto es un boceto. Las rutas, los textos y el alojamiento son de ejemplo hasta que tengamos los reales.</p>
+      </section>
+
+      <!-- Día: ruta y paradas -->
+      <section id="view-day" hidden>
+        <button class="back" type="button" data-go="home">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>
+          Todos los días
+        </button>
+        <h2 id="day-title"></h2>
+        <div class="chips" id="day-chips"></div>
+        <div class="actions" id="day-actions"></div>
+        <div id="day-body"></div>
+      </section>
+
+      <!-- Parada: historia, fotos y audio -->
+      <section id="view-stop" hidden>
+        <button class="back" type="button" data-go="day">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>
+          Volver a la ruta
+        </button>
+        <h2 id="stop-title"></h2>
+        <div class="chips" id="stop-chips"></div>
+
+        <div id="stop-body"></div>
+
+        <div class="next" id="stop-next"></div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  /* ---------- Datos de ejemplo ---------- */
+  const lodging = { name: "Zona Piazza Navona (ejemplo)", lat: 41.8992, lng: 12.4731 };
+
+  const days = [
+    {
+      n: "I", title: "Día 1", sub: "Del centro al Coliseo",
+      stops: [
+        { name: "Panteón", era: "Año 126 d. C.", lat: 41.8986, lng: 12.4769, audio: "1 min",
+          viator: "https://audioviator.com/audioguia/el-panteon-de-agripa/",
+          photo: {
+            src: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Fa%C3%A7ade_of_the_Pantheon%2C_Rome%2C_Italy.jpg/1280px-Fa%C3%A7ade_of_the_Pantheon%2C_Rome%2C_Italy.jpg",
+            alt: "Fachada del Panteón de Roma con su pórtico de columnas de granito",
+            ratio: "1280 / 878",
+            credit: "Foto: Wikimedia Commons, dominio público (CC0)"
+          },
+          points: [
+            { x: 50, y: 43, title: "La inscripción de Agripa",
+              text: "Dice: «Marco Agripa, hijo de Lucio, cónsul por tercera vez, lo hizo». Aunque este edificio lo levantó Adriano, se conservó el nombre de Agripa, que fundó el primer templo." },
+            { x: 57, y: 62, title: "Columnas de granito",
+              text: "Son dieciséis columnas de granito, de unos doce metros de altura y de una sola pieza. Salieron de canteras de Egipto y llegaron a Roma por el Nilo y por el mar." },
+            { x: 50, y: 22, title: "Los agujeros del frontón",
+              text: "Los pequeños agujeros del frontón sujetaban adornos de bronce que se perdieron con el tiempo. Ese metal se reutilizó en otras obras de la ciudad." },
+            { x: 50, y: 80, title: "Al cruzar la puerta",
+              text: "Dentro os espera la cúpula de 43 metros de diámetro, con el óculo abierto en lo alto. Fijaos en cómo cambia la luz según la hora: se mueve por las paredes como un reloj de sol." }
+          ],
+          teaser: "El templo de todos los dioses, con la cúpula de hormigón más grande del mundo.",
+          text: [
+            "Agripa levantó el primer templo en el 27 a. C., pero el edificio que veis hoy lo reconstruyó el emperador Adriano hacia el año 126.",
+            "Su cúpula mide 43 metros de diámetro y sigue siendo la mayor de hormigón sin armar del mundo. Por el óculo central entra la luz, y también la lluvia.",
+            "Desde el año 609 es una iglesia, y eso lo salvó del expolio." ] },
+        { name: "Fontana di Trevi", era: "Año 1762", lat: 41.9009, lng: 12.4833, audio: "1 min",
+          viator: "https://audioviator.com/audioguia/la-fontana-di-trevi/",
+          teaser: "La fuente más famosa de Roma marca el final de un acueducto de hace 2.000 años.",
+          text: [
+            "Nicola Salvi diseñó esta fuente barroca, que se inauguró en 1762 tras décadas de obras.",
+            "El agua llega por el acueducto Aqua Virgo, que Agripa mandó construir en el 19 a. C. Todavía hoy la abastece.",
+            "La tradición pide lanzar una moneda de espaldas, con la mano derecha por encima del hombro izquierdo, para volver a Roma." ] },
+        { name: "Piazza Venezia", era: "Año 1911", lat: 41.8946, lng: 12.4831, audio: "1 min",
+          teaser: "El Altare della Patria domina la plaza con su mármol blanco.",
+          text: [
+            "El Vittoriano se inauguró en 1911 para honrar a Víctor Manuel II, primer rey de la Italia unida.",
+            "Los romanos lo llaman la máquina de escribir o la tarta de bodas. Desde su terraza superior hay una de las mejores vistas de los Foros." ] },
+        { name: "Foro Romano", era: "Siglo VI a. C. al siglo IV d. C.", lat: 41.8925, lng: 12.4853, audio: "2 min",
+          viator: "https://audioviator.com/audioguia/foros-imperiales/",
+          teaser: "El centro político, religioso y comercial de la Roma antigua.",
+          text: [
+            "Empezó como un valle pantanoso entre colinas. Desde el siglo VI a. C. fue el lugar donde se votaba, se comerciaba y se celebraban los triunfos.",
+            "Fijaos en la Via Sacra, el camino que seguían los generales victoriosos, y en el Arco de Tito, junto a la salida hacia el Coliseo." ] },
+        { name: "Coliseo", era: "Año 80 d. C.", lat: 41.8902, lng: 12.4922, audio: "2 min",
+          viator: "https://audioviator.com/audioguia/el-coliseo-de-roma/",
+          viatorNote: "Audioguía completa de unos 13 minutos.",
+          photo: {
+            src: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/1280px-Colosseo_2020.jpg",
+            alt: "El Coliseo de Roma visto desde el exterior, con sus tres pisos de arcos",
+            ratio: "1280 / 897",
+            credit: "Foto: FeaturedPics, Wikimedia Commons, CC BY-SA 4.0"
+          },
+          points: [
+            { x: 31, y: 56, title: "Tres pisos, tres órdenes",
+              text: "Los arcos se apilan en tres pisos con tres estilos de columna: dórico abajo, jónico en medio y corintio arriba. Es como una lección de arquitectura clásica puesta en vertical." },
+            { x: 26, y: 22, title: "El muro exterior que sigue en pie",
+              text: "Esta parte alta es lo que queda del muro exterior. El resto se vino abajo con los terremotos, sobre todo el de 1349, y siglos después su piedra sirvió para levantar palacios e iglesias." },
+            { x: 68, y: 47, title: "El muro interior a la vista",
+              text: "Donde falta el muro exterior se ve la estructura de dentro, más baja, de ladrillo y hormigón. El hormigón romano es una de las razones por las que el edificio sigue en pie." },
+            { x: 52, y: 78, title: "Ochenta arcos, ochenta puertas",
+              text: "En la planta baja había ochenta arcos. Setenta y seis, numerados, eran para el público, y cuatro para las autoridades. Cada número llevaba a tu zona de las gradas, y así se podía desalojar el edificio con rapidez." }
+          ],
+          teaser: "El anfiteatro más grande del Imperio, con sitio para unas 50.000 personas.",
+          text: [
+            "Vespasiano empezó a construirlo hacia el año 70 y su hijo Tito lo inauguró en el 80 con cien días de juegos.",
+            "Se llamaba Anfiteatro Flavio. El nombre de Coliseo viene, probablemente, de la colosal estatua de Nerón que se alzaba cerca.",
+            "Bajo la arena había túneles, montacargas y jaulas para los animales: el hipogeo." ] }
+      ]
+    },
+    { n: "II", title: "Día 2", sub: "Vaticano (ejemplo)", stops: [] },
+    { n: "III", title: "Día 3", sub: "Trastevere (ejemplo)", stops: [] },
+    { n: "IV", title: "Día 4", sub: "Día libre", stops: [] }
+  ];
+
+  /* ---------- Utilidades ---------- */
+  const $ = (id) => document.getElementById(id);
+  const app = $("app");
+  const fmtKm = (km) => km.toFixed(1).replace(".", ",");
+
+  function haversine(a, b) {
+    const R = 6371, rad = (d) => d * Math.PI / 180;
+    const dLat = rad(b.lat - a.lat), dLng = rad(b.lng - a.lng);
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(h));
+  }
+  // Distancia en línea recta * 1,25 como aproximación a pie. La ruta real vendrá de un servicio de rutas.
+  function legKm(a, b) { return haversine(a, b) * 1.25; }
+  function minutes(km) { return Math.max(1, Math.round(km / 4.5 * 60)); }
+
+  function mapsUrl(points) {
+    const o = points[0], d = points[points.length - 1];
+    const via = points.slice(1, -1).map((p) => `${p.lat},${p.lng}`).join("|");
+    let u = `https://www.google.com/maps/dir/?api=1&origin=${o.lat},${o.lng}&destination=${d.lat},${d.lng}&travelmode=walking`;
+    if (via) u += `&waypoints=${encodeURIComponent(via)}`;
+    return u;
+  }
+
+  const icons = {
+    audio: '<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 6v4h3l4 3V3L5 6z"/><path d="M11 5.5a3.5 3.5 0 0 1 0 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+    photo: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="1.5" y="3" width="13" height="10" rx="2"/><circle cx="8" cy="8" r="2.5"/></svg>',
+    map: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 3.5 6 2l4 1.5L14.5 2v10.5L10 14l-4-1.5-4.5 1.5z"/><path d="M6 2v10.5M10 3.5V14"/></svg>'
+  };
+
+  /* ---------- Mapa ---------- */
+  const map = L.map("map", { zoomControl: false, scrollWheelZoom: true }).setView([41.8962, 12.482], 15);
+  L.control.zoom({ position: "topright" }).addTo(map);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+
+  let layer = L.layerGroup().addTo(map);
+  let markers = [];
+
+  function pinIcon(label, cls) {
+    return L.divIcon({ className: "", html: `<div class="pin ${cls || ""}">${label}</div>`, iconSize: [30, 30], iconAnchor: [15, 15] });
+  }
+
+  function drawDay(day) {
+    layer.clearLayers();
+    markers = [];
+    const start = L.marker([lodging.lat, lodging.lng], { icon: pinIcon("&#8962;", "origin"), title: "Alojamiento" }).addTo(layer);
+    if (!day.stops.length) { map.setView([lodging.lat, lodging.lng], 15); return; }
+    const pts = [[lodging.lat, lodging.lng], ...day.stops.map((s) => [s.lat, s.lng])];
+    L.polyline(pts, { color: "#fff", weight: 9, opacity: 0.95, lineCap: "round", lineJoin: "round" }).addTo(layer);
+    L.polyline(pts, { color: "#7A2E6E", weight: 5, opacity: 0.95, lineCap: "round", lineJoin: "round" }).addTo(layer);
+    start.addTo(layer);
+    day.stops.forEach((s, i) => {
+      const m = L.marker([s.lat, s.lng], { icon: pinIcon(i + 1), title: s.name }).addTo(layer);
+      m.on("click", () => openStop(i));
+      markers.push(m);
+    });
+    fitRoute(pts);
+  }
+
+  function fitRoute(pts) {
+    const narrow = window.matchMedia("(max-width: 899px)").matches;
+    map.fitBounds(pts, { padding: narrow ? [30, 30] : [60, 60] });
+  }
+
+  function setActivePin(i) {
+    markers.forEach((m, k) => m.setIcon(pinIcon(k + 1, k === i ? "active" : "")));
+  }
+
+  /* ---------- Vistas ---------- */
+  let currentDay = null, currentStop = null;
+
+  function show(view) {
+    ["home", "day", "stop"].forEach((v) => { $("view-" + v).hidden = v !== view; });
+    app.dataset.view = view;
+    stopSpeech();
+    $("panel").scrollTop = 0;
+    window.scrollTo(0, 0);
+    map.invalidateSize();
+  }
+
+  function renderHome() {
+    $("lodging-name").textContent = lodging.name;
+    $("plaques").innerHTML = days.map((d, i) => {
+      const meta = d.stops.length
+        ? (() => {
+            const pts = [lodging, ...d.stops];
+            let km = 0; for (let k = 1; k < pts.length; k++) km += legKm(pts[k - 1], pts[k]);
+            return `<span>${d.stops.length} paradas</span><span>unos ${fmtKm(km)} km</span>`;
+          })()
+        : `<span class="todo">Ruta por añadir</span>`;
+      return `<li><button class="plaque" type="button" data-day="${i}">
+        <span class="rione" aria-hidden="true">${d.n}</span>
+        <span class="plaque-body">
+          <span class="plaque-title">Día <span class="num">${i + 1}</span></span>
+          <span class="plaque-sub">${d.sub}</span>
+          <span class="plaque-meta">${meta}</span>
+        </span></button></li>`;
+    }).join("");
+  }
+
+  function openDay(i) {
+    currentDay = i;
+    const d = days[i];
+    show("day");
+    $("day-title").innerHTML = `Día <span class="num">${i + 1}</span>: ${d.sub}`;
+    drawDay(d);
+
+    if (!d.stops.length) {
+      $("day-chips").innerHTML = "";
+      $("day-actions").innerHTML = `<a class="btn btn-primary" aria-disabled="true">${icons.map} Abrir en Google Maps</a>`;
+      $("day-body").innerHTML = `<div class="empty"><strong>Aún no hay ruta para este día.</strong>Añadid los lugares que queréis visitar y aquí aparecerán el mapa, las paradas y sus historias.</div>`;
+      return;
+    }
+
+    const pts = [lodging, ...d.stops];
+    const legs = [];
+    let total = 0;
+    for (let k = 1; k < pts.length; k++) { const km = legKm(pts[k - 1], pts[k]); legs.push(km); total += km; }
+
+    $("day-chips").innerHTML =
+      `<span class="chip">unos ${fmtKm(total)} km</span>` +
+      `<span class="chip">unos ${minutes(total)} min a pie</span>` +
+      `<span class="chip">${d.stops.length} paradas</span>`;
+    $("day-actions").innerHTML =
+      `<a class="btn btn-primary" href="${mapsUrl(pts)}" target="_blank" rel="noopener">${icons.map} Abrir en Google Maps</a>` +
+      `<button class="btn" type="button" id="btn-fit">Ver todo el recorrido</button>`;
+
+    $("day-body").innerHTML = `<ol class="route">
+      <li><span class="step"><span class="step-dot origin" aria-hidden="true">&#8962;</span>
+        <span class="step-name">Alojamiento</span>
+        <span class="step-teaser">${lodging.name}</span>
+        <span class="leg">${minutes(legs[0])} min andando hasta la parada 1</span></span></li>
+      ${d.stops.map((s, k) => `<li><button class="step" type="button" data-stop="${k}">
+        <span class="step-dot" aria-hidden="true">${k + 1}</span>
+        <span class="step-name">${s.name}</span>
+        <span class="step-teaser">${s.teaser}</span>
+        <span class="step-tags"><span>${icons.audio} Audio ${s.audio}</span><span>${icons.photo} Fotos</span></span>
+        ${k < legs.length - 1 ? `<span class="leg">${minutes(legs[k + 1])} min andando hasta la parada ${k + 2}</span>` : ""}
+      </button></li>`).join("")}
+    </ol>`;
+  }
+
+  function openStop(k) {
+    currentStop = k;
+    const d = days[currentDay], s = d.stops[k];
+    $("stop-title").textContent = s.name;
+    $("stop-chips").innerHTML = `<span class="chip era">${s.era}</span><span class="chip">Parada ${k + 1} de ${d.stops.length}</span>`;
+    renderStopBody(s);
+
+    const next = d.stops[k + 1];
+    const from = k === 0 ? lodging : d.stops[k - 1];
+    $("stop-next").innerHTML =
+      `<a class="btn" href="${mapsUrl([from, s])}" target="_blank" rel="noopener">${icons.map} Cómo llegar aquí</a>` +
+      (next
+        ? `<button class="btn btn-primary" type="button" id="btn-next">Siguiente: ${next.name}</button>`
+        : `<span>Última parada del día</span>`);
+
+    setActivePin(k);
+    map.flyTo([s.lat, s.lng], 17, { duration: 0.8 });
+    show("stop");
+  }
+
+  /* ---------- Ficha de parada: foto con puntos, audio y enlace externo ---------- */
+  let activePoint = 0;
+  const curStop = () => days[currentDay].stops[currentStop];
+
+  const waveHtml = Array.from({ length: 40 }, (_, i) =>
+    `<i style="height:${30 + Math.round(Math.abs(Math.sin(i * 1.7)) * 70)}%;animation-delay:${(i % 8) * 0.11}s"></i>`).join("");
+
+  const playIcon = '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M6 3.5v13l11-6.5z"/></svg>';
+  const stopIcon = '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="10" height="10" rx="1.5"/></svg>';
+  const extIcon = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3H3.5v11.5H15V11M10 3h5v5M15 3 8.5 9.5"/></svg>';
+
+  function renderStopBody(s) {
+    activePoint = 0;
+    let html = "";
+    if (s.photo) {
+      html += `<figure class="viewer">
+        <div class="viewer-frame" style="aspect-ratio:${s.photo.ratio}">
+          <img src="${s.photo.src}" alt="${s.photo.alt}">
+          ${s.points.map((p, i) => `<button class="hot" type="button" data-point="${i}" style="left:${p.x}%;top:${p.y}%" aria-label="Punto ${i + 1}: ${p.title}">${i + 1}</button>`).join("")}
+        </div>
+        <figcaption>${s.photo.credit}</figcaption>
+      </figure>
+      <div class="point" id="point-card" aria-live="polite"></div>`;
+    } else {
+      html += `<div class="story">${s.text.map((p) => `<p>${p}</p>`).join("")}</div>`;
+    }
+    html += `<div class="audio" id="audio">
+        <button class="play" type="button" id="btn-play" aria-label="Escuchar"></button>
+        <div>
+          <p class="audio-title" id="audio-title"></p>
+          <p class="audio-sub" id="audio-sub"></p>
+          <div class="wave" aria-hidden="true">${waveHtml}</div>
+        </div>
+      </div>`;
+    if (s.photo) {
+      const label = `Escuchar toda la guía, ${s.points.length} puntos`;
+      html += `<button class="btn audio-all" type="button" id="btn-play-all" data-label="${label}">${label}</button>`;
+    }
+    if (s.viator) html += `<a class="viator" href="${s.viator}" target="_blank" rel="noopener">
+        <span><strong>Completar en AudioViator</strong>${s.viatorNote || "Audioguía completa de este lugar."} Se abre en otra web.</span>${extIcon}</a>`;
+    $("stop-body").innerHTML = html;
+    if (s.photo) selectPoint(0, false);
+    else { $("audio-title").textContent = "Escuchar la historia"; $("audio-sub").textContent = `Historia narrada, ${s.audio}`; }
+    setPlaying(false);
+  }
+
+  function selectPoint(i, byUser = true) {
+    const s = curStop();
+    if (byUser) stopSpeech();
+    activePoint = i;
+    const p = s.points[i];
+    document.querySelectorAll(".hot").forEach((b, k) => b.classList.toggle("active", k === i));
+    $("point-card").innerHTML = `<h3>${i + 1}. ${p.title}</h3><p>${p.text}</p>
+      <div class="point-nav">
+        <button class="btn btn-small" type="button" data-pnav="-1" ${i === 0 ? "disabled" : ""}>Anterior</button>
+        <button class="btn btn-small" type="button" data-pnav="1" ${i === s.points.length - 1 ? "disabled" : ""}>Siguiente</button>
+      </div>`;
+    $("audio-title").textContent = "Escuchar este punto";
+    $("audio-sub").textContent = `Punto ${i + 1} de ${s.points.length}`;
+  }
+
+  /* Audio con la voz del navegador, solo para el boceto */
+  let speechToken = 0;
+  function setPlaying(on) {
+    const a = $("audio"); if (!a) return;
+    a.classList.toggle("playing", on);
+    $("btn-play").innerHTML = on ? stopIcon : playIcon;
+    $("btn-play").setAttribute("aria-label", on ? "Parar" : "Escuchar");
+    const all = $("btn-play-all");
+    if (all) all.textContent = on && all.dataset.on ? "Parar la guía" : all.dataset.label;
+  }
+  function stopSpeech() {
+    speechToken++;
+    if ("speechSynthesis" in window) speechSynthesis.cancel();
+    const all = $("btn-play-all"); if (all) delete all.dataset.on;
+    setPlaying(false);
+  }
+  function speakChain(items, onItem) {
+    if (!("speechSynthesis" in window)) return;
+    const token = ++speechToken;
+    speechSynthesis.cancel();
+    setPlaying(true);
+    const run = (i) => {
+      if (token !== speechToken) return;
+      onItem && onItem(i);
+      const u = new SpeechSynthesisUtterance(items[i]);
+      u.lang = "es-ES";
+      u.onend = () => {
+        if (token !== speechToken) return;
+        if (i + 1 < items.length) run(i + 1);
+        else { const all = $("btn-play-all"); if (all) delete all.dataset.on; setPlaying(false); }
+      };
+      u.onerror = () => { if (token === speechToken) setPlaying(false); };
+      speechSynthesis.speak(u);
+    };
+    run(0);
+  }
+  const pointText = (p) => `${p.title}. ${p.text}`;
+
+  $("stop-body").addEventListener("click", (e) => {
+    const s = curStop();
+    const hot = e.target.closest("[data-point]");
+    const nav = e.target.closest("[data-pnav]");
+    if (hot) selectPoint(+hot.dataset.point);
+    else if (nav) selectPoint(activePoint + +nav.dataset.pnav);
+    else if (e.target.closest("#btn-play")) {
+      if ($("audio").classList.contains("playing")) { stopSpeech(); return; }
+      if (s.photo) speakChain([pointText(s.points[activePoint])]);
+      else speakChain([`${s.name}. ${s.text.join(" ")}`]);
+    } else if (e.target.closest("#btn-play-all")) {
+      if ($("audio").classList.contains("playing")) { stopSpeech(); return; }
+      const from = s.points.slice(activePoint === s.points.length - 1 ? 0 : activePoint);
+      const offset = s.points.length - from.length;
+      speakChain(from.map(pointText), (i) => selectPoint(i + offset, false));
+      $("btn-play-all").dataset.on = "1";
+      setPlaying(true);
+    }
+  });
+
+  /* ---------- Eventos ---------- */
+  document.addEventListener("click", (e) => {
+    const t = e.target.closest("[data-day],[data-stop],[data-go],#btn-fit,#btn-next,#btn-change,#btn-locate");
+    if (!t) return;
+    if (t.dataset.day !== undefined) openDay(+t.dataset.day);
+    else if (t.dataset.stop !== undefined) openStop(+t.dataset.stop);
+    else if (t.dataset.go === "home") { show("home"); }
+    else if (t.dataset.go === "day") { setActivePin(-1); drawDay(days[currentDay]); show("day"); }
+    else if (t.id === "btn-fit") { fitRoute([[lodging.lat, lodging.lng], ...days[currentDay].stops.map((s) => [s.lat, s.lng])]); }
+    else if (t.id === "btn-next") { openStop(currentStop + 1); }
+    else if (t.id === "btn-change") { alert("Aquí se podrá escribir la dirección del alojamiento."); }
+    else if (t.id === "btn-locate") { alert("Aquí se usará la ubicación del móvil como punto de partida."); }
+  });
+
+  renderHome();
+  drawDay(days[0]);
+</script>
+</body>
+</html>
