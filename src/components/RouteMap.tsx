@@ -29,6 +29,26 @@ const dropIcon = L.divIcon({
   iconAnchor: [12, 12],
 });
 
+/** Recorta la ruta para que empiece donde estás: la línea se va "consumiendo" a medida que avanzas. */
+function trimFrom(coords: [number, number][], pos: LatLng): [number, number][] {
+  const cosLat = Math.cos((pos.lat * Math.PI) / 180);
+  let best = 0;
+  let bestD = Infinity;
+  coords.forEach(([lat, lng], i) => {
+    const dy = lat - pos.lat;
+    const dx = (lng - pos.lng) * cosLat;
+    const d = dx * dx + dy * dy;
+    if (d < bestD) {
+      bestD = d;
+      best = i;
+    }
+  });
+  return [[pos.lat, pos.lng], ...coords.slice(best)];
+}
+
+const reducedMotion = () =>
+  typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 interface Props {
   dayId?: string;
   stopId?: string;
@@ -41,10 +61,15 @@ export function RouteMap({ dayId, stopId }: Props) {
 
   const box = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
+  const lineLayer = useRef<L.LayerGroup | null>(null);
   const routeLayer = useRef<L.LayerGroup | null>(null);
   const youLayer = useRef<L.LayerGroup | null>(null);
   const fountainLayer = useRef<L.LayerGroup | null>(null);
   const applyView = useRef<() => void>(() => {});
+  const you = useRef<{ dot: L.CircleMarker; halo: L.Circle } | null>(null);
+  const anim = useRef<number | null>(null);
+  const wasFollowing = useRef(false);
+  const [follow, setFollow] = useState(false);
   const [fountainError, setFountainError] = useState(false);
 
   const day = findDay(dayId);
@@ -61,10 +86,12 @@ export function RouteMap({ dayId, stopId }: Props) {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(m);
+    lineLayer.current = L.layerGroup().addTo(m);
     routeLayer.current = L.layerGroup().addTo(m);
     fountainLayer.current = L.layerGroup().addTo(m);
     youLayer.current = L.layerGroup().addTo(m);
     map.current = m;
+    m.on("dragstart", () => setFollow(false)); // si mueves el mapa con el dedo, deja de seguirte
 
     // El mapa está oculto en la portada en móvil: al mostrarse hay que recalcular su tamaño.
     let wasHidden = false;
@@ -108,24 +135,33 @@ export function RouteMap({ dayId, stopId }: Props) {
       return;
     }
 
-    if (foot) {
-      L.polyline(foot.coords, { color: "#fff", weight: 9, opacity: 0.95, lineCap: "round", lineJoin: "round" }).addTo(layer);
-      L.polyline(foot.coords, {
-        color: "#7A2E6E",
-        weight: 5,
-        opacity: 0.95,
-        lineCap: "round",
-        lineJoin: "round",
-        dashArray: foot.exact ? undefined : "2 10",
-      }).addTo(layer);
-    }
     stops.forEach((s, i) => {
       L.marker([s.lat, s.lng], { icon: pinIcon(String(i + 1), s.id === stopId ? "active" : visited.includes(s.id) ? "done" : ""), title: s.name })
         .on("click", () => navigate(`/dia/${day.id}/parada/${s.id}`))
         .addTo(layer);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [day, lodging, visited, foot?.coords, foot?.exact, stopId]);
+  }, [day, lodging, visited, stopId]);
+
+  /* Línea de la ruta. Al recorrer el día se recorta para que empiece donde estás. */
+  const linePos = live ? position : null;
+  useEffect(() => {
+    const layer = lineLayer.current;
+    if (!layer) return;
+    layer.clearLayers();
+    if (!day || !foot) return;
+    const coords = linePos ? trimFrom(foot.coords, linePos) : foot.coords;
+    L.polyline(coords, { color: "#fff", weight: 9, opacity: 0.95, lineCap: "round", lineJoin: "round" }).addTo(layer);
+    L.polyline(coords, {
+      color: "#7A2E6E",
+      weight: 5,
+      opacity: 0.95,
+      lineCap: "round",
+      lineJoin: "round",
+      dashArray: foot.exact ? undefined : "2 10",
+    }).addTo(layer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [day, foot?.coords, foot?.exact, linePos]);
 
   /* Encuadrar: la ruta entera, o la parada abierta */
   useEffect(() => {
@@ -150,27 +186,66 @@ export function RouteMap({ dayId, stopId }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dayId, stopId, fitSignal, live]);
 
-  /* Tu posición */
+  /* Tu posición: el punto se desliza hasta cada nueva lectura en vez de saltar */
   useEffect(() => {
     const layer = youLayer.current;
     if (!layer) return;
-    layer.clearLayers();
-    if (!position) return;
-    L.circle([position.lat, position.lng], {
-      radius: position.accuracy,
-      color: "#2b6cb0",
-      weight: 1,
-      fillColor: "#2b6cb0",
-      fillOpacity: 0.12,
-    }).addTo(layer);
-    L.circleMarker([position.lat, position.lng], {
-      radius: 8,
-      color: "#fff",
-      weight: 3,
-      fillColor: "#2b6cb0",
-      fillOpacity: 1,
-    }).addTo(layer);
+    if (anim.current !== null) cancelAnimationFrame(anim.current);
+    if (!position) {
+      layer.clearLayers();
+      you.current = null;
+      return;
+    }
+    const target = L.latLng(position.lat, position.lng);
+    if (!you.current) {
+      const halo = L.circle(target, {
+        radius: position.accuracy,
+        color: "#2b6cb0",
+        weight: 1,
+        fillColor: "#2b6cb0",
+        fillOpacity: 0.12,
+      }).addTo(layer);
+      const dot = L.circleMarker(target, { radius: 8, color: "#fff", weight: 3, fillColor: "#2b6cb0", fillOpacity: 1 }).addTo(layer);
+      you.current = { dot, halo };
+      return;
+    }
+    const { dot, halo } = you.current;
+    halo.setRadius(position.accuracy);
+    if (reducedMotion()) {
+      dot.setLatLng(target);
+      halo.setLatLng(target);
+      return;
+    }
+    const from = dot.getLatLng();
+    const t0 = performance.now();
+    const step = (now: number) => {
+      const k = Math.min(1, (now - t0) / 900);
+      const ll = L.latLng(from.lat + (target.lat - from.lat) * k, from.lng + (target.lng - from.lng) * k);
+      dot.setLatLng(ll);
+      halo.setLatLng(ll);
+      anim.current = k < 1 ? requestAnimationFrame(step) : null;
+    };
+    anim.current = requestAnimationFrame(step);
+    return () => {
+      if (anim.current !== null) cancelAnimationFrame(anim.current);
+    };
   }, [position]);
+
+  /* Modo "seguirme": el mapa acompaña tu posición */
+  useEffect(() => {
+    if (!position) setFollow(false);
+  }, [position]);
+  useEffect(() => {
+    const m = map.current;
+    if (!m || !follow || !position) {
+      wasFollowing.current = false;
+      return;
+    }
+    const ll: L.LatLngTuple = [position.lat, position.lng];
+    if (!wasFollowing.current) m.flyTo(ll, Math.max(m.getZoom(), 17), { duration: 0.6 });
+    else m.panTo(ll, { animate: true, duration: 0.8 });
+    wasFollowing.current = true;
+  }, [follow, position]);
 
   /* Fuentes de agua potable */
   useEffect(() => {
@@ -208,9 +283,10 @@ export function RouteMap({ dayId, stopId }: Props) {
         <button
           type="button"
           className="map-locate"
-          onClick={() => map.current?.flyTo([position.lat, position.lng], 17, { duration: 0.6 })}
+          aria-pressed={follow}
+          onClick={() => setFollow((f) => !f)}
         >
-          Centrar en mí
+          {follow ? "Siguiéndote" : "Seguirme"}
         </button>
       )}
       {fountainError && <p className="map-note">No se pudieron cargar las fuentes ahora mismo.</p>}

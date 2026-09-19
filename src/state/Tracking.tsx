@@ -23,8 +23,13 @@ export const ARRIVE_M = 50;
 const MAX_ACCURACY_M = 100;
 /** Las lecturas con más error que esto (m) tampoco se usan como punto de partida de la ruta. */
 const MAX_ORIGIN_ACCURACY_M = 150;
-/** La ruta se recalcula cuando te has movido más de esta distancia (m) desde su último punto de partida. */
-const REROUTE_M = 120;
+/** La ruta se recalcula cuando te has movido más de esta distancia (m) desde su último punto de partida... */
+const REROUTE_M = 80;
+/** ...y han pasado al menos estos milisegundos, para no saturar el servicio de rutas. */
+const REROUTE_MIN_MS = 15000;
+/** Filtro de suavizado del GPS: velocidad máxima esperada a pie (m/s) y salto (m) a partir del cual se reinicia. */
+const WALK_SPEED_MS = 6;
+const JUMP_M = 200;
 /** Modo de prueba: metros que avanza el punto simulado cada 250 ms (unos 50 m/s) y pausa al llegar a una parada. */
 const SIM_STEP_M = 12.5;
 const SIM_TICK_MS = 250;
@@ -85,6 +90,9 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
   const [alert, setAlert] = useState<ProximityAlert | null>(null);
   const [simulating, setSimulating] = useState(false);
 
+  const filter = useRef<{ lat: number; lng: number; variance: number; ts: number } | null>(null);
+  const originRef = useRef<LatLng | null>(null);
+  const originAt = useRef(0);
   const simTimer = useRef<number | null>(null);
   const simToken = useRef(0);
   const watchId = useRef<number | null>(null);
@@ -105,21 +113,48 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  /** Fija el punto de partida de la ruta actual. */
+  const refreshOrigin = useCallback((pos: LatLng) => {
+    originRef.current = { lat: pos.lat, lng: pos.lng };
+    originAt.current = Date.now();
+    setRouteOrigin(originRef.current);
+  }, []);
+
+  /**
+   * Suaviza las lecturas del GPS con un filtro de Kalman sencillo: da más peso a las lecturas precisas
+   * y menos a las que traen mucho error, y elimina los saltos de unos metros cuando estás quieto.
+   */
+  const smooth = useCallback((lat: number, lng: number, accuracy: number, ts: number): UserPosition => {
+    const acc = Math.max(accuracy, 1);
+    const f = filter.current;
+    if (!f || distanceM(f, { lat, lng }) > Math.max(JUMP_M, acc * 5)) {
+      filter.current = { lat, lng, variance: acc * acc, ts };
+      return { lat, lng, accuracy: acc };
+    }
+    const dt = Math.min(Math.max((ts - f.ts) / 1000, 0), 10);
+    const variance = f.variance + dt * WALK_SPEED_MS * WALK_SPEED_MS;
+    const k = variance / (variance + acc * acc);
+    const next = { lat: f.lat + k * (lat - f.lat), lng: f.lng + k * (lng - f.lng), variance: (1 - k) * variance, ts };
+    filter.current = next;
+    return { lat: next.lat, lng: next.lng, accuracy: Math.max(5, Math.sqrt(next.variance)) };
+  }, []);
+
   const handlePosition = useCallback(
-    (p: GeolocationPosition) => {
-      const pos: UserPosition = {
-        lat: p.coords.latitude,
-        lng: p.coords.longitude,
-        accuracy: p.coords.accuracy,
-      };
+    (p: GeolocationPosition, raw = false) => {
+      const c = p.coords;
+      // `raw` (modo de prueba) usa la posición tal cual, sin suavizar.
+      const pos: UserPosition = raw
+        ? { lat: c.latitude, lng: c.longitude, accuracy: c.accuracy }
+        : smooth(c.latitude, c.longitude, c.accuracy, p.timestamp);
       setPosition(pos);
       setStatus("on");
-      if (pos.accuracy <= MAX_ORIGIN_ACCURACY_M) {
-        setRouteOrigin((prev) =>
-          !prev || distanceM(prev, pos) > REROUTE_M ? { lat: pos.lat, lng: pos.lng } : prev,
-        );
+      if (c.accuracy <= MAX_ORIGIN_ACCURACY_M) {
+        const o = originRef.current;
+        if (!o || (distanceM(o, pos) > REROUTE_M && (raw || Date.now() - originAt.current >= REROUTE_MIN_MS))) {
+          refreshOrigin(pos);
+        }
       }
-      if (pos.accuracy > MAX_ACCURACY_M) return;
+      if (c.accuracy > MAX_ACCURACY_M) return;
 
       let best: ProximityAlert | null = null;
       for (const { stop, dayId } of allStops) {
@@ -145,11 +180,14 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
 
       announced.current.add(best.key);
       save("announced", [...announced.current]);
-      if (best.kind === "arrived") markVisited(best.stopId);
+      if (best.kind === "arrived") {
+        markVisited(best.stopId);
+        refreshOrigin(pos); // desde esta parada sale ahora la ruta
+      }
       setAlert(best);
       navigator.vibrate?.([150, 80, 150]); // solo Android; en iPhone se ignora
     },
-    [markVisited],
+    [markVisited, smooth, refreshOrigin],
   );
 
   const handleError = useCallback((err: GeolocationPositionError) => {
@@ -173,7 +211,7 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
       setStatus("searching");
       watchId.current = navigator.geolocation.watchPosition(handlePosition, handleError, {
         enableHighAccuracy: true,
-        maximumAge: 5000,
+        maximumAge: 0, // nunca una lectura guardada: siempre la posición de ahora
         timeout: 20000,
       });
       void requestWakeLock();
@@ -191,6 +229,8 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
     void wakeLock.current?.release();
     wakeLock.current = null;
     followingRef.current = null;
+    filter.current = null;
+    originRef.current = null;
     setFollowingDay(null);
     setRouteOrigin(null);
     setStatus("off");
@@ -238,7 +278,7 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
         const lng = coords[seg][1] + (coords[seg + 1][1] - coords[seg][1]) * t;
 
         const before = announced.current.size;
-        handlePosition({ coords: { latitude: lat, longitude: lng, accuracy: 8 }, timestamp: Date.now() } as GeolocationPosition);
+        handlePosition({ coords: { latitude: lat, longitude: lng, accuracy: 8 }, timestamp: Date.now() } as GeolocationPosition, true);
         if (announced.current.size > before) pauseUntil = Date.now() + SIM_PAUSE_MS;
 
         if (travelled >= total && simTimer.current !== null) {

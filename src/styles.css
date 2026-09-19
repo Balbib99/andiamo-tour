@@ -912,6 +912,10 @@ a.step:hover .step-name {
   font-size: 0.875rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
+.map-locate[aria-pressed="true"] {
+  background: var(--you);
+  color: #fff;
+}
 .map-note {
   position: absolute;
   left: 10px;
