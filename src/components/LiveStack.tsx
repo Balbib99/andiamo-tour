@@ -8,16 +8,14 @@ import { MapIcon } from "./Icons";
 /** Barra fija al pie del panel: seguimiento en directo y avisos de cercanía. */
 export function LiveStack() {
   const { visited } = useApp();
-  const { status, position, followingDay, stop, alert, dismissAlert } = useTracking();
+  const { status, position, followingDay, stop, alert, dismissAlert, simulating } = useTracking();
 
   if (status === "off" && !alert) return null;
 
   const day = findDay(followingDay ?? undefined);
   const pending = day?.stops.filter((s) => !visited.includes(s.id)) ?? [];
-  const target =
-    position && pending.length
-      ? pending.reduce((a, b) => (distanceM(position, a) <= distanceM(position, b) ? a : b))
-      : pending[0];
+  // La siguiente parada es la primera sin ver del día, la misma a la que apunta la ruta del mapa.
+  const target = pending[0];
 
   const alertStop = alert ? allStops.find((s) => s.stop.id === alert.stopId)?.stop : undefined;
 
@@ -44,6 +42,7 @@ export function LiveStack() {
 
       {status !== "off" && (
         <div className="track">
+          {simulating && <span className="track-sim">Simulación</span>}
           {status === "denied" && (
             <p className="track-text">
               No tengo permiso para ver tu ubicación. Actívalo en los ajustes del navegador para esta web y vuelve a empezar.

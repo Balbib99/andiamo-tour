@@ -6,7 +6,7 @@ import { allStops, findDay } from "../data/itinerario";
 import type { LatLng } from "../data/types";
 import { routePoints } from "../lib/geo";
 import { fetchFountains } from "../lib/places";
-import { useFootRoute } from "../lib/routing";
+import { useLiveRoute } from "../lib/useLiveRoute";
 import { useApp } from "../state/AppState";
 import { useTracking } from "../state/Tracking";
 
@@ -35,7 +35,7 @@ interface Props {
 }
 
 export function RouteMap({ dayId, stopId }: Props) {
-  const { lodging, fountainsOn, fitSignal } = useApp();
+  const { lodging, visited, fountainsOn, fitSignal } = useApp();
   const { position } = useTracking();
   const navigate = useNavigate();
 
@@ -49,8 +49,8 @@ export function RouteMap({ dayId, stopId }: Props) {
 
   const day = findDay(dayId);
   const stops = day?.stops ?? [];
-  const points: LatLng[] | null = stops.length ? routePoints(lodging, stops) : null;
-  const foot = useFootRoute(points);
+  // Antes de empezar la ruta sale del alojamiento; al empezar, de tu posición y hacia las paradas que faltan.
+  const { live, points, foot } = useLiveRoute(day);
 
   /* Crear el mapa una sola vez */
   useEffect(() => {
@@ -120,12 +120,12 @@ export function RouteMap({ dayId, stopId }: Props) {
       }).addTo(layer);
     }
     stops.forEach((s, i) => {
-      L.marker([s.lat, s.lng], { icon: pinIcon(String(i + 1), s.id === stopId ? "active" : ""), title: s.name })
+      L.marker([s.lat, s.lng], { icon: pinIcon(String(i + 1), s.id === stopId ? "active" : visited.includes(s.id) ? "done" : ""), title: s.name })
         .on("click", () => navigate(`/dia/${day.id}/parada/${s.id}`))
         .addTo(layer);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [day, lodging, foot?.coords, foot?.exact, stopId]);
+  }, [day, lodging, visited, foot?.coords, foot?.exact, stopId]);
 
   /* Encuadrar: la ruta entera, o la parada abierta */
   useEffect(() => {
@@ -146,8 +146,9 @@ export function RouteMap({ dayId, stopId }: Props) {
     };
     applyView.current = view;
     view();
+    // `live` vuelve a encuadrar una sola vez al empezar o parar la ruta, no en cada recálculo.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dayId, stopId, fitSignal]);
+  }, [dayId, stopId, fitSignal, live]);
 
   /* Tu posición */
   useEffect(() => {

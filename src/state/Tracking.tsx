@@ -8,8 +8,10 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { allStops } from "../data/itinerario";
-import { distanceM } from "../lib/geo";
+import { allStops, findDay } from "../data/itinerario";
+import type { LatLng } from "../data/types";
+import { distanceM, routePoints } from "../lib/geo";
+import { fetchFootRoute } from "../lib/routing";
 import { load, save } from "../lib/storage";
 import { useApp } from "./AppState";
 
@@ -19,6 +21,14 @@ export const NEAR_M = 150;
 export const ARRIVE_M = 50;
 /** Las lecturas de GPS con más error que esto (m) no disparan avisos. */
 const MAX_ACCURACY_M = 100;
+/** Las lecturas con más error que esto (m) tampoco se usan como punto de partida de la ruta. */
+const MAX_ORIGIN_ACCURACY_M = 150;
+/** La ruta se recalcula cuando te has movido más de esta distancia (m) desde su último punto de partida. */
+const REROUTE_M = 120;
+/** Modo de prueba: metros que avanza el punto simulado cada 250 ms (unos 50 m/s) y pausa al llegar a una parada. */
+const SIM_STEP_M = 12.5;
+const SIM_TICK_MS = 250;
+const SIM_PAUSE_MS = 6000;
 
 export type TrackingStatus = "off" | "searching" | "on" | "denied" | "unsupported";
 
@@ -44,6 +54,11 @@ interface TrackingContextValue {
   position: UserPosition | null;
   /** Día que se está recorriendo. */
   followingDay: string | null;
+  /**
+   * Punto desde el que sale la ruta mientras se sigue un día: tu posición, que solo se actualiza cuando
+   * te has movido lo bastante para que merezca recalcular. null hasta la primera lectura fiable.
+   */
+  routeOrigin: LatLng | null;
   start: (dayId: string) => void;
   stop: () => void;
   alert: ProximityAlert | null;
@@ -52,6 +67,9 @@ interface TrackingContextValue {
   locateOnce: () => Promise<UserPosition>;
   /** Olvida los avisos ya dados, para poder recorrer la ruta otra vez. */
   resetAlerts: () => void;
+  /** Modo de prueba: recorre la ruta del día con una posición simulada, sin GPS. Borra las paradas vistas. */
+  simulate: (dayId: string) => void;
+  simulating: boolean;
 }
 
 const TrackingContext = createContext<TrackingContextValue | null>(null);
@@ -59,12 +77,16 @@ const TrackingContext = createContext<TrackingContextValue | null>(null);
 const hasGeo = () => typeof navigator !== "undefined" && "geolocation" in navigator;
 
 export function TrackingProvider({ children }: { children: ReactNode }) {
-  const { markVisited } = useApp();
+  const { markVisited, resetVisited, lodging } = useApp();
   const [status, setStatus] = useState<TrackingStatus>("off");
   const [position, setPosition] = useState<UserPosition | null>(null);
   const [followingDay, setFollowingDay] = useState<string | null>(null);
+  const [routeOrigin, setRouteOrigin] = useState<LatLng | null>(null);
   const [alert, setAlert] = useState<ProximityAlert | null>(null);
+  const [simulating, setSimulating] = useState(false);
 
+  const simTimer = useRef<number | null>(null);
+  const simToken = useRef(0);
   const watchId = useRef<number | null>(null);
   const wakeLock = useRef<WakeLockSentinel | null>(null);
   const followingRef = useRef<string | null>(null);
@@ -92,6 +114,11 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
       };
       setPosition(pos);
       setStatus("on");
+      if (pos.accuracy <= MAX_ORIGIN_ACCURACY_M) {
+        setRouteOrigin((prev) =>
+          !prev || distanceM(prev, pos) > REROUTE_M ? { lat: pos.lat, lng: pos.lng } : prev,
+        );
+      }
       if (pos.accuracy > MAX_ACCURACY_M) return;
 
       let best: ProximityAlert | null = null;
@@ -155,16 +182,74 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
   );
 
   const stop = useCallback(() => {
+    simToken.current++;
+    if (simTimer.current !== null) window.clearInterval(simTimer.current);
+    simTimer.current = null;
+    setSimulating(false);
     if (watchId.current !== null && hasGeo()) navigator.geolocation.clearWatch(watchId.current);
     watchId.current = null;
     void wakeLock.current?.release();
     wakeLock.current = null;
     followingRef.current = null;
     setFollowingDay(null);
+    setRouteOrigin(null);
     setStatus("off");
     setPosition(null);
     setAlert(null);
   }, []);
+
+  const simulate = useCallback(
+    async (dayId: string) => {
+      const day = findDay(dayId);
+      if (!day || day.stops.length === 0) return;
+      stop();
+      resetVisited();
+      announced.current = new Set();
+      save("announced", []);
+
+      const token = simToken.current;
+      followingRef.current = dayId;
+      setFollowingDay(dayId);
+      setStatus("searching");
+      setSimulating(true);
+
+      // Camino que se recorre: la ruta a pie prevista, del alojamiento a la última parada.
+      const points = routePoints(lodging, day.stops);
+      const route = await fetchFootRoute(points);
+      if (token !== simToken.current) return; // se paró la simulación mientras se calculaba
+      const coords: [number, number][] = route?.coords ?? points.map((p) => [p.lat, p.lng]);
+
+      const cum = [0];
+      for (let i = 1; i < coords.length; i++) {
+        cum.push(cum[i - 1] + distanceM({ lat: coords[i - 1][0], lng: coords[i - 1][1] }, { lat: coords[i][0], lng: coords[i][1] }));
+      }
+      const total = cum[cum.length - 1];
+
+      let travelled = 0;
+      let seg = 0;
+      let pauseUntil = 0;
+      simTimer.current = window.setInterval(() => {
+        if (Date.now() < pauseUntil) return;
+        travelled = Math.min(travelled + SIM_STEP_M, total);
+        while (seg < cum.length - 2 && cum[seg + 1] < travelled) seg++;
+        const span = cum[seg + 1] - cum[seg] || 1;
+        const t = Math.max(0, Math.min(1, (travelled - cum[seg]) / span));
+        const lat = coords[seg][0] + (coords[seg + 1][0] - coords[seg][0]) * t;
+        const lng = coords[seg][1] + (coords[seg + 1][1] - coords[seg][1]) * t;
+
+        const before = announced.current.size;
+        handlePosition({ coords: { latitude: lat, longitude: lng, accuracy: 8 }, timestamp: Date.now() } as GeolocationPosition);
+        if (announced.current.size > before) pauseUntil = Date.now() + SIM_PAUSE_MS;
+
+        if (travelled >= total && simTimer.current !== null) {
+          window.clearInterval(simTimer.current);
+          simTimer.current = null;
+          setSimulating(false);
+        }
+      }, SIM_TICK_MS);
+    },
+    [handlePosition, lodging, resetVisited, stop],
+  );
 
   // El navegador suelta el bloqueo de pantalla al cambiar de app: se pide otra vez al volver.
   useEffect(() => {
@@ -195,6 +280,7 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
       status,
       position,
       followingDay,
+      routeOrigin,
       start,
       stop,
       alert,
@@ -205,8 +291,10 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
         save("announced", []);
         setAlert(null);
       },
+      simulate: (dayId: string) => void simulate(dayId),
+      simulating,
     }),
-    [status, position, followingDay, start, stop, alert, locateOnce],
+    [status, position, followingDay, routeOrigin, start, stop, alert, locateOnce, simulate, simulating],
   );
 
   return <TrackingContext.Provider value={value}>{children}</TrackingContext.Provider>;
