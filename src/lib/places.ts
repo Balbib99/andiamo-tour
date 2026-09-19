@@ -24,25 +24,25 @@ export async function searchPlace(query: string): Promise<PlaceResult[]> {
   }));
 }
 
-const fountainCache = new Map<string, Promise<LatLng[]>>();
+let fountains: Promise<LatLng[]> | null = null;
 
-/** Fuentes de agua potable (los "nasoni" de Roma) dentro de una zona, desde OpenStreetMap. */
-export function fetchFountains(b: { s: number; w: number; n: number; e: number }): Promise<LatLng[]> {
-  const bbox = `${b.s.toFixed(3)},${b.w.toFixed(3)},${b.n.toFixed(3)},${b.e.toFixed(3)}`;
-  const hit = fountainCache.get(bbox);
-  if (hit) return hit;
-
-  const query = `[out:json][timeout:20];node[amenity=drinking_water](${bbox});out;`;
-  const promise = fetch("https://overpass-api.de/api/interpreter", {
-    method: "POST",
-    body: new URLSearchParams({ data: query }),
-  })
+/** Todas las fuentes de agua potable de Roma, del archivo incluido en la web (public/data/fuentes-roma.json). */
+function loadFountains(): Promise<LatLng[]> {
+  fountains ??= fetch("/data/fuentes-roma.json")
     .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-    .then((json) => (json.elements as { lat: number; lon: number }[]).map((e) => ({ lat: e.lat, lng: e.lon })))
+    .then((json: { puntos: [number, number][] }) => json.puntos.map(([lat, lng]) => ({ lat, lng })))
     .catch((err) => {
-      fountainCache.delete(bbox);
+      fountains = null; // permite reintentar
       throw err;
     });
-  fountainCache.set(bbox, promise);
-  return promise;
+  return fountains;
+}
+
+/**
+ * Fuentes de agua potable (los "nasoni" de Roma) dentro de una zona.
+ * Los datos son de OpenStreetMap y se descargaron una vez; no dependen de ningún servicio externo.
+ */
+export async function fetchFountains(b: { s: number; w: number; n: number; e: number }): Promise<LatLng[]> {
+  const all = await loadFountains();
+  return all.filter((f) => f.lat >= b.s && f.lat <= b.n && f.lng >= b.w && f.lng <= b.e);
 }

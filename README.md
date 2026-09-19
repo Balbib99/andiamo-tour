@@ -49,5 +49,8 @@ La ubicación del móvil solo funciona con HTTPS, y Vercel lo da por defecto.
 
 - Mapa: teselas de OpenStreetMap.
 - Rutas a pie: `routing.openstreetmap.de` (FOSSGIS). Si falla, se dibuja una línea recta como estimación.
-- Búsqueda de direcciones: Nominatim. Fuentes de agua: Overpass API.
+- Búsqueda de direcciones: Nominatim.
+- Fuentes de agua potable: no se piden a ningún servicio al usar la web. Están en `public/data/fuentes-roma.json`
+  (1.834 puntos de OpenStreetMap descargados el 19/9/2026, © colaboradores de OpenStreetMap, licencia ODbL). Se cargó
+  así porque Overpass, el servicio público de OpenStreetMap, se satura y falla a ratos.
 - Para un uso intenso conviene cambiar las teselas por un proveedor propio (MapTiler, Stadia) con clave gratuita.

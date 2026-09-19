@@ -22,13 +22,6 @@ const pinIcon = (label: string, cls = "") =>
 
 const HOME_ICON = "&#8962;";
 
-const dropIcon = L.divIcon({
-  className: "",
-  html: `<div class="drop" title="Fuente de agua potable"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5C5 4.5 3.2 6.3 3.2 8.6a3.8 3.8 0 0 0 7.6 0C10.8 6.3 9 4.5 7 1.5Z" fill="#fff"/></svg></div>`,
-  iconSize: [24, 24],
-  iconAnchor: [12, 12],
-});
-
 /** Recorta la ruta para que empiece donde estás: la línea se va "consumiendo" a medida que avanzas. */
 function trimFrom(coords: [number, number][], pos: LatLng): [number, number][] {
   const cosLat = Math.cos((pos.lat * Math.PI) / 180);
@@ -86,9 +79,10 @@ export function RouteMap({ dayId, stopId }: Props) {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(m);
+    // Orden de abajo arriba: fuentes, línea de la ruta, paradas y tu posición.
+    fountainLayer.current = L.layerGroup().addTo(m);
     lineLayer.current = L.layerGroup().addTo(m);
     routeLayer.current = L.layerGroup().addTo(m);
-    fountainLayer.current = L.layerGroup().addTo(m);
     youLayer.current = L.layerGroup().addTo(m);
     map.current = m;
     m.on("dragstart", () => setFollow(false)); // si mueves el mapa con el dedo, deja de seguirte
@@ -267,7 +261,11 @@ export function RouteMap({ dayId, stopId }: Props) {
     fetchFountains(bounds)
       .then((list) => {
         if (!alive) return;
-        list.forEach((f) => L.marker([f.lat, f.lng], { icon: dropIcon, keyboard: false }).addTo(layer));
+        list.forEach((f) =>
+          L.circleMarker([f.lat, f.lng], { radius: 5, color: "#fff", weight: 2, fillColor: "#0891b2", fillOpacity: 1 })
+            .bindTooltip("Fuente de agua potable")
+            .addTo(layer),
+        );
       })
       .catch(() => alive && setFountainError(true));
     return () => {
