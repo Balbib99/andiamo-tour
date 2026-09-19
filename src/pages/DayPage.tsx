@@ -4,15 +4,21 @@ import { LodgingCard } from "../components/LodgingCard";
 import { findDay } from "../data/itinerario";
 import { distanceM, formatDistance, mapsDirectionsUrl } from "../lib/geo";
 import { useLiveRoute } from "../lib/useLiveRoute";
-import { useApp } from "../state/AppState";
+import { useApp, type FountainMode } from "../state/AppState";
 import { useTracking } from "../state/Tracking";
 
 const MAPS_STOPS = 10;
 
+const FOUNTAIN_OPTIONS: { mode: FountainMode; label: string; help: string }[] = [
+  { mode: "off", label: "Ninguna", help: "" },
+  { mode: "fotos", label: "Con foto real", help: "Solo las fuentes de las que tenemos una foto real." },
+  { mode: "todas", label: "Todas", help: "Todas las que constan en OpenStreetMap; alguna puede haber desaparecido." },
+];
+
 export function DayPage() {
   const { dayId } = useParams();
   const day = findDay(dayId);
-  const { lodging, visited, resetVisited, fountainsOn, setFountainsOn, requestFit } = useApp();
+  const { lodging, visited, resetVisited, fountainMode, setFountainMode, requestFit } = useApp();
   const { status, position, followingDay, start, stop, resetAlerts, simulate, simulating } = useTracking();
   const [params] = useSearchParams();
   const testMode = params.has("prueba");
@@ -136,10 +142,28 @@ export function DayPage() {
             </p>
           )}
 
-          <label className="toggle">
-            <input type="checkbox" checked={fountainsOn} onChange={(e) => setFountainsOn(e.target.checked)} />
-            <span>Mostrar fuentes de agua potable en el mapa</span>
-          </label>
+          <fieldset className="fountains">
+            <legend>Fuentes de agua en el mapa</legend>
+            <div className="segmented">
+              {FOUNTAIN_OPTIONS.map((o) => (
+                <label key={o.mode} className={fountainMode === o.mode ? "on" : ""}>
+                  <input
+                    type="radio"
+                    name="fountain-mode"
+                    value={o.mode}
+                    checked={fountainMode === o.mode}
+                    onChange={() => setFountainMode(o.mode)}
+                  />
+                  {o.label}
+                </label>
+              ))}
+            </div>
+            {fountainMode !== "off" && (
+              <p className="hint hint-tight">
+                {FOUNTAIN_OPTIONS.find((o) => o.mode === fountainMode)?.help} Toca un punto del mapa para verla.
+              </p>
+            )}
+          </fieldset>
 
           <ol className="route">
             {live && foot ? (

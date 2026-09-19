@@ -53,4 +53,11 @@ La ubicación del móvil solo funciona con HTTPS, y Vercel lo da por defecto.
 - Fuentes de agua potable: no se piden a ningún servicio al usar la web. Están en `public/data/fuentes-roma.json`
   (1.834 puntos de OpenStreetMap descargados el 19/9/2026, © colaboradores de OpenStreetMap, licencia ODbL). Se cargó
   así porque Overpass, el servicio público de OpenStreetMap, se satura y falla a ratos.
+- Fotos de las fuentes: 182 fuentes llevan su foto real de Wikimedia Commons (categoría «Nasoni (Rome)»), emparejada
+  por cercanía (a menos de 25 m). Casi todas son CC BY-SA 4.0 y algunas CC0: la tarjeta muestra el autor y la
+  licencia, y hay que mantenerlos. Se cargan desde Wikimedia y, si una falla, la tarjeta usa la foto de ejemplo
+  (`public/img/nasone.jpg`, de Guretto, CC0). El nombre de la calle sale del nombre del archivo de cada foto.
+- El botón «Ver la calle» de cada fuente abre Google Street View en ese punto.
+- En la vista de cada día se elige qué fuentes ver: ninguna, solo las que tienen foto real, o todas. La elección se guarda
+  en el móvil.
 - Para un uso intenso conviene cambiar las teselas por un proveedor propio (MapTiler, Stadia) con clave gratuita.

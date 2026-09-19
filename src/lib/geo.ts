@@ -47,3 +47,8 @@ export function mapsDirectionsUrl(opts: {
   if (opts.waypoints?.length) params.set("waypoints", opts.waypoints.map(pair).join("|"));
   return `https://www.google.com/maps/dir/?${params.toString()}`;
 }
+
+/** Enlace que abre Google Street View en un punto, para ver cómo es el lugar antes de llegar. */
+export function streetViewUrl(p: LatLng): string {
+  return `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${pair(p)}`;
+}

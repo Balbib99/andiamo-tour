@@ -4,8 +4,8 @@ import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router-dom";
 import { allStops, findDay } from "../data/itinerario";
 import type { LatLng } from "../data/types";
-import { routePoints } from "../lib/geo";
-import { fetchFountains } from "../lib/places";
+import { distanceM, formatDistance, mapsDirectionsUrl, routePoints, streetViewUrl } from "../lib/geo";
+import { fetchFountains, type Fountain } from "../lib/places";
 import { useLiveRoute } from "../lib/useLiveRoute";
 import { useApp } from "../state/AppState";
 import { useTracking } from "../state/Tracking";
@@ -39,6 +39,40 @@ function trimFrom(coords: [number, number][], pos: LatLng): [number, number][] {
   return [[pos.lat, pos.lng], ...coords.slice(best)];
 }
 
+const esc = (t: string) =>
+  t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+
+/**
+ * Tarjeta que se abre al tocar una fuente, como un sitio en Google Maps: foto, nombre y cómo llegar.
+ * Si hay una foto real de esa fuente se usa (con su autoría); si no, una foto de ejemplo, avisándolo.
+ */
+function fountainCard(f: Fountain, from: LatLng | null): string {
+  const away = from ? ` (${formatDistance(distanceM(from, f))})` : "";
+  const photo = f.photo;
+  const alt = photo
+    ? "Foto de esta fuente, un nasone de Roma"
+    : "Un nasone, la fuente de hierro típica de Roma, con su caño curvo";
+  // Si la foto de Wikimedia no carga, se cambia por la de ejemplo y se avisa de que lo es.
+  const fallback = "this.onerror=null;this.src='/img/nasone.jpg';this.nextElementSibling.hidden=false;this.parentElement.classList.remove('real')";
+  return `<article class="fountain-card">
+    <figure class="fountain-photo${photo ? " real" : ""}">
+      <img src="${photo ? esc(photo.url) : "/img/nasone.jpg"}" width="96" height="170" loading="lazy" alt="${alt}"${photo ? ` onerror="${fallback}"` : ""}>
+      <figcaption${photo ? " hidden" : ""}>Foto de ejemplo</figcaption>
+    </figure>
+    <div class="fountain-body">
+      <h3>Nasone</h3>
+      <p class="fountain-kind">Fuente de agua potable</p>
+      ${photo?.lugar ? `<p class="fountain-place">En ${esc(photo.lugar)}</p>` : ""}
+      <p>Así llaman los romanos a estas fuentes, por su caño curvo. El agua es gratis y potable. Tapa el caño con un dedo y beberás del agujero de arriba.</p>
+      <div class="fountain-actions">
+        <a class="btn btn-small btn-primary" href="${mapsDirectionsUrl({ destination: f })}" target="_blank" rel="noopener noreferrer">Cómo llegar${away}</a>
+        <a class="btn btn-small" href="${streetViewUrl(f)}" target="_blank" rel="noopener noreferrer">Ver la calle</a>
+      </div>
+      ${photo ? `<p class="fountain-credit">Foto: <a href="${esc(photo.pagina)}" target="_blank" rel="noopener noreferrer">${esc(photo.autor)}</a>, ${esc(photo.licencia)}</p>` : ""}
+    </div>
+  </article>`;
+}
+
 const reducedMotion = () =>
   typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -48,10 +82,13 @@ interface Props {
 }
 
 export function RouteMap({ dayId, stopId }: Props) {
-  const { lodging, visited, fountainsOn, fitSignal } = useApp();
+  const { lodging, visited, fountainMode, fitSignal } = useApp();
   const { position } = useTracking();
   const navigate = useNavigate();
 
+  // La posición actual, para que la tarjeta de una fuente pueda decir a qué distancia estás.
+  const positionRef = useRef<LatLng | null>(null);
+  positionRef.current = position;
   const box = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
   const lineLayer = useRef<L.LayerGroup | null>(null);
@@ -247,7 +284,7 @@ export function RouteMap({ dayId, stopId }: Props) {
     if (!layer) return;
     layer.clearLayers();
     setFountainError(false);
-    if (!fountainsOn) return;
+    if (fountainMode === "off" || stopId) return;
 
     const focus: LatLng[] = points ?? routePoints(lodging, allStops.map((s) => s.stop));
     const pad = 0.004;
@@ -261,9 +298,17 @@ export function RouteMap({ dayId, stopId }: Props) {
     fetchFountains(bounds)
       .then((list) => {
         if (!alive) return;
-        list.forEach((f) =>
-          L.circleMarker([f.lat, f.lng], { radius: 5, color: "#fff", weight: 2, fillColor: "#0891b2", fillOpacity: 1 })
-            .bindTooltip("Fuente de agua potable")
+        // En pantallas táctiles el punto es más grande para poder tocarlo bien con el dedo.
+        const radius = window.matchMedia("(pointer: coarse)").matches ? 8 : 5;
+        const shown = fountainMode === "fotos" ? list.filter((f) => f.photo) : list;
+        shown.forEach((f) =>
+          L.circleMarker([f.lat, f.lng], { radius, color: "#fff", weight: 2, fillColor: "#0891b2", fillOpacity: 1 })
+            .bindPopup(() => fountainCard(f, positionRef.current), {
+              className: "fountain-popup",
+              minWidth: 320,
+              maxWidth: 320,
+              autoPanPadding: [16, 16],
+            })
             .addTo(layer),
         );
       })
@@ -272,7 +317,7 @@ export function RouteMap({ dayId, stopId }: Props) {
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fountainsOn, dayId, lodging]);
+  }, [fountainMode, dayId, lodging, stopId]);
 
   return (
     <div className="map" aria-label="Mapa de la ruta">
