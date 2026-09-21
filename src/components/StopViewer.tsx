@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { podcasts } from "../data/podcasts";
 import type { Stop } from "../data/types";
 import { audioFile, audioSrc, useAudioManifest } from "../lib/audio";
 import { mapsDirectionsUrl } from "../lib/geo";
 import { useSpeech, type Playable } from "../lib/useSpeech";
 import { ExternalIcon, MapIcon, PlayIcon, StopIcon } from "./Icons";
+import { PodcastCard } from "./PodcastCard";
 
 const wave = Array.from({ length: 40 }, (_, i) => ({
   height: 30 + Math.round(Math.abs(Math.sin(i * 1.7)) * 70),
@@ -16,6 +18,9 @@ export function StopViewer({ stop }: { stop: Stop }) {
   const [playingAll, setPlayingAll] = useState(false);
   const manifest = useAudioManifest();
   const { supported, playing, speak, stop: stopSpeech } = useSpeech();
+
+  const podcast = podcasts[stop.id];
+  const podcastRef = useRef<HTMLAudioElement>(null);
 
   const points = stop.points ?? [];
   const hasPhoto = Boolean(stop.photo && points.length > 0);
@@ -55,13 +60,18 @@ export function StopViewer({ stop }: { stop: Stop }) {
     setActive(Math.max(0, Math.min(points.length - 1, i)));
   };
 
+  // La guía y el podcast no suenan a la vez: al empezar una se para la otra.
+  const pausePodcast = () => podcastRef.current?.pause();
+
   const togglePlay = () => {
     if (playing) {
       stopSpeech();
       setPlayingAll(false);
     } else if (hasPhoto) {
+      pausePodcast();
       speak([items[active]]);
     } else {
+      pausePodcast();
       speak(items);
     }
   };
@@ -73,6 +83,7 @@ export function StopViewer({ stop }: { stop: Stop }) {
       return;
     }
     const from = active === points.length - 1 ? 0 : active;
+    pausePodcast();
     setPlayingAll(true);
     speak(items.slice(from), (i) => setActive(from + i));
   };
@@ -194,6 +205,18 @@ export function StopViewer({ stop }: { stop: Stop }) {
           Este navegador no puede leer los textos en voz alta. Los podéis leer
           en pantalla.
         </p>
+      )}
+
+      {podcast && (
+        <PodcastCard
+          podcast={podcast}
+          name={stop.name}
+          audioRef={podcastRef}
+          onPlay={() => {
+            stopSpeech();
+            setPlayingAll(false);
+          }}
+        />
       )}
 
       {stop.highlights && stop.highlights.length > 0 && (

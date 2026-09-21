@@ -1,6 +1,6 @@
 # El Foro Romano: dossier de investigación para un podcast
 
-**Nota para NotebookLM.** Este documento es material de fondo para un podcast en español dirigido a dos viajeros españoles que visitarán el Foro Romano en noviembre de 2026. Quieren entender lo que ven mientras caminan, con un tono cercano y con historias, no con una lista de fechas. Cada dato lleva una etiqueta de fiabilidad:
+**Nota para NotebookLM.** Este documento es material de fondo para un podcast en español dirigido a dos viajeros españoles que van a visitar el Foro Romano. Quieren entender lo que ven mientras caminan, con un tono cercano y con historias, no con una lista de fechas. **Enfoque: solo historia, mitología, arte, arqueología y curiosidades. No hables de horarios, precios, entradas, reservas, cómo llegar ni de cuándo conviene visitarlo.** Cada dato lleva una etiqueta de fiabilidad:
 
 - **[Documentado]**: lo respaldan fuentes históricas o arqueológicas.
 - **[Tradición]**: lo cuentan los autores antiguos (Livio, Plutarco, Suetonio y otros) pero no se puede comprobar.
@@ -215,40 +215,23 @@ Es el orden en que se recorre con la aplicación Andiamo de los viajeros: se emp
 - En 2016 el conjunto Coliseo-Foro-Palatino recibió unos 6,4 millones de visitas, según la Wikipedia italiana (F2).
 - El itinerario del peregrino medieval llamado *Mirabilia Urbis Romae* fue, durante tres siglos, la principal guía escrita de la ciudad, con muchas invenciones (F2).
 
-## 7. Información práctica para la visita (fuente oficial, consultada el 21 de septiembre de 2026)
-
-**Verificad todo en la web oficial antes de ir: los horarios cambian.**
-
-- **Entrada al Foro Romano:** Largo della Salara Vecchia, 5/6 (F3).
-- **Cómo llegar:** metro línea B (parada Colosseo); autobuses 51, 75, 81, 85, 87 y 118 (F3).
-- **Horario:** el Foro y el Palatino abren a las **9:00** (el Coliseo, a las 8:30) (F4).
-  - Del 29 de marzo al 30 de septiembre de 2026: hasta las 19:15.
-  - Del 1 al 24 de octubre: cierra a las 18:30, última entrada a las 17:30.
-  - **Del 25 de octubre de 2026 al 28 de febrero de 2027: cierra a las 16:30, última entrada a las 15:30.** En noviembre queda poco día: conviene entrar pronto.
-- **Entradas:** la entrada única Coliseo-Foro-Palatino vale 24 horas, con un solo acceso a cada zona. Las entradas son **nominativas** y hay que enseñar documento de identidad. Se reservan en ticketing.colosseo.it con hasta 30 días de antelación (F4).
-- **Días de entrada gratuita:** el primer domingo de cada mes, el 25 de abril, el 2 de junio y el **4 de noviembre**. Es probable que ese día haya mucha gente (F4).
-- **Servicios:** hay zonas accesibles, aseos, audioguías y cafetería (F3).
-
----
-
-## 8. Preguntas para que los presentadores conversen
+## 7. Preguntas para que los presentadores conversen
 
 1. ¿Por qué el Foro es hoy tan poco espectacular si fue el centro del mundo? ¿Qué se perdió y quién lo perdió?
 2. ¿Qué dice de una sociedad que castiga con la muerte a una sacerdotisa por romper un voto, y que a la vez les da más derechos que a cualquier otra mujer?
 3. Si solo pudieras ver tres cosas en el Foro, ¿cuáles elegirías y por qué?
 4. Del funeral de César a la columna de Focas pasan 650 años. ¿Qué cambió en el Foro en ese tiempo?
-5. ¿Es mejor entrar en el Foro con guía, con audioguía o solo con una buena historia en la cabeza?
+5. ¿Qué monumento del Foro resume mejor el paso del tiempo, del esplendor al abandono y de ahí a la recuperación?
 
 ---
 
-## 9. Fuentes
+## 8. Fuentes
 
-Las páginas de Wikipedia se han usado como fuente de síntesis y remiten a autores antiguos y a estudios modernos. Los datos prácticos son de la web oficial del parque.
+Las páginas de Wikipedia se han usado como fuente de síntesis y remiten a autores antiguos y a estudios modernos. 
 
 - **F1.** Wikipedia (inglés), "Roman Forum": https://en.wikipedia.org/wiki/Roman_Forum
 - **F2.** Wikipedia (italiano), "Foro romano": https://it.wikipedia.org/wiki/Foro_romano
 - **F3.** Parco archeologico del Colosseo, página del Foro Romano: https://colosseo.it/en/area/the-roman-forum/
-- **F4.** Parco archeologico del Colosseo, horarios y entradas: https://colosseo.it/en/opening-times-and-tickets/
 - **F5.** Wikipedia (inglés), "Vestal Virgin": https://en.wikipedia.org/wiki/Vestal_Virgin
 - **F6.** Wikipedia (inglés), "Lacus Curtius": https://en.wikipedia.org/wiki/Lacus_Curtius
 - **F7.** Wikipedia (inglés), "Temple of Castor and Pollux": https://en.wikipedia.org/wiki/Temple_of_Castor_and_Pollux

@@ -1,6 +1,6 @@
 # El Monte Palatino: dossier de investigación para un podcast
 
-**Nota para NotebookLM.** Este documento es material de fondo para un podcast en español dirigido a dos viajeros españoles que visitarán el Monte Palatino en noviembre de 2026, tras ver el Foro Romano. Quieren entender lo que pisan mientras caminan, con un tono cercano y con historias, no con una lista de fechas. Cada dato lleva una etiqueta de fiabilidad:
+**Nota para NotebookLM.** Este documento es material de fondo para un podcast en español dirigido a dos viajeros españoles que van a visitar el Monte Palatino después del Foro Romano. Quieren entender lo que pisan mientras caminan, con un tono cercano y con historias, no con una lista de fechas. **Enfoque: solo historia, mitología, arte, arqueología y curiosidades. No hables de horarios, precios, entradas, reservas, cómo llegar ni de cuándo conviene visitarlo.** Cada dato lleva una etiqueta de fiabilidad:
 
 - **[Documentado]**: lo respaldan fuentes históricas o arqueológicas.
 - **[Tradición]**: lo cuentan los autores antiguos (Livio, Suetonio, Ovidio y otros) pero no se puede comprobar.
@@ -85,7 +85,6 @@ Las pinturas son **de las más importantes del Segundo Estilo maduro en Roma** (
 
 **Aviso importante para el podcast:** la fuente de Wikipedia consultada sobre "House of Livia" describe otra villa de Livia, la de Prima Porta, cuyos frescos del jardín están en el Palazzo Massimo. Son dos lugares distintos y no hay que mezclarlos.
 
-Para visitarla hace falta una entrada especial: según la web oficial, se accede con el **Forum Pass SUPER**, los paquetes "Full Experience" o la tarjeta de socio (P5). Conviene comprobarlo antes de ir.
 
 ### 3.7 La piedra negra de Cibeles y la matrona Quinta Claudia **[Tradición]**
 
@@ -124,7 +123,7 @@ En **1550** el cardenal **Alessandro Farnese**, nieto del papa Pablo III, encarg
 
 ### 3.12 El museo y la villa
 
-En el siglo XVI se levantó allí la Villa Mattei, que después fue convento y tras una demolición parcial (1928) alojó el **Museo Palatino**, con hallazgos de las excavaciones de la colina (P1, P2). Es un buen sitio para descansar.
+En el siglo XVI se levantó allí la Villa Mattei, que después fue convento y tras una demolición parcial (1928) alojó el **Museo Palatino**, con hallazgos de las excavaciones de la colina (P1, P2).
 
 ---
 
@@ -132,7 +131,7 @@ En el siglo XVI se levantó allí la Villa Mattei, que después fue convento y t
 
 1. **Terraza del Palatino / jardines Farnesio.** Vistas al Foro y a la ciudad (P2, P11).
 2. **Casa de Livia.** Ver 3.6.
-3. **Casa de Augusto.** Ver 3.5. Suele visitarse solo en horarios concretos.
+3. **Casa de Augusto.** Ver 3.5.
 4. **Domus Flavia.** Ver 3.9.
 5. **Museo Palatino.** Ver 3.12.
 6. **Estadio de Domiciano.** Ver 3.9.
@@ -158,21 +157,7 @@ En el siglo XVI se levantó allí la Villa Mattei, que después fue convento y t
 - Del complejo de Nerón conectado con el Palatino, el criptopórtico de unos 130 metros es de los mejor conservados de sus pasadizos decorados (P2, P15).
 - En el palacio de Domiciano, las reconstrucciones parciales de los años treinta del siglo XX conservan algunos muros a bastante altura, en particular en el lado suroeste del tercer peristilo (P6).
 
-## 7. Información práctica para la visita (fuente oficial, consultada el 21 de septiembre de 2026)
-
-**Verificad todo en la web oficial antes de ir: los horarios cambian.**
-
-- **Entrada al Palatino:** Via di San Gregorio, 30 (P2).
-- **Cómo llegar:** metro línea B (Colosseo), autobuses 51, 75, 81, 85, 87 y 118, y tranvía 3 (P2).
-- **Horario:** el Foro y el Palatino abren a las **9:00** (P16). Del 25 de octubre de 2026 al 28 de febrero de 2027 el parque cierra a las **16:30**, con última entrada a las **15:30**. Del 1 al 24 de octubre cierra a las 18:30 (P16). En noviembre conviene dejar el Palatino para la mañana.
-- **Entradas:** la entrada única Coliseo-Foro-Palatino vale 24 horas con un acceso a cada zona, es **nominativa** y se compra en ticketing.colosseo.it (P16).
-- **Casa de Livia:** solo con el Forum Pass SUPER, los paquetes "Full Experience" o la tarjeta de socio (P5).
-- **Servicios:** zonas accesibles, aseos, audioguías, cafetería, librería y ascensores (P2). La web oficial no detalla qué zonas pueden estar cerradas ese día.
-- **Consejo práctico:** hay cuestas y escalones y poca sombra. Llevad agua y calzado cómodo.
-
----
-
-## 8. Preguntas para que los presentadores conversen
+## 7. Preguntas para que los presentadores conversen
 
 1. Si "palacio" viene del Palatino, ¿qué dice eso de cómo el poder se instala y deja huella incluso en las palabras?
 2. Augusto presumía de vivir con sencillez en una de las casas más importantes de Roma. ¿Era modestia real o propaganda?
@@ -182,9 +167,9 @@ En el siglo XVI se levantó allí la Villa Mattei, que después fue convento y t
 
 ---
 
-## 9. Fuentes
+## 8. Fuentes
 
-Las páginas de Wikipedia se han usado como fuente de síntesis y remiten a autores antiguos y a estudios modernos. Los datos prácticos son de la web oficial del parque.
+Las páginas de Wikipedia se han usado como fuente de síntesis y remiten a autores antiguos y a estudios modernos.
 
 - **P1.** Wikipedia (inglés), "Palatine Hill": https://en.wikipedia.org/wiki/Palatine_Hill
 - **P2.** Parco archeologico del Colosseo, página del Palatino: https://colosseo.it/en/area/the-palatine/
@@ -201,6 +186,5 @@ Las páginas de Wikipedia se han usado como fuente de síntesis y remiten a auto
 - **P13.** Wikipedia (inglés), "Domitian": https://en.wikipedia.org/wiki/Domitian
 - **P14.** Suetonio, *Vida de Domiciano*, 14 (texto en inglés en LacusCurtius): http://penelope.uchicago.edu/Thayer/e/roman/texts/suetonius/12caesars/domitian*.html
 - **P15.** Turismo Roma, "Neronian cryptoporticus": https://www.turismoroma.it/en/places/neronian-cryptoporticus ; Wikipedia (inglés), "Domus Transitoria": https://en.wikipedia.org/wiki/Domus_Transitoria
-- **P16.** Parco archeologico del Colosseo, horarios y entradas: https://colosseo.it/en/opening-times-and-tickets/
 
 **Límites de esta investigación.** No se pudieron consultar las fuentes clásicas originales (Livio, Ovidio, Suetonio en su texto completo); lo que se les atribuye viene de las páginas anteriores o del conocimiento general y se marca como tradición. La anécdota de los doce buitres, la de Quinta Claudia con el barco encallado y la del asesinato de Domiciano en sus habitaciones no aparecen en las páginas de Wikipedia consultadas: son historias antiguas muy conocidas que se presentan como tal. No se ha podido comprobar el estado actual de acceso a cada casa del Palatino, que puede cambiar.

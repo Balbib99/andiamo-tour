@@ -1,6 +1,7 @@
 import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
-import { AudioIcon, ChevronLeft, CheckIcon, MapIcon, PhotoIcon } from "../components/Icons";
+import { AudioIcon, ChevronLeft, CheckIcon, MapIcon, MicIcon, PhotoIcon } from "../components/Icons";
 import { findDay } from "../data/itinerario";
+import { podcasts } from "../data/podcasts";
 import { stopAudioLabel, useAudioManifest } from "../lib/audio";
 import { distanceM, formatDistance, mapsDirectionsUrl } from "../lib/geo";
 import { useLiveRoute } from "../lib/useLiveRoute";
@@ -214,6 +215,11 @@ export function DayPage() {
                       <span>
                         <AudioIcon /> Audio {stopAudioLabel(s, manifest)}
                       </span>
+                      {podcasts[s.id] && (
+                        <span>
+                          <MicIcon /> Podcast {podcasts[s.id].min} min
+                        </span>
+                      )}
                       {s.photo && (
                         <span>
                           <PhotoIcon /> Fotos

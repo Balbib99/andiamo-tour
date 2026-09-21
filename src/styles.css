@@ -676,6 +676,50 @@ a.step:hover .step-name {
 .audio-all {
   margin-bottom: 8px;
 }
+/* Podcast de una parada */
+.podcast {
+  margin: 22px 0 6px;
+  padding: 14px;
+  background: var(--marble);
+  border-radius: 12px;
+}
+.podcast-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.podcast-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--nasone);
+  color: #fff;
+}
+.podcast h3 {
+  font-size: 1.15rem;
+  line-height: 1.2;
+  margin: 0;
+}
+.podcast-sub {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.podcast audio {
+  display: block;
+  width: 100%;
+}
+.podcast-note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
 /* Lugares que ver dentro de una parada */
 .highlights {
   margin-top: 26px;

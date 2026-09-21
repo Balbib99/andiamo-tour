@@ -69,3 +69,10 @@ export const PinIcon = () => (
     <circle cx="9" cy="7.5" r="1.8" />
   </svg>
 );
+
+export const MicIcon = () => (
+  <svg {...base}>
+    <rect x="6.5" y="2" width="5" height="9" rx="2.5" />
+    <path d="M3.5 8.5a5.5 5.5 0 0 0 11 0M9 14v2.5M6.5 16.5h5" />
+  </svg>
+);

@@ -52,6 +52,19 @@ python scripts/generar-audios.py
 El script adapta el texto para la voz: entre frases del mismo párrafo pone punto y coma, porque un punto deja casi un
 segundo de silencio, y escribe con letras los números y «a. C.». Con `--todo` rehace todos.
 
+## Podcasts (NotebookLM)
+
+Los podcasts descargados pesan decenas de MB, así que se comprimen antes de publicarlos:
+
+1. Guarda el original en `audios-originales/` (carpeta fuera de Git y de Vercel) con el nombre del dosier: `coliseo.m4a`,
+   `foro-romano.m4a`...
+2. Ejecuta `python scripts/comprimir_audios.py` (hace falta ffmpeg). Cada audio se comprime una sola vez, a AAC mono
+   de 48 kbps, y sale en `public/podcast/`.
+3. Registra el podcast en `src/data/podcasts.ts` (id de la parada, nombre del archivo y minutos) y aparecerá en su ficha,
+   con un reproductor, y en la lista del día.
+4. Solo `public/podcast/` se sube. No metas podcasts en `public/audio/`: ahí `generar-audios.py` borra los `.mp3` que no
+   correspondan a una parada.
+
 ## Publicar en Vercel
 
 1. Sube el proyecto a un repositorio de GitHub.
