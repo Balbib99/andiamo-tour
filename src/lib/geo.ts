@@ -22,9 +22,9 @@ export function walkMinutes(km: number): number {
   return Math.max(1, Math.round((km / 4.5) * 60));
 }
 
-/** Puntos de una ruta: el alojamiento (si ya se indicó) seguido de las paradas. */
-export function routePoints(lodging: LatLng | null, stops: LatLng[]): LatLng[] {
-  return lodging ? [lodging, ...stops] : [...stops];
+/** Puntos de una ruta: el de salida seguido de las paradas. */
+export function routePoints(origin: LatLng, stops: LatLng[]): LatLng[] {
+  return [origin, ...stops];
 }
 
 const pair = (p: LatLng) => `${p.lat},${p.lng}`;

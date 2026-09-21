@@ -1,14 +1,10 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
-import type { Lodging } from "../data/types";
 import { load, save } from "../lib/storage";
 
 /** Qué fuentes de agua se dibujan en el mapa: ninguna, solo las que tienen foto real, o todas. */
 export type FountainMode = "off" | "fotos" | "todas";
 
 interface AppContextValue {
-  /** Alojamiento. null hasta que se indica; se guarda solo en este móvil. */
-  lodging: Lodging | null;
-  setLodging: (l: Lodging) => void;
   /** Ids de las paradas ya vistas. Se guardan en el móvil. */
   visited: string[];
   markVisited: (id: string) => void;
@@ -23,8 +19,14 @@ interface AppContextValue {
 
 const AppContext = createContext<AppContextValue | null>(null);
 
+/** Versiones anteriores guardaban aquí una dirección escrita a mano: se borra de los móviles que la tuvieran. */
+try {
+  localStorage.removeItem("andiamo:lodging");
+} catch {
+  /* sin acceso al almacenamiento: no hay nada que borrar */
+}
+
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [lodging, setLodgingState] = useState<Lodging | null>(() => load<Lodging | null>("lodging", null));
   const [visited, setVisited] = useState<string[]>(() => load("visited", []));
   const [fountainMode, setFountainModeState] = useState<FountainMode>(() => {
     const saved = load<string>("fountainMode", "off");
@@ -37,11 +39,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     save("fountainMode", mode);
   }, []);
 
-  const setLodging = useCallback((l: Lodging) => {
-    setLodgingState(l);
-    save("lodging", l);
-  }, []);
-
   const update = useCallback((next: (prev: string[]) => string[]) => {
     setVisited((prev) => {
       const value = next(prev);
@@ -52,8 +49,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<AppContextValue>(
     () => ({
-      lodging,
-      setLodging,
       visited,
       markVisited: (id) => update((prev) => (prev.includes(id) ? prev : [...prev, id])),
       toggleVisited: (id) =>
@@ -64,7 +59,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       fitSignal,
       requestFit: () => setFitSignal((n) => n + 1),
     }),
-    [lodging, setLodging, visited, update, fountainMode, setFountainMode, fitSignal],
+    [visited, update, fountainMode, setFountainMode, fitSignal],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

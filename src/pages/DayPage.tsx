@@ -1,6 +1,5 @@
 import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import { AudioIcon, ChevronLeft, CheckIcon, MapIcon, PhotoIcon } from "../components/Icons";
-import { LodgingCard } from "../components/LodgingCard";
 import { findDay } from "../data/itinerario";
 import { stopAudioLabel, useAudioManifest } from "../lib/audio";
 import { distanceM, formatDistance, mapsDirectionsUrl } from "../lib/geo";
@@ -19,11 +18,11 @@ const FOUNTAIN_OPTIONS: { mode: FountainMode; label: string; help: string }[] = 
 export function DayPage() {
   const { dayId } = useParams();
   const day = findDay(dayId);
-  const { lodging, visited, resetVisited, fountainMode, setFountainMode, requestFit } = useApp();
-  const { status, position, followingDay, start, stop, resetAlerts, simulate, simulating } = useTracking();
+  const { visited, resetVisited, fountainMode, setFountainMode, requestFit } = useApp();
+  const { status, position, followingDay, start, stop, resetAlerts, simulate, simulating, replan } = useTracking();
   const [params] = useSearchParams();
   const testMode = params.has("prueba");
-  const { live, pending, foot } = useLiveRoute(day);
+  const { live, pending, foot, stops, replanned } = useLiveRoute(day);
   const manifest = useAudioManifest();
 
   if (!day) return <Navigate to="/" replace />;
@@ -31,20 +30,22 @@ export function DayPage() {
   const following = followingDay === day.id;
   const seen = day.stops.filter((s) => visited.includes(s.id)).length;
   const approx = foot && !foot.exact ? "unos " : "";
-  // Con alojamiento, el primer tramo va del alojamiento a la parada 1; sin él, los tramos empiezan en la parada 1.
-  const legOffset = lodging ? 1 : 0;
-  // Tiempo entre una parada y la siguiente. Si la ruta sale de tu ubicación, solo hay tramos entre paradas pendientes.
+  // El primer tramo va del punto de partida a la parada 1. Tiempo entre una parada y la siguiente: si la ruta sale
+  // de tu ubicación, solo hay tramos entre paradas pendientes.
   const legAfter = (stopIndex: number) => {
     if (!foot) return undefined;
-    if (!live) return foot.legs[stopIndex + legOffset];
-    const p = pending.findIndex((s) => s.id === day.stops[stopIndex].id);
-    const nextIsPending = p >= 0 && pending[p + 1]?.id === day.stops[stopIndex + 1]?.id;
+    if (!live) return foot.legs[stopIndex + 1];
+    const p = pending.findIndex((s) => s.id === stops[stopIndex].id);
+    const nextIsPending = p >= 0 && pending[p + 1]?.id === stops[stopIndex + 1]?.id;
     return nextIsPending ? foot.legs[p + 1] : undefined;
   };
-  const firstPending = live ? day.stops.findIndex((s) => s.id === pending[0].id) : -1;
+  const firstPending = live ? stops.findIndex((s) => s.id === pending[0].id) : -1;
   // Google Maps admite como máximo 9 paradas intermedias por enlace: los días largos se parten en tramos de 10 paradas.
-  const chunks = Array.from({ length: Math.ceil(day.stops.length / MAPS_STOPS) }, (_, k) =>
-    day.stops.slice(k * MAPS_STOPS, (k + 1) * MAPS_STOPS),
+  // Con la ruta en marcha solo cuentan las paradas que faltan, que se numeran a continuación de las vistas.
+  const mapsStops = live ? pending : stops;
+  const mapsOffset = live ? stops.length - pending.length : 0;
+  const chunks = Array.from({ length: Math.ceil(mapsStops.length / MAPS_STOPS) }, (_, k) =>
+    mapsStops.slice(k * MAPS_STOPS, (k + 1) * MAPS_STOPS),
   );
 
   return (
@@ -63,8 +64,6 @@ export function DayPage() {
         </div>
       ) : (
         <>
-          {!lodging && <LodgingCard />}
-
           <div className="chips">
             {foot && (
               <>
@@ -97,9 +96,10 @@ export function DayPage() {
               </button>
             )}
             {chunks.map((chunk, k) => {
-              const origin = k === 0 ? (lodging ?? undefined) : chunks[k - 1][chunks[k - 1].length - 1];
-              const from = k * MAPS_STOPS + 1;
-              const to = k * MAPS_STOPS + chunk.length;
+              // Sin origen, Maps sale de la ubicación del móvil.
+              const origin = k === 0 ? undefined : chunks[k - 1][chunks[k - 1].length - 1];
+              const from = mapsOffset + k * MAPS_STOPS + 1;
+              const to = mapsOffset + k * MAPS_STOPS + chunk.length;
               return (
                 <a
                   key={from}
@@ -131,7 +131,7 @@ export function DayPage() {
                 {simulating ? "Parar simulación" : "Simular paseo por este día"}
               </button>
               <p className="hint">
-                Modo prueba: la web finge que camináis la ruta desde el alojamiento y se detiene unos segundos en
+                Modo prueba: la web finge que camináis la ruta desde el punto de inicio y se detiene unos segundos en
                 cada parada. Al empezar borra las paradas vistas.
               </p>
             </div>
@@ -167,35 +167,41 @@ export function DayPage() {
             )}
           </fieldset>
 
+          {live && replanned && (
+            <p className="hint hint-tight">
+              Las paradas que faltan se han reordenado para hacer el menor camino desde donde estáis.{" "}
+              <button type="button" className="link" onClick={replan}>
+                Recalcular desde aquí
+              </button>
+            </p>
+          )}
+
           <ol className="route">
             {live && foot ? (
               <li>
                 <div className="step">
                   <span className="step-dot you" aria-hidden="true" />
                   <span className="step-name">Tu ubicación</span>
-                  <span className="step-teaser">La ruta sale de donde estás y sigue por las paradas que faltan.</span>
+                  <span className="step-teaser">
+                    La ruta sale de donde estás y sigue por las paradas que faltan, en el orden que hace menos camino.
+                  </span>
                   <span className="leg">
                     {foot.legs[0].min} min andando hasta la parada {firstPending + 1}
                   </span>
                 </div>
               </li>
             ) : (
-              lodging && (
-                <li>
-                  <div className="step">
-                    <span className="step-dot origin" aria-hidden="true">
-                      &#8962;
-                    </span>
-                    <span className="step-name">Alojamiento</span>
-                    <span className="step-teaser">{lodging.name}</span>
-                    {foot && <span className="leg">{foot.legs[0].min} min andando hasta la parada 1</span>}
-                  </div>
-                </li>
-              )
+              <li>
+                <div className="step">
+                  <span className="step-dot origin" aria-hidden="true" />
+                  <span className="step-name">Punto de inicio</span>
+                  {foot && <span className="leg">{foot.legs[0].min} min andando hasta la parada 1</span>}
+                </div>
+              </li>
             )}
-            {day.stops.map((s, i) => {
+            {stops.map((s, i) => {
               const isSeen = visited.includes(s.id);
-              const next = i < day.stops.length - 1 ? legAfter(i) : undefined;
+              const next = i < stops.length - 1 ? legAfter(i) : undefined;
               return (
                 <li key={s.id}>
                   <Link className="step" to={`/dia/${day.id}/parada/${s.id}`}>

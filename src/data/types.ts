@@ -49,9 +49,3 @@ export interface Day {
   title: string;
   stops: Stop[];
 }
-
-export interface Lodging extends LatLng {
-  name: string;
-  /** true mientras el alojamiento sea el de ejemplo. */
-  isExample?: boolean;
-}

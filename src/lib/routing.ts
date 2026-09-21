@@ -92,3 +92,23 @@ export function useFootRoute(points: LatLng[] | null): FootRouteState | null {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, result]);
 }
+
+const matrixCache = new Map<string, Promise<number[][] | null>>();
+
+/** Distancias a pie (m) entre todos los pares de puntos, con el mismo servicio. Null si falla. */
+export function fetchFootMatrix(points: LatLng[]): Promise<number[][] | null> {
+  const key = keyOf(points);
+  const hit = matrixCache.get(key);
+  if (hit) return hit;
+
+  const url = `https://routing.openstreetmap.de/routed-foot/table/v1/foot/${key}?annotations=distance`;
+  const promise = fetch(url)
+    .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+    .then((json): number[][] | null => (json?.code === "Ok" ? (json.distances as number[][]) : null))
+    .catch(() => {
+      matrixCache.delete(key);
+      return null;
+    });
+  matrixCache.set(key, promise);
+  return promise;
+}

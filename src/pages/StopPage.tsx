@@ -3,6 +3,7 @@ import { CheckIcon, ChevronLeft, MapIcon } from "../components/Icons";
 import { StopViewer } from "../components/StopViewer";
 import { findDay, findStop } from "../data/itinerario";
 import { distanceM, formatDistance, mapsDirectionsUrl } from "../lib/geo";
+import { useDayOrder } from "../lib/useLiveRoute";
 import { useApp } from "../state/AppState";
 import { useTracking } from "../state/Tracking";
 
@@ -12,11 +13,13 @@ export function StopPage() {
   const stop = findStop(day, stopId);
   const { visited, toggleVisited } = useApp();
   const { position } = useTracking();
+  // El orden y la numeración de las paradas cambian cuando se empieza la ruta y se recalcula desde tu posición.
+  const { stops } = useDayOrder(day);
 
   if (!day || !stop) return <Navigate to={day ? `/dia/${day.id}` : "/"} replace />;
 
-  const index = day.stops.findIndex((s) => s.id === stop.id);
-  const next = day.stops[index + 1];
+  const index = stops.findIndex((s) => s.id === stop.id);
+  const next = stops[index + 1];
   const isSeen = visited.includes(stop.id);
 
   return (
@@ -28,7 +31,7 @@ export function StopPage() {
       <div className="chips">
         <span className="chip era">{stop.era}</span>
         <span className="chip">
-          Parada {index + 1} de {day.stops.length}
+          Parada {index + 1} de {stops.length}
         </span>
         {position && <span className="chip">a {formatDistance(distanceM(position, stop))} de ti</span>}
       </div>

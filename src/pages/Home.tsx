@@ -1,5 +1,4 @@
 import { Hero } from "../components/Hero";
-import { LodgingCard } from "../components/LodgingCard";
 import { Plaques } from "../components/Plaques";
 import { useApp } from "../state/AppState";
 import { useTracking } from "../state/Tracking";
@@ -11,7 +10,6 @@ export function Home() {
   return (
     <>
       <Hero />
-      <LodgingCard />
       <Plaques />
       {visited.length > 0 && (
         <p className="note">

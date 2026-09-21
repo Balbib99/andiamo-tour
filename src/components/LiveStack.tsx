@@ -1,20 +1,20 @@
 import { Link } from "react-router-dom";
 import { allStops, findDay } from "../data/itinerario";
 import { distanceM, formatDistance, mapsDirectionsUrl } from "../lib/geo";
-import { useApp } from "../state/AppState";
+import { useDayOrder } from "../lib/useLiveRoute";
 import { useTracking } from "../state/Tracking";
 import { MapIcon } from "./Icons";
 
 /** Barra fija al pie del panel: seguimiento en directo y avisos de cercanía. */
 export function LiveStack() {
-  const { visited } = useApp();
   const { status, position, followingDay, stop, alert, dismissAlert, simulating } = useTracking();
+
+  const day = findDay(followingDay ?? undefined);
+  const { pending } = useDayOrder(day);
 
   if (status === "off" && !alert) return null;
 
-  const day = findDay(followingDay ?? undefined);
-  const pending = day?.stops.filter((s) => !visited.includes(s.id)) ?? [];
-  // La siguiente parada es la primera sin ver del día, la misma a la que apunta la ruta del mapa.
+  // La siguiente parada es la primera sin ver del orden recalculado, la misma a la que apunta la ruta del mapa.
   const target = pending[0];
 
   const alertStop = alert ? allStops.find((s) => s.stop.id === alert.stopId)?.stop : undefined;

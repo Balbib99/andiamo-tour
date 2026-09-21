@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router-dom";
-import { allStops, findDay } from "../data/itinerario";
+import { allStops, findDay, startPoint } from "../data/itinerario";
 import type { LatLng, Stop } from "../data/types";
 import { distanceM, formatDistance, mapsDirectionsUrl, routePoints, streetViewUrl } from "../lib/geo";
 import { fetchFountains, type Fountain } from "../lib/places";
@@ -23,7 +23,7 @@ const pinIcon = (label: string, cls = "") =>
 /** Opciones de la tarjeta de una parada: se abre un poco por encima del pin para no taparlo. */
 const STOP_POPUP: L.PopupOptions = { className: "stop-popup", minWidth: 320, maxWidth: 320, offset: [0, -10], autoPanPaddingTopLeft: [16, 16], autoPanPaddingBottomRight: [64, 16] };
 
-const HOME_ICON = "&#8962;";
+const START_ICON = "&#9873;";
 
 /** Recorta la ruta para que empiece donde estás: la línea se va "consumiendo" a medida que avanzas. */
 function trimFrom(coords: [number, number][], pos: LatLng): [number, number][] {
@@ -113,7 +113,7 @@ interface Props {
 }
 
 export function RouteMap({ dayId, stopId }: Props) {
-  const { lodging, visited, fountainMode, fitSignal } = useApp();
+  const { visited, fountainMode, fitSignal } = useApp();
   const { position } = useTracking();
   const navigate = useNavigate();
 
@@ -134,9 +134,9 @@ export function RouteMap({ dayId, stopId }: Props) {
   const [fountainError, setFountainError] = useState(false);
 
   const day = findDay(dayId);
-  const stops = day?.stops ?? [];
-  // Antes de empezar la ruta sale del alojamiento; al empezar, de tu posición y hacia las paradas que faltan.
-  const { live, points, foot } = useLiveRoute(day);
+  // Antes de empezar la ruta sale del punto de inicio; al empezar, de tu posición y hacia las paradas que faltan, en
+  // el orden más corto. `stops` es ese orden, y es el que se numera en el mapa.
+  const { live, points, foot, stops } = useLiveRoute(day);
 
   /* Crear el mapa una sola vez */
   useEffect(() => {
@@ -184,9 +184,7 @@ export function RouteMap({ dayId, stopId }: Props) {
     if (!layer) return;
     layer.clearLayers();
 
-    if (lodging) {
-      L.marker([lodging.lat, lodging.lng], { icon: pinIcon(HOME_ICON, "origin"), title: "Alojamiento" }).addTo(layer);
-    }
+    L.marker([startPoint.lat, startPoint.lng], { icon: pinIcon(START_ICON, "origin"), title: "Punto de inicio" }).addTo(layer);
 
     if (!day) {
       allStops.forEach(({ stop, dayId: d }) => {
@@ -203,7 +201,7 @@ export function RouteMap({ dayId, stopId }: Props) {
         .addTo(layer);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [day, lodging, visited, stopId]);
+  }, [day, stops, visited, stopId]);
 
   /* Línea de la ruta. Al recorrer el día se recorta para que empiece donde estás. */
   const linePos = live ? position : null;
@@ -238,7 +236,7 @@ export function RouteMap({ dayId, stopId }: Props) {
       } else if (day && points) {
         m.fitBounds(points.map((p) => [p.lat, p.lng] as L.LatLngTuple), { padding });
       } else {
-        const all = routePoints(lodging, allStops.map((s) => s.stop));
+        const all = routePoints(startPoint, allStops.map((s) => s.stop));
         m.fitBounds(all.map((p) => [p.lat, p.lng] as L.LatLngTuple), { padding });
       }
     };
@@ -317,7 +315,7 @@ export function RouteMap({ dayId, stopId }: Props) {
     setFountainError(false);
     if (fountainMode === "off" || stopId) return;
 
-    const focus: LatLng[] = points ?? routePoints(lodging, allStops.map((s) => s.stop));
+    const focus: LatLng[] = points ?? routePoints(startPoint, allStops.map((s) => s.stop));
     const pad = 0.004;
     const bounds = {
       s: Math.min(...focus.map((p) => p.lat)) - pad,
@@ -348,7 +346,7 @@ export function RouteMap({ dayId, stopId }: Props) {
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fountainMode, dayId, lodging, stopId]);
+  }, [fountainMode, dayId, stopId]);
 
   return (
     <div className="map" aria-label="Mapa de la ruta">

@@ -16,8 +16,8 @@ Se abre en http://localhost:5173.
 
 Todo el contenido está en [src/data/itinerario.ts](src/data/itinerario.ts):
 
-- El alojamiento no está en el código: cada persona lo escribe la primera vez que entra en la web (por dirección o con su
-  ubicación) y queda guardado solo en su móvil.
+- `startPoint`: el punto de inicio de las rutas, con coordenadas aproximadas. En la web solo aparece como «Punto de
+  inicio»; no hay dirección ni se pide a nadie.
 - `days`: los días y sus paradas, en el orden en que se recorren.
 - Cada parada lleva coordenadas (clic derecho en Google Maps y se copian los dos números), una explicación corta
   (`teaser`, la que sale en la tarjeta del mapa), la historia y, si se quiere, un enlace a una audioguía externa.
@@ -63,6 +63,10 @@ La ubicación del móvil solo funciona con HTTPS, y Vercel lo da por defecto.
 ## Cómo funciona el seguimiento
 
 - «Empezar ruta» activa el GPS y mantiene la pantalla encendida.
+- Al empezar, las paradas que faltan se reordenan para hacer el menor camino a pie desde donde estéis (el orden más
+  corto, calculado con las distancias reales por las calles) y la numeración del mapa y de la lista cambia a ese orden.
+  El cálculo se repite al llegar a cada parada, y también con «Recalcular desde aquí». Al parar la ruta vuelve el orden
+  previsto del día, que sale del punto de inicio. La reordenación no depende del día, sirve con las paradas que tenga cada uno.
 - A 150 m de una parada avisa; a 50 m marca la parada como vista.
 - Las lecturas de GPS con más de 100 m de error se ignoran.
 - Solo funciona con la web abierta y la pantalla encendida: un navegador no puede vigilar la ubicación en segundo plano.
@@ -71,7 +75,6 @@ La ubicación del móvil solo funciona con HTTPS, y Vercel lo da por defecto.
 
 - Mapa: teselas de OpenStreetMap.
 - Rutas a pie: `routing.openstreetmap.de` (FOSSGIS). Si falla, se dibuja una línea recta como estimación.
-- Búsqueda de direcciones: Nominatim.
 - Fuentes de agua potable: no se piden a ningún servicio al usar la web. Están en `public/data/fuentes-roma.json`
   (1.834 puntos de OpenStreetMap descargados el 19/9/2026, © colaboradores de OpenStreetMap, licencia ODbL). Se cargó
   así porque Overpass, el servicio público de OpenStreetMap, se satura y falla a ratos.

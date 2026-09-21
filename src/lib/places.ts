@@ -1,29 +1,5 @@
 import type { LatLng } from "../data/types";
 
-export interface PlaceResult extends LatLng {
-  name: string;
-}
-
-/** Busca una dirección en Roma con Nominatim (OpenStreetMap). Uso ligero: una búsqueda por clic. */
-export async function searchPlace(query: string): Promise<PlaceResult[]> {
-  const params = new URLSearchParams({
-    q: query,
-    format: "jsonv2",
-    limit: "5",
-    countrycodes: "it",
-    "accept-language": "es",
-    viewbox: "12.30,42.00,12.70,41.75",
-  });
-  const res = await fetch(`https://nominatim.openstreetmap.org/search?${params}`);
-  if (!res.ok) throw new Error(String(res.status));
-  const json = (await res.json()) as { display_name: string; lat: string; lon: string }[];
-  return json.map((r) => ({
-    name: r.display_name.split(",").slice(0, 3).join(",").trim(),
-    lat: parseFloat(r.lat),
-    lng: parseFloat(r.lon),
-  }));
-}
-
 /** Foto real de una fuente, de Wikimedia Commons, con los datos que hay que citar. */
 export interface FountainPhoto {
   url: string;

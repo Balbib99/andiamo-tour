@@ -226,10 +226,6 @@ h2 {
   padding: 6px 14px;
   font-size: 0.875rem;
 }
-.btn-quiet {
-  border-color: transparent;
-  color: var(--muted);
-}
 .btn-done {
   background: var(--marble);
   border-color: var(--marble);
@@ -242,85 +238,6 @@ h2 {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.input {
-  flex: 1;
-  min-width: 0;
-  padding: 9px 14px;
-  border: 1.5px solid var(--stone);
-  border-radius: 999px;
-  background: #fff;
-  font: inherit;
-}
-
-/* ---------- Punto de partida ---------- */
-.start {
-  margin: 24px 0 28px;
-  padding: 14px 16px;
-  background: var(--marble);
-  border-radius: 10px;
-}
-.start p {
-  margin: 0;
-}
-.start-name {
-  font-weight: 600;
-}
-.start-label {
-  color: var(--muted);
-  font-size: 0.875rem;
-}
-.start-hint {
-  color: var(--muted);
-  font-size: 0.9375rem;
-}
-.start-missing {
-  background: #fff;
-  border: 2px solid var(--porpora);
-}
-.start-title {
-  font-family: var(--display);
-  font-size: 1.35rem;
-  line-height: 1.2;
-  margin-bottom: 2px !important;
-}
-.start-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-  flex-wrap: wrap;
-}
-.start-edit {
-  margin-top: 12px;
-}
-.start-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 4px;
-}
-.results {
-  list-style: none;
-  margin: 10px 0 0;
-  padding: 0;
-  display: grid;
-  gap: 6px;
-}
-.results button {
-  width: 100%;
-  text-align: left;
-  padding: 9px 12px;
-  border: 1px solid var(--stone);
-  border-radius: 8px;
-  background: #fff;
-}
-.results button:hover {
-  border-color: var(--nasone);
-}
-.start-message {
-  margin: 10px 0 0;
-  color: var(--muted);
-  font-size: 0.9375rem;
-}
-
 /* ---------- Placas de día ---------- */
 .plaques {
   display: grid;

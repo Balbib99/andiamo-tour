@@ -1,13 +1,11 @@
 import { Link } from "react-router-dom";
-import { days, romanNumerals } from "../data/itinerario";
+import { days, romanNumerals, startPoint } from "../data/itinerario";
 import type { Day } from "../data/types";
 import { formatDistance, routePoints } from "../lib/geo";
 import { useFootRoute } from "../lib/routing";
-import { useApp } from "../state/AppState";
 
 function Plaque({ day, index }: { day: Day; index: number }) {
-  const { lodging } = useApp();
-  const foot = useFootRoute(day.stops.length ? routePoints(lodging, day.stops) : null);
+  const foot = useFootRoute(day.stops.length ? routePoints(startPoint, day.stops) : null);
   const hasRoute = day.stops.length > 0;
 
   return (

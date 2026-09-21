@@ -8,9 +8,10 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { allStops, findDay } from "../data/itinerario";
+import { allStops, findDay, startPoint } from "../data/itinerario";
 import type { LatLng } from "../data/types";
 import { distanceM, routePoints } from "../lib/geo";
+import { planOrder } from "../lib/order";
 import { fetchFootRoute } from "../lib/routing";
 import { load, save } from "../lib/storage";
 import { useApp } from "./AppState";
@@ -64,12 +65,17 @@ interface TrackingContextValue {
    * te has movido lo bastante para que merezca recalcular. null hasta la primera lectura fiable.
    */
   routeOrigin: LatLng | null;
+  /**
+   * Orden de las paradas que faltan, recalculado a partir de tu posición para hacer el menor camino a pie.
+   * null mientras no se está siguiendo un día o hasta tener la primera posición.
+   */
+  plan: { dayId: string; ids: string[] } | null;
+  /** Vuelve a calcular ese orden desde donde estás ahora. */
+  replan: () => void;
   start: (dayId: string) => void;
   stop: () => void;
   alert: ProximityAlert | null;
   dismissAlert: () => void;
-  /** Una sola lectura de la posición, por ejemplo para fijar el alojamiento. */
-  locateOnce: () => Promise<UserPosition>;
   /** Olvida los avisos ya dados, para poder recorrer la ruta otra vez. */
   resetAlerts: () => void;
   /** Modo de prueba: recorre la ruta del día con una posición simulada, sin GPS. Borra las paradas vistas. */
@@ -82,11 +88,13 @@ const TrackingContext = createContext<TrackingContextValue | null>(null);
 const hasGeo = () => typeof navigator !== "undefined" && "geolocation" in navigator;
 
 export function TrackingProvider({ children }: { children: ReactNode }) {
-  const { markVisited, resetVisited, lodging } = useApp();
+  const { markVisited, resetVisited, visited } = useApp();
   const [status, setStatus] = useState<TrackingStatus>("off");
   const [position, setPosition] = useState<UserPosition | null>(null);
   const [followingDay, setFollowingDay] = useState<string | null>(null);
   const [routeOrigin, setRouteOrigin] = useState<LatLng | null>(null);
+  const [plan, setPlan] = useState<{ dayId: string; ids: string[] } | null>(null);
+  const [replanKey, setReplanKey] = useState(0);
   const [alert, setAlert] = useState<ProximityAlert | null>(null);
   const [simulating, setSimulating] = useState(false);
 
@@ -203,6 +211,7 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
     (dayId: string) => {
       followingRef.current = dayId;
       setFollowingDay(dayId);
+      setPlan(null);
       if (!hasGeo()) {
         setStatus("unsupported");
         return;
@@ -233,6 +242,7 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
     originRef.current = null;
     setFollowingDay(null);
     setRouteOrigin(null);
+    setPlan(null);
     setStatus("off");
     setPosition(null);
     setAlert(null);
@@ -253,8 +263,9 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
       setStatus("searching");
       setSimulating(true);
 
-      // Camino que se recorre: la ruta a pie prevista, del alojamiento a la última parada.
-      const points = routePoints(lodging, day.stops);
+      // Camino que se recorre: desde el punto de inicio, por las paradas en el orden más corto, como hará la ruta real.
+      const ordered = await planOrder(startPoint, day.stops);
+      const points = routePoints(startPoint, ordered);
       const route = await fetchFootRoute(points);
       if (token !== simToken.current) return; // se paró la simulación mientras se calculaba
       const coords: [number, number][] = route?.coords ?? points.map((p) => [p.lat, p.lng]);
@@ -288,7 +299,7 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
         }
       }, SIM_TICK_MS);
     },
-    [handlePosition, lodging, resetVisited, stop],
+    [handlePosition, resetVisited, stop],
   );
 
   // El navegador suelta el bloqueo de pantalla al cambiar de app: se pide otra vez al volver.
@@ -302,18 +313,26 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => stop, [stop]);
 
-  const locateOnce = useCallback(
-    () =>
-      new Promise<UserPosition>((resolve, reject) => {
-        if (!hasGeo()) return reject(new Error("unsupported"));
-        navigator.geolocation.getCurrentPosition(
-          (p) => resolve({ lat: p.coords.latitude, lng: p.coords.longitude, accuracy: p.coords.accuracy }),
-          (err) => reject(err),
-          { enableHighAccuracy: true, timeout: 20000 },
-        );
-      }),
-    [],
-  );
+  // Al empezar la ruta (y al llegar a una parada) se recalcula el orden de las que faltan desde donde estás.
+  const hasOrigin = routeOrigin !== null;
+  useEffect(() => {
+    const day = findDay(followingDay ?? undefined);
+    const origin = originRef.current;
+    if (!day || !origin || !hasOrigin) return;
+    const pending = day.stops.filter((s) => !visited.includes(s.id));
+    let alive = true;
+    void planOrder(origin, pending).then((ordered) => {
+      if (alive) setPlan({ dayId: day.id, ids: ordered.map((s) => s.id) });
+    });
+    return () => {
+      alive = false;
+    };
+  }, [followingDay, hasOrigin, visited, replanKey]);
+
+  const replan = useCallback(() => {
+    if (position) refreshOrigin(position);
+    setReplanKey((k) => k + 1);
+  }, [position, refreshOrigin]);
 
   const value = useMemo<TrackingContextValue>(
     () => ({
@@ -321,11 +340,12 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
       position,
       followingDay,
       routeOrigin,
+      plan,
+      replan,
       start,
       stop,
       alert,
       dismissAlert: () => setAlert(null),
-      locateOnce,
       resetAlerts: () => {
         announced.current = new Set();
         save("announced", []);
@@ -334,7 +354,7 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
       simulate: (dayId: string) => void simulate(dayId),
       simulating,
     }),
-    [status, position, followingDay, routeOrigin, start, stop, alert, locateOnce, simulate, simulating],
+    [status, position, followingDay, routeOrigin, plan, replan, start, stop, alert, simulate, simulating],
   );
 
   return <TrackingContext.Provider value={value}>{children}</TrackingContext.Provider>;

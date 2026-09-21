@@ -1,13 +1,14 @@
 import { guides } from "./guias.ts";
-import type { Day, Stop } from "./types";
+import type { Day, LatLng, Stop } from "./types";
 
 /**
  * Aquí se edita el viaje: los días y las paradas de cada día.
  * Las coordenadas se sacan de Google Maps (clic derecho sobre el sitio, y se copian los dos números).
  * Todo lo que lleva "(ejemplo)" es de prueba.
- *
- * El alojamiento NO se guarda aquí: cada persona lo escribe una vez en la web y queda guardado en su móvil.
  */
+
+/** Punto de inicio de las rutas de cada día, con coordenadas aproximadas (a unos 100 m). */
+export const startPoint: LatLng = { lat: 41.888, lng: 12.468 };
 
 const panteon: Stop = {
   id: "panteon",
