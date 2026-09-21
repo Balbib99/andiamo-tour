@@ -83,6 +83,7 @@ h2 {
 }
 .panel {
   grid-area: panel;
+  min-width: 0;
   background: var(--paper);
 }
 .panel-inner {
@@ -624,6 +625,15 @@ a.step:hover .step-name {
   color: var(--muted);
   font-size: 0.75rem;
 }
+.viewer-scroll.wide {
+  overflow-x: auto;
+  border-radius: 14px;
+  scrollbar-width: thin;
+}
+.viewer-scroll.wide .viewer-frame {
+  min-width: 640px;
+  border-radius: 0;
+}
 .hot {
   position: absolute;
   width: 40px;
@@ -1107,6 +1117,93 @@ a.step:hover .step-name {
 .fountain-popup a.leaflet-popup-close-button {
   top: 4px;
   right: 6px;
+}
+
+/* Tarjeta de una parada: foto vertical a la izquierda y a la derecha el nombre, una explicación corta y los botones */
+.stop-popup .leaflet-popup-content-wrapper {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 14px;
+}
+.stop-popup .leaflet-popup-content {
+  margin: 0;
+  width: 320px !important;
+  line-height: 1.4;
+}
+.stop-card {
+  display: flex;
+}
+.stop-photo {
+  position: relative;
+  flex: none;
+  width: 110px;
+  margin: 0;
+  background: var(--stone);
+}
+.stop-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 40%;
+}
+.stop-photo figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px 5px 3px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  color: #fff;
+  font-size: 0.5625rem;
+  line-height: 1.2;
+}
+.stop-body {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 26px 12px 12px;
+}
+.stop-body p.stop-meta {
+  margin: 0 0 1px;
+  color: var(--porpora);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.stop-card h3 {
+  font-size: 1.15rem;
+  line-height: 1.15;
+  margin: 0 0 4px;
+}
+.stop-body p.stop-teaser {
+  margin: 0 0 8px;
+  font-size: 0.8125rem;
+}
+.stop-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.stop-actions .btn {
+  padding: 5px 11px;
+  font-size: 0.8125rem;
+}
+.leaflet-container .stop-card a.btn {
+  color: var(--nasone);
+}
+.stop-popup a.leaflet-popup-close-button {
+  top: 4px;
+  right: 6px;
+}
+
+@media (max-width: 480px) {
+  .hot {
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    font-size: 0.8125rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

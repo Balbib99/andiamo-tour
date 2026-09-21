@@ -19,8 +19,14 @@ Todo el contenido está en [src/data/itinerario.ts](src/data/itinerario.ts):
 - El alojamiento no está en el código: cada persona lo escribe la primera vez que entra en la web (por dirección o con su
   ubicación) y queda guardado solo en su móvil.
 - `days`: los días y sus paradas, en el orden en que se recorren.
-- Cada parada lleva coordenadas (clic derecho en Google Maps y se copian los dos números), historia y, si se quiere,
-  una foto con puntos numerados y un enlace a una audioguía externa.
+- Cada parada lleva coordenadas (clic derecho en Google Maps y se copian los dos números), una explicación corta
+  (`teaser`, la que sale en la tarjeta del mapa), la historia y, si se quiere, un enlace a una audioguía externa.
+- La foto de cada parada con sus puntos para tocar y escuchar está en [src/data/guias.ts](src/data/guias.ts), unida a la
+  parada por su `id`. Las imágenes están en `public/img/monumentos/` (de Wikimedia Commons, con licencia libre y su
+  autoría mostrada). Los puntos se dan en píxeles de la foto y el código los pasa a porcentaje. Toda parada nueva debería
+  llevar su foto y sus puntos, como el Coliseo.
+- En el mapa, al tocar una parada se abre una tarjeta con su foto, el `teaser` y los botones «Escuchar la guía» y
+  «Cómo llegar».
 
 Lo que lleva «(ejemplo)» es de prueba.
 
@@ -32,11 +38,11 @@ con ese nombre. Más detalles en `public/personajes/LEEME.txt`.
 
 ## Audios
 
-Cada parada (y cada punto de la foto del Coliseo y del Panteón) tiene su audio, hecho con la voz de Ximena de Microsoft
+Cada punto de la foto de cada parada tiene su audio, hecho con la voz de Ximena de Microsoft
 Edge y guardado en `public/audio/`. La web reproduce esos archivos y, si falta alguno o no se puede reproducir, lee el
 texto con la voz del móvil. `public/audio/manifest.json` lista los audios y lo que dura cada uno.
 
-Cuando cambies un texto de `src/data/itinerario.ts`, regenera los audios (solo rehace los que han cambiado). Hace falta
+Cuando cambies un texto de `src/data/itinerario.ts` o de `src/data/guias.ts`, regenera los audios (solo rehace los que han cambiado). Hace falta
 Python y Node, y instalar una vez `pip install edge-tts num2words`:
 
 ```bash

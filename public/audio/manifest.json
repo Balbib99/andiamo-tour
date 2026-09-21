@@ -1,29 +1,105 @@
 {
  "voz": "es-ES-XimenaNeural",
  "files": {
-  "acqua-paola.mp3": {
-   "seg": 23,
-   "hash": "169cc29b64b3"
+  "acqua-paola-1.mp3": {
+   "seg": 19,
+   "hash": "449d8877d6e8"
   },
-  "arco-constantino.mp3": {
-   "seg": 26,
-   "hash": "c9f300d5dd09"
+  "acqua-paola-2.mp3": {
+   "seg": 12,
+   "hash": "4d067860a235"
   },
-  "barrio-judio.mp3": {
-   "seg": 23,
-   "hash": "45edfe691d2a"
+  "acqua-paola-3.mp3": {
+   "seg": 12,
+   "hash": "fdfffc97ddab"
   },
-  "campo-de-fiori.mp3": {
+  "acqua-paola-4.mp3": {
+   "seg": 11,
+   "hash": "51e21a9f2094"
+  },
+  "arco-constantino-1.mp3": {
+   "seg": 21,
+   "hash": "935660e1589d"
+  },
+  "arco-constantino-2.mp3": {
+   "seg": 13,
+   "hash": "7b8fb90f50fa"
+  },
+  "arco-constantino-3.mp3": {
+   "seg": 13,
+   "hash": "0d45b0e16c94"
+  },
+  "arco-constantino-4.mp3": {
+   "seg": 16,
+   "hash": "899ac9d6b451"
+  },
+  "arco-constantino-5.mp3": {
+   "seg": 17,
+   "hash": "b9ccd5ce0fab"
+  },
+  "barrio-judio-1.mp3": {
+   "seg": 13,
+   "hash": "69fa10bb5fb0"
+  },
+  "barrio-judio-2.mp3": {
+   "seg": 13,
+   "hash": "69f3808ed441"
+  },
+  "barrio-judio-3.mp3": {
+   "seg": 16,
+   "hash": "7321f0cf8b84"
+  },
+  "barrio-judio-4.mp3": {
+   "seg": 17,
+   "hash": "e1dad4fa14b0"
+  },
+  "barrio-judio-5.mp3": {
+   "seg": 13,
+   "hash": "4370611f9571"
+  },
+  "campo-de-fiori-1.mp3": {
+   "seg": 15,
+   "hash": "7805b750e420"
+  },
+  "campo-de-fiori-2.mp3": {
+   "seg": 13,
+   "hash": "54b427991eb7"
+  },
+  "campo-de-fiori-3.mp3": {
+   "seg": 13,
+   "hash": "ee6dfc9dc34a"
+  },
+  "campo-de-fiori-4.mp3": {
+   "seg": 12,
+   "hash": "6d59f2d8c31b"
+  },
+  "cavalieri-malta-1.mp3": {
+   "seg": 17,
+   "hash": "f1b8e17c0fb5"
+  },
+  "cavalieri-malta-2.mp3": {
+   "seg": 14,
+   "hash": "f128b9420138"
+  },
+  "cavalieri-malta-3.mp3": {
    "seg": 18,
-   "hash": "b7384ed56566"
+   "hash": "3a4489c0dfa8"
   },
-  "cavalieri-malta.mp3": {
-   "seg": 24,
-   "hash": "171419356016"
+  "circo-massimo-1.mp3": {
+   "seg": 18,
+   "hash": "8e6c83c7863b"
   },
-  "circo-massimo.mp3": {
-   "seg": 25,
-   "hash": "bdae297d17e8"
+  "circo-massimo-2.mp3": {
+   "seg": 16,
+   "hash": "67fc431e27d3"
+  },
+  "circo-massimo-3.mp3": {
+   "seg": 12,
+   "hash": "7bd261540d34"
+  },
+  "circo-massimo-4.mp3": {
+   "seg": 11,
+   "hash": "6543f71bd872"
   },
   "coliseo-1.mp3": {
    "seg": 14,
@@ -41,45 +117,177 @@
    "seg": 17,
    "hash": "e8862e8b3dff"
   },
-  "cosmedin.mp3": {
-   "seg": 52,
-   "hash": "9af20469b0e0"
+  "cosmedin-1.mp3": {
+   "seg": 17,
+   "hash": "b2043154c0ec"
   },
-  "foro-romano.mp3": {
-   "seg": 83,
-   "hash": "d16eda48d6b0"
+  "cosmedin-2.mp3": {
+   "seg": 24,
+   "hash": "2552aca22a48"
   },
-  "gianicolo.mp3": {
-   "seg": 30,
-   "hash": "98bd944585e0"
+  "cosmedin-3.mp3": {
+   "seg": 10,
+   "hash": "1b7917935143"
   },
-  "jardin-naranjos.mp3": {
-   "seg": 22,
-   "hash": "d19c9fc5cb92"
-  },
-  "largo-argentina.mp3": {
-   "seg": 23,
-   "hash": "4b96b5d5ad4a"
-  },
-  "mercados-trajano.mp3": {
+  "cosmedin-4.mp3": {
    "seg": 21,
-   "hash": "b7f7298669cb"
+   "hash": "dbd2b78141b6"
   },
-  "monte-palatino.mp3": {
-   "seg": 67,
-   "hash": "ca76072c34f3"
+  "foro-romano-1.mp3": {
+   "seg": 21,
+   "hash": "1cbaafed058e"
   },
-  "monti.mp3": {
-   "seg": 22,
-   "hash": "e66096cdd79d"
+  "foro-romano-2.mp3": {
+   "seg": 17,
+   "hash": "071d7ac51f83"
   },
-  "museos-capitolinos.mp3": {
-   "seg": 27,
-   "hash": "91b5df886ba9"
+  "foro-romano-3.mp3": {
+   "seg": 17,
+   "hash": "a5179fe36c1d"
   },
-  "museos-vaticanos.mp3": {
-   "seg": 25,
-   "hash": "e5b6738512d8"
+  "foro-romano-4.mp3": {
+   "seg": 15,
+   "hash": "4138c15bb72a"
+  },
+  "foro-romano-5.mp3": {
+   "seg": 12,
+   "hash": "1c61c3548903"
+  },
+  "foro-romano-6.mp3": {
+   "seg": 20,
+   "hash": "ac867911a0b8"
+  },
+  "foro-romano-7.mp3": {
+   "seg": 14,
+   "hash": "69d779862080"
+  },
+  "gianicolo-1.mp3": {
+   "seg": 17,
+   "hash": "1803b7d462d8"
+  },
+  "gianicolo-2.mp3": {
+   "seg": 11,
+   "hash": "88bdac0ac2f3"
+  },
+  "gianicolo-3.mp3": {
+   "seg": 15,
+   "hash": "57d2a75e2de3"
+  },
+  "gianicolo-4.mp3": {
+   "seg": 14,
+   "hash": "e0894de030fe"
+  },
+  "jardin-naranjos-1.mp3": {
+   "seg": 19,
+   "hash": "fa6b889f269c"
+  },
+  "jardin-naranjos-2.mp3": {
+   "seg": 12,
+   "hash": "46e5b798841d"
+  },
+  "jardin-naranjos-3.mp3": {
+   "seg": 14,
+   "hash": "3ebd225dd032"
+  },
+  "largo-argentina-1.mp3": {
+   "seg": 17,
+   "hash": "16d72d4fe2d0"
+  },
+  "largo-argentina-2.mp3": {
+   "seg": 16,
+   "hash": "99914f95f5f5"
+  },
+  "largo-argentina-3.mp3": {
+   "seg": 17,
+   "hash": "701f2806a970"
+  },
+  "largo-argentina-4.mp3": {
+   "seg": 13,
+   "hash": "af81a8ca6024"
+  },
+  "mercados-trajano-1.mp3": {
+   "seg": 15,
+   "hash": "f2de71929bbf"
+  },
+  "mercados-trajano-2.mp3": {
+   "seg": 14,
+   "hash": "5a9ebcfbf6d9"
+  },
+  "mercados-trajano-3.mp3": {
+   "seg": 17,
+   "hash": "acde5441d920"
+  },
+  "monte-palatino-1.mp3": {
+   "seg": 19,
+   "hash": "3a1eb8ae9845"
+  },
+  "monte-palatino-2.mp3": {
+   "seg": 18,
+   "hash": "5aca21784538"
+  },
+  "monte-palatino-3.mp3": {
+   "seg": 17,
+   "hash": "08f93dcaccfd"
+  },
+  "monte-palatino-4.mp3": {
+   "seg": 24,
+   "hash": "ede07fe0944f"
+  },
+  "monte-palatino-5.mp3": {
+   "seg": 11,
+   "hash": "c72a13fca97b"
+  },
+  "monti-1.mp3": {
+   "seg": 11,
+   "hash": "7969fd2768f7"
+  },
+  "monti-2.mp3": {
+   "seg": 10,
+   "hash": "ab2d0e219c5e"
+  },
+  "monti-3.mp3": {
+   "seg": 14,
+   "hash": "bb19cd97624d"
+  },
+  "monti-4.mp3": {
+   "seg": 16,
+   "hash": "099b9bc324e3"
+  },
+  "museos-capitolinos-1.mp3": {
+   "seg": 13,
+   "hash": "410eba432d79"
+  },
+  "museos-capitolinos-2.mp3": {
+   "seg": 11,
+   "hash": "182cc5343496"
+  },
+  "museos-capitolinos-3.mp3": {
+   "seg": 15,
+   "hash": "a0ae1e97f888"
+  },
+  "museos-capitolinos-4.mp3": {
+   "seg": 24,
+   "hash": "f6df3cc9b415"
+  },
+  "museos-capitolinos-5.mp3": {
+   "seg": 11,
+   "hash": "b0782647b694"
+  },
+  "museos-vaticanos-1.mp3": {
+   "seg": 15,
+   "hash": "1dccb5c2d5bf"
+  },
+  "museos-vaticanos-2.mp3": {
+   "seg": 15,
+   "hash": "6124890c61c0"
+  },
+  "museos-vaticanos-3.mp3": {
+   "seg": 16,
+   "hash": "790fa1518191"
+  },
+  "museos-vaticanos-4.mp3": {
+   "seg": 18,
+   "hash": "c034c2f9795a"
   },
   "panteon-1.mp3": {
    "seg": 14,
@@ -97,41 +305,153 @@
    "seg": 14,
    "hash": "40f979499031"
   },
-  "piazza-navona.mp3": {
-   "seg": 24,
-   "hash": "086a45441be7"
+  "piazza-navona-1.mp3": {
+   "seg": 15,
+   "hash": "40c894210505"
   },
-  "plaza-san-pedro.mp3": {
-   "seg": 30,
-   "hash": "9ba35c852433"
+  "piazza-navona-2.mp3": {
+   "seg": 21,
+   "hash": "d72ff266d07a"
   },
-  "ponte-sisto.mp3": {
-   "seg": 26,
-   "hash": "6912eeb4eb93"
-  },
-  "porta-portese.mp3": {
-   "seg": 19,
-   "hash": "bb2a85186b01"
-  },
-  "san-pietro-in-vincoli.mp3": {
-   "seg": 25,
-   "hash": "2c29100d2371"
-  },
-  "san-pietro-montorio.mp3": {
-   "seg": 22,
-   "hash": "5d9baf90f72d"
-  },
-  "santa-cecilia.mp3": {
-   "seg": 29,
-   "hash": "c5313840044a"
-  },
-  "trevi.mp3": {
-   "seg": 25,
-   "hash": "3128a215643c"
-  },
-  "vittoriano.mp3": {
+  "piazza-navona-3.mp3": {
    "seg": 18,
-   "hash": "b5d40037c70c"
+   "hash": "7c571cf3c176"
+  },
+  "piazza-navona-4.mp3": {
+   "seg": 19,
+   "hash": "9f4e8af6836c"
+  },
+  "plaza-san-pedro-1.mp3": {
+   "seg": 16,
+   "hash": "fd3a744d7e89"
+  },
+  "plaza-san-pedro-2.mp3": {
+   "seg": 18,
+   "hash": "6c34014c2ece"
+  },
+  "plaza-san-pedro-3.mp3": {
+   "seg": 14,
+   "hash": "eeaeaa5d0f42"
+  },
+  "plaza-san-pedro-4.mp3": {
+   "seg": 13,
+   "hash": "70ae141cbca6"
+  },
+  "plaza-san-pedro-5.mp3": {
+   "seg": 17,
+   "hash": "99df3fac3303"
+  },
+  "ponte-sisto-1.mp3": {
+   "seg": 13,
+   "hash": "b9d9f9d69e10"
+  },
+  "ponte-sisto-2.mp3": {
+   "seg": 18,
+   "hash": "32a829bfcd52"
+  },
+  "ponte-sisto-3.mp3": {
+   "seg": 13,
+   "hash": "507099b5f838"
+  },
+  "ponte-sisto-4.mp3": {
+   "seg": 12,
+   "hash": "e628597ceba3"
+  },
+  "porta-portese-1.mp3": {
+   "seg": 14,
+   "hash": "928953c138bc"
+  },
+  "porta-portese-2.mp3": {
+   "seg": 10,
+   "hash": "56033cac64f9"
+  },
+  "porta-portese-3.mp3": {
+   "seg": 8,
+   "hash": "ef4b533081be"
+  },
+  "porta-portese-4.mp3": {
+   "seg": 17,
+   "hash": "4c41814bf39a"
+  },
+  "san-pietro-in-vincoli-1.mp3": {
+   "seg": 14,
+   "hash": "98febcddd763"
+  },
+  "san-pietro-in-vincoli-2.mp3": {
+   "seg": 14,
+   "hash": "02e99952a8a0"
+  },
+  "san-pietro-in-vincoli-3.mp3": {
+   "seg": 17,
+   "hash": "07d5fb28340b"
+  },
+  "san-pietro-montorio-1.mp3": {
+   "seg": 16,
+   "hash": "7f20bd39b681"
+  },
+  "san-pietro-montorio-2.mp3": {
+   "seg": 9,
+   "hash": "60b0f1247cc9"
+  },
+  "san-pietro-montorio-3.mp3": {
+   "seg": 10,
+   "hash": "4713136bc7dc"
+  },
+  "san-pietro-montorio-4.mp3": {
+   "seg": 23,
+   "hash": "9e010369e25c"
+  },
+  "santa-cecilia-1.mp3": {
+   "seg": 6,
+   "hash": "bc5d06c861f6"
+  },
+  "santa-cecilia-2.mp3": {
+   "seg": 14,
+   "hash": "1522d11cee2d"
+  },
+  "santa-cecilia-3.mp3": {
+   "seg": 9,
+   "hash": "7d0eddb5f205"
+  },
+  "santa-cecilia-4.mp3": {
+   "seg": 22,
+   "hash": "f7687a3669b2"
+  },
+  "trevi-1.mp3": {
+   "seg": 19,
+   "hash": "cb2e62b0a599"
+  },
+  "trevi-2.mp3": {
+   "seg": 14,
+   "hash": "e563650eae65"
+  },
+  "trevi-3.mp3": {
+   "seg": 19,
+   "hash": "a9022a31cf6b"
+  },
+  "trevi-4.mp3": {
+   "seg": 21,
+   "hash": "9b28bc1e4629"
+  },
+  "vittoriano-1.mp3": {
+   "seg": 17,
+   "hash": "feb500da3cb7"
+  },
+  "vittoriano-2.mp3": {
+   "seg": 17,
+   "hash": "88e96e683eb1"
+  },
+  "vittoriano-3.mp3": {
+   "seg": 10,
+   "hash": "6c1d92889254"
+  },
+  "vittoriano-4.mp3": {
+   "seg": 14,
+   "hash": "5e877ea88850"
+  },
+  "vittoriano-5.mp3": {
+   "seg": 14,
+   "hash": "9aaffd522197"
   }
  }
 }

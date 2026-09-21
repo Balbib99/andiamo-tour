@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Stop } from "../data/types";
 import { audioFile, audioSrc, useAudioManifest } from "../lib/audio";
 import { mapsDirectionsUrl } from "../lib/geo";
@@ -21,13 +21,32 @@ export function StopViewer({ stop }: { stop: Stop }) {
   const hasPhoto = Boolean(stop.photo && points.length > 0);
   const point = points[active];
 
+  // Las fotos panorámicas serían muy bajas en el móvil y los puntos se amontonarían: se dejan más anchas y se desliza.
+  const [pw, ph] = (stop.photo?.ratio ?? "1 / 1").split("/").map(Number);
+  const wide = pw / ph > 2;
+  const scroller = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const box = scroller.current;
+    const dot = box?.querySelector<HTMLElement>(".hot.active");
+    if (box && dot && wide)
+      box.scrollTo({
+        left: dot.offsetLeft - box.clientWidth / 2,
+        behavior: "smooth",
+      });
+  }, [active, wide]);
+
   // Lo que se reproduce: un elemento por punto de la foto, o uno solo con toda la historia de la parada.
   const items: Playable[] = hasPhoto
     ? points.map((p, i) => ({
         text: `${p.title}. ${p.text}`,
         src: audioSrc(manifest, audioFile(stop.id, i + 1)),
       }))
-    : [{ text: `${stop.name}. ${stop.text.join(" ")}`, src: audioSrc(manifest, audioFile(stop.id)) }];
+    : [
+        {
+          text: `${stop.name}. ${stop.text.join(" ")}`,
+          src: audioSrc(manifest, audioFile(stop.id)),
+        },
+      ];
   const canPlay = supported || items.some((i) => i.src);
 
   const choose = (i: number) => {
@@ -65,21 +84,29 @@ export function StopViewer({ stop }: { stop: Stop }) {
       {hasPhoto && stop.photo && (
         <>
           <figure className="viewer">
-            <div className="viewer-frame" style={{ aspectRatio: stop.photo.ratio }}>
-              <img src={stop.photo.src} alt={stop.photo.alt} />
-              {points.map((p, i) => (
-                <button
-                  key={p.title}
-                  type="button"
-                  className={`hot${i === active ? " active" : ""}`}
-                  style={{ left: `${p.x}%`, top: `${p.y}%` }}
-                  aria-label={`Punto ${i + 1}: ${p.title}`}
-                  aria-pressed={i === active}
-                  onClick={() => choose(i)}
-                >
-                  {i + 1}
-                </button>
-              ))}
+            <div
+              ref={scroller}
+              className={`viewer-scroll${wide ? " wide" : ""}`}
+            >
+              <div
+                className="viewer-frame"
+                style={{ aspectRatio: stop.photo.ratio }}
+              >
+                <img src={stop.photo.src} alt={stop.photo.alt} />
+                {points.map((p, i) => (
+                  <button
+                    key={p.title}
+                    type="button"
+                    className={`hot${i === active ? " active" : ""}`}
+                    style={{ left: `${p.x}%`, top: `${p.y}%` }}
+                    aria-label={`Punto ${i + 1}: ${p.title}`}
+                    aria-pressed={i === active}
+                    onClick={() => choose(i)}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
             </div>
             <figcaption>{stop.photo.credit}</figcaption>
           </figure>
@@ -90,7 +117,12 @@ export function StopViewer({ stop }: { stop: Stop }) {
             </h3>
             <p>{point.text}</p>
             <div className="point-nav">
-              <button type="button" className="btn btn-small" disabled={active === 0} onClick={() => choose(active - 1)}>
+              <button
+                type="button"
+                className="btn btn-small"
+                disabled={active === 0}
+                onClick={() => choose(active - 1)}
+              >
                 Anterior
               </button>
               <button
@@ -126,25 +158,42 @@ export function StopViewer({ stop }: { stop: Stop }) {
               {playing ? <StopIcon /> : <PlayIcon />}
             </button>
             <div>
-              <p className="audio-title">{hasPhoto ? "Escuchar este punto" : "Escuchar la historia"}</p>
+              <p className="audio-title">
+                {hasPhoto ? "Escuchar este punto" : "Escuchar la historia"}
+              </p>
               <p className="audio-sub">
-                {hasPhoto ? `Punto ${active + 1} de ${points.length}` : "Historia narrada"}
+                {hasPhoto
+                  ? `Punto ${active + 1} de ${points.length}`
+                  : "Historia narrada"}
               </p>
               <div className="wave" aria-hidden="true">
                 {wave.map((w, i) => (
-                  <i key={i} style={{ height: `${w.height}%`, animationDelay: `${w.delay}s` }} />
+                  <i
+                    key={i}
+                    style={{
+                      height: `${w.height}%`,
+                      animationDelay: `${w.delay}s`,
+                    }}
+                  />
                 ))}
               </div>
             </div>
           </div>
           {hasPhoto && (
-            <button type="button" className="btn audio-all" onClick={togglePlayAll}>
+            <button
+              type="button"
+              className="btn audio-all"
+              onClick={togglePlayAll}
+            >
               {playing && playingAll ? "Parar la guía" : allLabel}
             </button>
           )}
         </>
       ) : (
-        <p className="empty">Este navegador no puede leer los textos en voz alta. Los podéis leer en pantalla.</p>
+        <p className="empty">
+          Este navegador no puede leer los textos en voz alta. Los podéis leer
+          en pantalla.
+        </p>
       )}
 
       {stop.highlights && stop.highlights.length > 0 && (
@@ -158,7 +207,9 @@ export function StopViewer({ stop }: { stop: Stop }) {
                 {h.lat !== undefined && h.lng !== undefined && (
                   <a
                     className="hl-maps"
-                    href={mapsDirectionsUrl({ destination: { lat: h.lat, lng: h.lng } })}
+                    href={mapsDirectionsUrl({
+                      destination: { lat: h.lat, lng: h.lng },
+                    })}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Abrir en Google Maps la ruta a ${h.name} desde mi ubicación`}
@@ -173,10 +224,16 @@ export function StopViewer({ stop }: { stop: Stop }) {
       )}
 
       {stop.viator && (
-        <a className="viator" href={stop.viator.url} target="_blank" rel="noopener noreferrer">
+        <a
+          className="viator"
+          href={stop.viator.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <span>
             <strong>Completar en AudioViator</strong>
-            {stop.viator.note ?? "Audioguía completa de este lugar."} Se abre en otra web.
+            {stop.viator.note ?? "Audioguía completa de este lugar."} Se abre en
+            otra web.
           </span>
           <ExternalIcon />
         </a>

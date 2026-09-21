@@ -3,7 +3,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router-dom";
 import { allStops, findDay } from "../data/itinerario";
-import type { LatLng } from "../data/types";
+import type { LatLng, Stop } from "../data/types";
 import { distanceM, formatDistance, mapsDirectionsUrl, routePoints, streetViewUrl } from "../lib/geo";
 import { fetchFountains, type Fountain } from "../lib/places";
 import { useLiveRoute } from "../lib/useLiveRoute";
@@ -19,6 +19,9 @@ const pinIcon = (label: string, cls = "") =>
     iconSize: [32, 32],
     iconAnchor: [16, 16],
   });
+
+/** Opciones de la tarjeta de una parada: se abre un poco por encima del pin para no taparlo. */
+const STOP_POPUP: L.PopupOptions = { className: "stop-popup", minWidth: 320, maxWidth: 320, offset: [0, -10], autoPanPaddingTopLeft: [16, 16], autoPanPaddingBottomRight: [64, 16] };
 
 const HOME_ICON = "&#8962;";
 
@@ -71,6 +74,34 @@ function fountainCard(f: Fountain, from: LatLng | null): string {
       ${photo ? `<p class="fountain-credit">Foto: <a href="${esc(photo.pagina)}" target="_blank" rel="noopener noreferrer">${esc(photo.autor)}</a>, ${esc(photo.licencia)}</p>` : ""}
     </div>
   </article>`;
+}
+
+/**
+ * Tarjeta que se abre al tocar una parada en el mapa, como un sitio en Google Maps: foto, nombre,
+ * una explicación corta y los botones para escuchar la guía o ir hasta allí.
+ */
+function stopCard(stop: Stop, meta: string, from: LatLng | null, onGuide: () => void): HTMLElement {
+  const away = from ? ` (${formatDistance(distanceM(from, stop))})` : "";
+  const el = document.createElement("article");
+  el.className = "stop-card";
+  el.innerHTML = `${
+    stop.photo
+      ? `<figure class="stop-photo"><img src="${esc(stop.photo.src)}" alt="${esc(stop.photo.alt)}" loading="lazy"><figcaption>${esc(
+          stop.photo.credit.replace(/^Foto: /, "").replace(", Wikimedia Commons", ""),
+        )}</figcaption></figure>`
+      : ""
+  }
+    <div class="stop-body">
+      <p class="stop-meta">${esc(meta)}</p>
+      <h3>${esc(stop.name)}</h3>
+      <p class="stop-teaser">${esc(stop.teaser)}</p>
+      <div class="stop-actions">
+        <button type="button" class="btn btn-small btn-primary" data-guide>Escuchar la guía</button>
+        <a class="btn btn-small" href="${mapsDirectionsUrl({ destination: stop })}" target="_blank" rel="noopener noreferrer">Cómo llegar${away}</a>
+      </div>
+    </div>`;
+  el.querySelector("[data-guide]")?.addEventListener("click", onGuide);
+  return el;
 }
 
 const reducedMotion = () =>
@@ -160,7 +191,7 @@ export function RouteMap({ dayId, stopId }: Props) {
     if (!day) {
       allStops.forEach(({ stop, dayId: d }) => {
         L.marker([stop.lat, stop.lng], { icon: pinIcon("", "small"), title: stop.name })
-          .on("click", () => navigate(`/dia/${d}/parada/${stop.id}`))
+          .bindPopup(() => stopCard(stop, `Día ${d}`, positionRef.current, () => navigate(`/dia/${d}/parada/${stop.id}`)), STOP_POPUP)
           .addTo(layer);
       });
       return;
@@ -168,7 +199,7 @@ export function RouteMap({ dayId, stopId }: Props) {
 
     stops.forEach((s, i) => {
       L.marker([s.lat, s.lng], { icon: pinIcon(String(i + 1), s.id === stopId ? "active" : visited.includes(s.id) ? "done" : ""), title: s.name })
-        .on("click", () => navigate(`/dia/${day.id}/parada/${s.id}`))
+        .bindPopup(() => stopCard(s, `Parada ${i + 1} de ${stops.length}`, positionRef.current, () => navigate(`/dia/${day.id}/parada/${s.id}`)), STOP_POPUP)
         .addTo(layer);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,3 +1,4 @@
+import { guides } from "./guias.ts";
 import type { Day, Stop } from "./types";
 
 /**
@@ -504,7 +505,7 @@ const museosVaticanos: Stop = {
   },
 };
 
-export const days: Day[] = [
+const baseDays: Day[] = [
   {
     id: "1",
     title: "Roma antigua, Aventino y Trastevere",
@@ -548,6 +549,11 @@ export const days: Day[] = [
     ],
   },
 ];
+
+/** Une a cada parada su foto con puntos, si la tiene en guias.ts. */
+const withGuide = (stop: Stop): Stop => (guides[stop.id] ? { ...stop, ...guides[stop.id] } : stop);
+
+export const days: Day[] = baseDays.map((d) => ({ ...d, stops: d.stops.map(withGuide) }));
 
 export const romanNumerals = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
