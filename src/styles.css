@@ -749,6 +749,53 @@ a.step:hover .step-name {
 .audio-all {
   margin-bottom: 8px;
 }
+/* Lugares que ver dentro de una parada */
+.highlights {
+  margin-top: 26px;
+}
+.highlights h3 {
+  font-size: 1.35rem;
+  margin-bottom: 8px;
+}
+.highlights ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--stone);
+}
+.highlights li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--stone);
+}
+.hl-name {
+  display: block;
+  font-family: var(--display);
+  font-size: 1.1rem;
+  line-height: 1.25;
+}
+.hl-note {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  max-width: 60ch;
+}
+.hl-maps {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 3px 12px 3px 10px;
+  border: 1.5px solid var(--stone);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--nasone);
+  text-decoration: none;
+}
+.hl-maps:hover {
+  border-color: var(--nasone);
+}
 .viator {
   display: flex;
   align-items: center;

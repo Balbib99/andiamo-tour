@@ -30,6 +30,22 @@ La portada muestra la primera que exista en `public/personajes/`: `bienvenida.mp
 fija con fondo transparente) o, si no hay ninguna, la foto de una estatua romana. Para cambiarla basta guardar el archivo
 con ese nombre. Más detalles en `public/personajes/LEEME.txt`.
 
+## Audios
+
+Cada parada (y cada punto de la foto del Coliseo y del Panteón) tiene su audio, hecho con la voz de Ximena de Microsoft
+Edge y guardado en `public/audio/`. La web reproduce esos archivos y, si falta alguno o no se puede reproducir, lee el
+texto con la voz del móvil. `public/audio/manifest.json` lista los audios y lo que dura cada uno.
+
+Cuando cambies un texto de `src/data/itinerario.ts`, regenera los audios (solo rehace los que han cambiado). Hace falta
+Python y Node, y instalar una vez `pip install edge-tts num2words`:
+
+```bash
+python scripts/generar-audios.py
+```
+
+El script adapta el texto para la voz: entre frases del mismo párrafo pone punto y coma, porque un punto deja casi un
+segundo de silencio, y escribe con letras los números y «a. C.». Con `--todo` rehace todos.
+
 ## Publicar en Vercel
 
 1. Sube el proyecto a un repositorio de GitHub.

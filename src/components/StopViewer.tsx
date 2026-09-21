@@ -1,23 +1,34 @@
 import { useState } from "react";
 import type { Stop } from "../data/types";
-import { useSpeech } from "../lib/useSpeech";
-import { ExternalIcon, PlayIcon, StopIcon } from "./Icons";
+import { audioFile, audioSrc, useAudioManifest } from "../lib/audio";
+import { mapsDirectionsUrl } from "../lib/geo";
+import { useSpeech, type Playable } from "../lib/useSpeech";
+import { ExternalIcon, MapIcon, PlayIcon, StopIcon } from "./Icons";
 
 const wave = Array.from({ length: 40 }, (_, i) => ({
   height: 30 + Math.round(Math.abs(Math.sin(i * 1.7)) * 70),
   delay: (i % 8) * 0.11,
 }));
 
-/** Contenido de una parada: foto con puntos de audioguía (o texto), audio y enlace externo. */
+/** Contenido de una parada: foto con puntos (o texto), audio, lugares que ver y enlace externo. */
 export function StopViewer({ stop }: { stop: Stop }) {
   const [active, setActive] = useState(0);
   const [playingAll, setPlayingAll] = useState(false);
+  const manifest = useAudioManifest();
   const { supported, playing, speak, stop: stopSpeech } = useSpeech();
 
   const points = stop.points ?? [];
   const hasPhoto = Boolean(stop.photo && points.length > 0);
   const point = points[active];
-  const pointText = (i: number) => `${points[i].title}. ${points[i].text}`;
+
+  // Lo que se reproduce: un elemento por punto de la foto, o uno solo con toda la historia de la parada.
+  const items: Playable[] = hasPhoto
+    ? points.map((p, i) => ({
+        text: `${p.title}. ${p.text}`,
+        src: audioSrc(manifest, audioFile(stop.id, i + 1)),
+      }))
+    : [{ text: `${stop.name}. ${stop.text.join(" ")}`, src: audioSrc(manifest, audioFile(stop.id)) }];
+  const canPlay = supported || items.some((i) => i.src);
 
   const choose = (i: number) => {
     stopSpeech();
@@ -30,9 +41,9 @@ export function StopViewer({ stop }: { stop: Stop }) {
       stopSpeech();
       setPlayingAll(false);
     } else if (hasPhoto) {
-      speak([pointText(active)]);
+      speak([items[active]]);
     } else {
-      speak([`${stop.name}. ${stop.text.join(" ")}`]);
+      speak(items);
     }
   };
 
@@ -44,10 +55,7 @@ export function StopViewer({ stop }: { stop: Stop }) {
     }
     const from = active === points.length - 1 ? 0 : active;
     setPlayingAll(true);
-    speak(
-      points.slice(from).map((_, i) => pointText(from + i)),
-      (i) => setActive(from + i),
-    );
+    speak(items.slice(from), (i) => setActive(from + i));
   };
 
   const allLabel = `Escuchar toda la guía, ${points.length} puntos`;
@@ -106,7 +114,7 @@ export function StopViewer({ stop }: { stop: Stop }) {
         </div>
       )}
 
-      {supported ? (
+      {canPlay ? (
         <>
           <div className={`audio${playing ? " playing" : ""}`}>
             <button
@@ -120,7 +128,7 @@ export function StopViewer({ stop }: { stop: Stop }) {
             <div>
               <p className="audio-title">{hasPhoto ? "Escuchar este punto" : "Escuchar la historia"}</p>
               <p className="audio-sub">
-                {hasPhoto ? `Punto ${active + 1} de ${points.length}` : `Historia narrada, ${stop.audio}`}
+                {hasPhoto ? `Punto ${active + 1} de ${points.length}` : "Historia narrada"}
               </p>
               <div className="wave" aria-hidden="true">
                 {wave.map((w, i) => (
@@ -137,6 +145,31 @@ export function StopViewer({ stop }: { stop: Stop }) {
         </>
       ) : (
         <p className="empty">Este navegador no puede leer los textos en voz alta. Los podéis leer en pantalla.</p>
+      )}
+
+      {stop.highlights && stop.highlights.length > 0 && (
+        <section className="highlights" aria-label="Qué ver aquí">
+          <h3>Qué ver aquí</h3>
+          <ol>
+            {stop.highlights.map((h) => (
+              <li key={h.name}>
+                <span className="hl-name">{h.name}</span>
+                <span className="hl-note">{h.note}</span>
+                {h.lat !== undefined && h.lng !== undefined && (
+                  <a
+                    className="hl-maps"
+                    href={mapsDirectionsUrl({ destination: { lat: h.lat, lng: h.lng } })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Abrir en Google Maps la ruta a ${h.name} desde mi ubicación`}
+                  >
+                    <MapIcon /> Cómo llegar
+                  </a>
+                )}
+              </li>
+            ))}
+          </ol>
+        </section>
       )}
 
       {stop.viator && (

@@ -19,6 +19,14 @@ export interface Photo {
   credit: string;
 }
 
+/** Un lugar concreto dentro de una parada, por ejemplo un templo del Foro Romano. */
+export interface Highlight {
+  name: string;
+  note: string;
+  lat?: number;
+  lng?: number;
+}
+
 export interface Stop extends LatLng {
   id: string;
   name: string;
@@ -28,6 +36,8 @@ export interface Stop extends LatLng {
   text: string[];
   /** Duración aproximada del audio, para mostrar en pantalla. */
   audio: string;
+  /** Lugares que ver dentro de la parada, en el orden en que conviene recorrerlos. */
+  highlights?: Highlight[];
   photo?: Photo;
   points?: PhotoPoint[];
   /** Enlace a una audioguía externa para completar la información. */

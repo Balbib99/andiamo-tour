@@ -1,0 +1,137 @@
+{
+ "voz": "es-ES-XimenaNeural",
+ "files": {
+  "acqua-paola.mp3": {
+   "seg": 23,
+   "hash": "169cc29b64b3"
+  },
+  "arco-constantino.mp3": {
+   "seg": 26,
+   "hash": "c9f300d5dd09"
+  },
+  "barrio-judio.mp3": {
+   "seg": 23,
+   "hash": "45edfe691d2a"
+  },
+  "campo-de-fiori.mp3": {
+   "seg": 18,
+   "hash": "b7384ed56566"
+  },
+  "cavalieri-malta.mp3": {
+   "seg": 24,
+   "hash": "171419356016"
+  },
+  "circo-massimo.mp3": {
+   "seg": 25,
+   "hash": "bdae297d17e8"
+  },
+  "coliseo-1.mp3": {
+   "seg": 14,
+   "hash": "152b5cd34a56"
+  },
+  "coliseo-2.mp3": {
+   "seg": 16,
+   "hash": "a5901520d908"
+  },
+  "coliseo-3.mp3": {
+   "seg": 13,
+   "hash": "8089d17e572f"
+  },
+  "coliseo-4.mp3": {
+   "seg": 17,
+   "hash": "e8862e8b3dff"
+  },
+  "cosmedin.mp3": {
+   "seg": 52,
+   "hash": "9af20469b0e0"
+  },
+  "foro-romano.mp3": {
+   "seg": 83,
+   "hash": "d16eda48d6b0"
+  },
+  "gianicolo.mp3": {
+   "seg": 30,
+   "hash": "98bd944585e0"
+  },
+  "jardin-naranjos.mp3": {
+   "seg": 22,
+   "hash": "d19c9fc5cb92"
+  },
+  "largo-argentina.mp3": {
+   "seg": 23,
+   "hash": "4b96b5d5ad4a"
+  },
+  "mercados-trajano.mp3": {
+   "seg": 21,
+   "hash": "b7f7298669cb"
+  },
+  "monte-palatino.mp3": {
+   "seg": 67,
+   "hash": "ca76072c34f3"
+  },
+  "monti.mp3": {
+   "seg": 22,
+   "hash": "e66096cdd79d"
+  },
+  "museos-capitolinos.mp3": {
+   "seg": 27,
+   "hash": "91b5df886ba9"
+  },
+  "museos-vaticanos.mp3": {
+   "seg": 25,
+   "hash": "e5b6738512d8"
+  },
+  "panteon-1.mp3": {
+   "seg": 14,
+   "hash": "2e53d7f4b81c"
+  },
+  "panteon-2.mp3": {
+   "seg": 12,
+   "hash": "91d53ae55552"
+  },
+  "panteon-3.mp3": {
+   "seg": 11,
+   "hash": "bd4ac301c6a6"
+  },
+  "panteon-4.mp3": {
+   "seg": 14,
+   "hash": "40f979499031"
+  },
+  "piazza-navona.mp3": {
+   "seg": 24,
+   "hash": "086a45441be7"
+  },
+  "plaza-san-pedro.mp3": {
+   "seg": 30,
+   "hash": "9ba35c852433"
+  },
+  "ponte-sisto.mp3": {
+   "seg": 26,
+   "hash": "6912eeb4eb93"
+  },
+  "porta-portese.mp3": {
+   "seg": 19,
+   "hash": "bb2a85186b01"
+  },
+  "san-pietro-in-vincoli.mp3": {
+   "seg": 25,
+   "hash": "2c29100d2371"
+  },
+  "san-pietro-montorio.mp3": {
+   "seg": 22,
+   "hash": "5d9baf90f72d"
+  },
+  "santa-cecilia.mp3": {
+   "seg": 29,
+   "hash": "c5313840044a"
+  },
+  "trevi.mp3": {
+   "seg": 25,
+   "hash": "3128a215643c"
+  },
+  "vittoriano.mp3": {
+   "seg": 18,
+   "hash": "b5d40037c70c"
+  }
+ }
+}

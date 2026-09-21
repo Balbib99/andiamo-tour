@@ -2,6 +2,7 @@ import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import { AudioIcon, ChevronLeft, CheckIcon, MapIcon, PhotoIcon } from "../components/Icons";
 import { LodgingCard } from "../components/LodgingCard";
 import { findDay } from "../data/itinerario";
+import { stopAudioLabel, useAudioManifest } from "../lib/audio";
 import { distanceM, formatDistance, mapsDirectionsUrl } from "../lib/geo";
 import { useLiveRoute } from "../lib/useLiveRoute";
 import { useApp, type FountainMode } from "../state/AppState";
@@ -23,6 +24,7 @@ export function DayPage() {
   const [params] = useSearchParams();
   const testMode = params.has("prueba");
   const { live, pending, foot } = useLiveRoute(day);
+  const manifest = useAudioManifest();
 
   if (!day) return <Navigate to="/" replace />;
 
@@ -204,7 +206,7 @@ export function DayPage() {
                     <span className="step-teaser">{s.teaser}</span>
                     <span className="step-tags">
                       <span>
-                        <AudioIcon /> Audio {s.audio}
+                        <AudioIcon /> Audio {stopAudioLabel(s, manifest)}
                       </span>
                       {s.photo && (
                         <span>

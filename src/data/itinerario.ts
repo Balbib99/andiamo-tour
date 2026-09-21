@@ -89,16 +89,37 @@ const vittoriano: Stop = {
 const foroRomano: Stop = {
   id: "foro-romano",
   name: "Foro Romano",
-  era: "Siglo VI a. C. al siglo IV d. C.",
-  lat: 41.8925,
-  lng: 12.4853,
+  era: "Siglo VII a. C. al siglo IV d. C.",
+  lat: 41.89246,
+  lng: 12.48532,
   audio: "2 min",
-  teaser: "El centro político, religioso y comercial de la Roma antigua.",
+  teaser: "El centro político, religioso y comercial de la Roma antigua, con sus templos, arcos y basílicas.",
   text: [
-    "Empezó como un valle pantanoso entre colinas. Desde el siglo VI a. C. fue el lugar donde se votaba, se comerciaba y se celebraban los triunfos.",
-    "Fijaos en la Via Sacra, el camino que seguían los generales victoriosos, y en el Arco de Tito, en el extremo del Foro que queda más cerca del Coliseo.",
+    "Durante siglos fue el corazón de Roma. Era un valle pantanoso entre colinas hasta que en el siglo siete antes de Cristo se drenó con la Cloaca Máxima y se convirtió en el centro político, religioso, comercial y judicial de la ciudad. Aquí se hacía la vida diaria de los romanos y aquí estaban los principales edificios del gobierno.",
+    "Entre ellos está la Curia que era la sede del Senado; la que vemos hoy es la que reconstruyó Diocleciano hacia el año 300 aunque el tejado y parte de los muros son de una restauración de los años treinta del siglo veinte. También están los Rostra que eran las tribunas desde las que hablaban los oradores y el Templo de Saturno donde se guardaba el tesoro de Roma y del que se conservan ocho columnas del siglo cuatro.",
+    "Otro edificio impresionante es la Basílica de Majencio con sus enormes bóvedas aún visibles. Hay además templos dedicados a divinidades y emperadores como Vesta, César, Venus y Roma, los Dioscuros Cástor y Pólux, Antonino y Faustina, Vespasiano y Tito, la Concordia y Rómulo el hijo de Majencio.",
+    "Tras la caída de Roma el Foro se fue abandonando y en la Edad Media se le llamó Campo Vaccino porque allí pastaban las vacas. Quedó enterrado bajo la tierra y los escombros hasta que las excavaciones lo sacaron a la luz a partir del siglo diecinueve.",
   ],
-  viator: { url: "https://audioviator.com/audioguia/foros-imperiales/" },
+  viator: {
+    url: "https://audioviator.com/audioguia/foros-imperiales/",
+    note: "Audioguía de los Foros Imperiales, para completar la zona.",
+  },
+  highlights: [
+    { name: "Templo de Venus y Roma", note: "Fue el templo más grande de la Roma antigua y lo proyectó el emperador Adriano.", lat: 41.89083, lng: 12.48998 },
+    { name: "Arco de Tito", note: "Del año 81. Conmemora la conquista de Jerusalén y uno de sus relieves muestra el candelabro de siete brazos.", lat: 41.8907, lng: 12.48865 },
+    { name: "Vía Sacra", note: "La calle principal del Foro. Por ella desfilaban los generales que celebraban un triunfo.", lat: 41.89049, lng: 12.48939 },
+    { name: "Basílica de Majencio y Constantino", note: "La empezó Majencio en el año 308 y la terminó Constantino. Se conservan las enormes bóvedas de una nave lateral.", lat: 41.89197, lng: 12.4882 },
+    { name: "Templo de Antonino y Faustina", note: "Del año 141. En la Edad Media se convirtió en iglesia y por eso se conserva tan bien.", lat: 41.89225, lng: 12.48683 },
+    { name: "Casa de las Vestales", note: "Aquí vivían las sacerdotisas de Vesta, encargadas de mantener el fuego sagrado de Roma.", lat: 41.89141, lng: 12.48664 },
+    { name: "Templo de Vesta", note: "Pequeño templo redondo donde ardía el fuego sagrado de la ciudad.", lat: 41.89171, lng: 12.48621 },
+    { name: "Templo de Julio César", note: "Lo levantó Augusto en el año 29 antes de Cristo en el lugar donde fue incinerado César.", lat: 41.89207, lng: 12.48602 },
+    { name: "Templo de Cástor y Pólux", note: "Solo quedan tres columnas corintias, pero es una de las imágenes más famosas del Foro.", lat: 41.8917, lng: 12.48566 },
+    { name: "Curia Julia", note: "La sede del Senado. En el interior se conserva un suelo de mármol de colores.", lat: 41.89297, lng: 12.48543 },
+    { name: "Columna de Focas", note: "Se levantó en el año 608 y fue el último monumento que se añadió al Foro.", lat: 41.89246, lng: 12.48487 },
+    { name: "Templo de Saturno", note: "Guardaba el tesoro de Roma. Se conservan ocho columnas de granito.", lat: 41.89254, lng: 12.48426 },
+    { name: "Arco de Septimio Severo", note: "Del año 203. Celebra las victorias del emperador sobre los partos.", lat: 41.89288, lng: 12.48474 },
+    { name: "Mirador de la Piazza del Campidoglio", note: "Desde la terraza que hay detrás del palacio del Senado se ve todo el Foro desde arriba.", lat: 41.89348, lng: 12.48307 },
+  ],
 };
 
 const coliseo: Stop = {
@@ -166,17 +187,173 @@ const circoMassimo: Stop = {
   ],
 };
 
-const trastevere: Stop = {
-  id: "trastevere",
-  name: "Trastevere",
-  era: "Barrio medieval",
-  lat: 41.8894,
-  lng: 12.4695,
+const arcoConstantino: Stop = {
+  id: "arco-constantino",
+  name: "Arco de Constantino",
+  era: "Año 315",
+  lat: 41.88976,
+  lng: 12.49067,
   audio: "1 min",
-  teaser: "Calles empedradas y plazas al otro lado del Tíber, con la basílica de Santa Maria como corazón.",
+  teaser: "El mayor arco de triunfo de Roma, junto al Coliseo.",
   text: [
-    "Trastevere significa «al otro lado del Tíber». Sus calles empedradas y sus plazas se recorren mejor sin prisa, sobre todo por la tarde.",
-    "En el centro está la basílica de Santa Maria in Trastevere, una de las iglesias más antiguas de Roma, con mosaicos dorados del siglo XII.",
+    "Se levantó en el año 315 para celebrar la victoria del emperador Constantino sobre Majencio en la batalla del Puente Milvio tres años antes. Es el mayor arco de triunfo que se conserva en Roma y mide unos 21 metros de altura. Muchos de sus relieves y estatuas proceden de monumentos de Trajano, Adriano y Marco Aurelio y por eso parece un museo al aire libre.",
+  ],
+};
+
+const montePalatino: Stop = {
+  id: "monte-palatino",
+  name: "Monte Palatino",
+  era: "Desde el siglo VIII a. C.",
+  lat: 41.8889,
+  lng: 12.4862,
+  audio: "2 min",
+  teaser: "La colina donde según la leyenda nació Roma y donde los emperadores tuvieron sus palacios.",
+  text: [
+    "Es una de las siete colinas de Roma y según la leyenda el lugar donde Rómulo fundó la ciudad en el año 753 antes de Cristo. La tradición cuenta que fue aquí donde Rómulo vio doce buitres que le señalaron el sitio y que en una cueva al pie de la colina la loba amamantó a los gemelos Rómulo y Remo.",
+    "Con el tiempo fue el barrio elegante de la República y después el lugar elegido por los emperadores para levantar sus palacios; de hecho de esta colina viene nuestra palabra palacio. Aquí vivieron Tiberio, Calígula, Nerón y Domiciano y según la tradición aquí nació Augusto.",
+    "El conjunto más grande es el palacio de Domiciano terminado hacia el año 92 con la Domus Flavia para las ceremonias y la Domus Augustana para la vida privada. En la Domus Flavia quedan restos de suelos de mármol de colores y las mejores pinturas murales se ven en la Casa de Livia y en la Casa de Augusto. Más tarde Septimio Severo amplió el palacio hacia el Circo Máximo con la Domus Severiana de la que quedan sobre todo enormes muros y arcos de ladrillo.",
+  ],
+  highlights: [
+    { name: "Terraza del Palatino", note: "Los jardines Farnesio, del siglo XVI, tienen vistas al Foro y a la ciudad." },
+    { name: "Casa de Livia", note: "Conserva pinturas murales muy bien conservadas del siglo I antes de Cristo.", lat: 41.88931, lng: 12.48567 },
+    { name: "Casa de Augusto", note: "Con pinturas murales del primer emperador. Suele visitarse solo en horarios concretos.", lat: 41.88902, lng: 12.48517 },
+    { name: "Domus Flavia", note: "Las salas de ceremonias del palacio de Domiciano, con un gran patio y una fuente octogonal.", lat: 41.88872, lng: 12.48653 },
+    { name: "Museo Palatino", note: "Guarda hallazgos de las excavaciones de la colina.", lat: 41.88844, lng: 12.4871 },
+    { name: "Estadio de Domiciano", note: "Un estadio ajardinado que formaba parte del palacio, de más de 150 metros de largo.", lat: 41.88773, lng: 12.48766 },
+  ],
+};
+
+const cosmedin: Stop = {
+  id: "cosmedin",
+  name: "Santa María in Cosmedin y el Foro Boario",
+  era: "Siglos II a. C. al XII",
+  lat: 41.8884,
+  lng: 12.4812,
+  audio: "1 min",
+  teaser: "La Bocca della Verità y dos de los templos mejor conservados de Roma.",
+  text: [
+    "La iglesia de Santa María in Cosmedin nació en el siglo seis y su torre románica es del siglo doce. En el pórtico está la Bocca della Verità un gran disco de mármol de la Roma antigua con forma de rostro que probablemente era una tapa de alcantarilla y representa al dios Océano. La leyenda dice que si un mentiroso mete la mano en su boca esta se cierra y se la corta; la escena se hizo famosa con la película Vacaciones en Roma de 1953.",
+    "A pocos pasos hay dos de los templos mejor conservados de la ciudad. El redondo es el Templo de Hércules Víctor del siglo dos antes de Cristo y es el edificio de mármol más antiguo que se conserva en Roma. El rectangular es el Templo de Portuno de finales de la República y se salvó porque siglos después se convirtió en iglesia.",
+  ],
+  highlights: [
+    { name: "Bocca della Verità", note: "En el pórtico de la iglesia. Suele haber cola para la foto.", lat: 41.88801, lng: 12.48159 },
+    { name: "Templo de Hércules Víctor", note: "El templo redondo, del siglo II antes de Cristo.", lat: 41.88874, lng: 12.48077 },
+    { name: "Templo de Portuno", note: "El templo rectangular, de finales de la República.", lat: 41.88924, lng: 12.48091 },
+  ],
+};
+
+const cavalieriMalta: Stop = {
+  id: "cavalieri-malta",
+  name: "Piazza dei Cavalieri di Malta",
+  era: "Siglo XVIII",
+  lat: 41.88285,
+  lng: 12.47855,
+  audio: "1 min",
+  teaser: "Una plaza tranquila del Aventino con una cerradura que enmarca la cúpula de San Pedro.",
+  text: [
+    "Es una plaza tranquila del Aventino diseñada por Piranesi en el siglo dieciocho y en ella está la sede del Priorato de la Orden de Malta. Su secreto está en la puerta verde del priorato: por el ojo de la cerradura se ve al fondo del jardín la cúpula de San Pedro perfectamente enmarcada por un pasillo de setos. A veces hay que esperar turno para mirar.",
+  ],
+};
+
+const jardinNaranjos: Stop = {
+  id: "jardin-naranjos",
+  name: "Jardín de los Naranjos",
+  era: "Desde 1932",
+  lat: 41.88493,
+  lng: 12.48045,
+  audio: "1 min",
+  teaser: "Un jardín de naranjos con la mejor terraza del Aventino sobre Roma.",
+  text: [
+    "El Giardino degli Aranci o Parque Savello se abrió en 1932 en el lugar de una antigua fortaleza medieval de la familia Savelli. Está lleno de naranjos y desde su terraza mirador se ve Roma entera con la cúpula de San Pedro al fondo. Es uno de los mejores sitios de la ciudad para ver el atardecer.",
+  ],
+};
+
+const pontesisto: Stop = {
+  id: "ponte-sisto",
+  name: "Ponte Sisto y Piazza Trilussa",
+  era: "Años 1473 a 1479",
+  lat: 41.892,
+  lng: 12.4705,
+  audio: "1 min",
+  teaser: "El puente peatonal que lleva a Trastevere y la plaza más animada del barrio.",
+  text: [
+    "El Ponte Sisto lo mandó construir el papa Sixto cuarto entre 1473 y 1479 y hoy solo pueden cruzarlo los peatones. Une el centro histórico con Trastevere y al otro lado está la Piazza Trilussa que lleva el nombre de un poeta romano y tiene una gran fuente. Es uno de los sitios más animados de Trastevere a la hora del aperitivo.",
+  ],
+  highlights: [
+    { name: "Piazza Trilussa", note: "Con el Fontanone di Ponte Sisto y muchísimo ambiente por la tarde.", lat: 41.89174, lng: 12.47017 },
+  ],
+};
+
+const santaCecilia: Stop = {
+  id: "santa-cecilia",
+  name: "Basílica de Santa Cecilia",
+  era: "Siglo III",
+  lat: 41.88732,
+  lng: 12.47583,
+  audio: "1 min",
+  teaser: "La casa de una santa romana, una escultura famosa y un fresco medieval.",
+  text: [
+    "La basílica se levantó sobre lo que según la tradición fue la casa de santa Cecilia una joven mártir del siglo tres. Dentro está la escultura de la santa que hizo Stefano Maderno en 1600 con la postura en que apareció su cuerpo cuando se abrió su tumba. Además se puede visitar con entrada aparte y en horario limitado el Juicio Final de Pietro Cavallini de finales del siglo trece uno de los frescos medievales más importantes de Roma.",
+  ],
+};
+
+const portaPortese: Stop = {
+  id: "porta-portese",
+  name: "Porta Portese",
+  era: "Año 1644",
+  lat: 41.88378,
+  lng: 12.47418,
+  audio: "1 min",
+  teaser: "La puerta de Trastevere famosa por su mercadillo de los domingos.",
+  text: [
+    "La puerta actual la levantó el papa Urbano octavo en 1644. Es famosa por el mercadillo de Porta Portese que se celebra los domingos por la mañana y donde se vende de todo desde ropa hasta antigüedades. Cualquier otro día solo veréis la puerta y un barrio tranquilo.",
+  ],
+};
+
+const sanPietroMontorio: Stop = {
+  id: "san-pietro-montorio",
+  name: "San Pietro in Montorio",
+  era: "Año 1502",
+  lat: 41.88869,
+  lng: 12.46638,
+  audio: "1 min",
+  teaser: "Una iglesia con el Tempietto de Bramante y una gran panorámica de Roma.",
+  text: [
+    "Según una antigua tradición esta colina es el lugar donde fue crucificado san Pedro. En el patio de la iglesia está el Tempietto de Bramante de 1502 un pequeño templo circular considerado una obra maestra del Renacimiento y encargado por los Reyes Católicos. Desde la terraza se ve una gran panorámica de Roma.",
+  ],
+  highlights: [
+    { name: "Tempietto de Bramante", note: "En el patio de la iglesia. Es uno de los templos más perfectos del Renacimiento.", lat: 41.88865, lng: 12.46655 },
+  ],
+};
+
+const acquaPaola: Stop = {
+  id: "acqua-paola",
+  name: "Fontana dell'Acqua Paola",
+  era: "Año 1612",
+  lat: 41.88881,
+  lng: 12.46429,
+  audio: "1 min",
+  teaser: "El Fontanone, la gran fuente monumental del Gianicolo.",
+  text: [
+    "El Fontanone se terminó en 1612 por orden del papa Pablo quinto para celebrar la llegada del agua del antiguo acueducto de Trajano que él mandó restaurar. Cinco chorros caen en grandes pilas y una parte del mármol procede de los Foros Imperiales. Es el lugar donde empieza la película La gran belleza de Paolo Sorrentino.",
+  ],
+};
+
+const gianicolo: Stop = {
+  id: "gianicolo",
+  name: "Gianicolo",
+  era: "Miradores de 1895 y 1911",
+  lat: 41.8917,
+  lng: 12.461,
+  audio: "1 min",
+  teaser: "La colina con la mejor panorámica de Roma, el monumento a Garibaldi y el faro.",
+  text: [
+    "Es la colina desde la que mejor se ve Roma con sus cúpulas y campanarios. Aquí está el gran monumento ecuestre a Garibaldi de 1895 y cada día a mediodía se dispara un cañonazo que se oye por toda la ciudad. Un poco más allá está el Faro del Gianicolo de 1911 obra del arquitecto Manfredo Manfredi y regalo de los italianos de Buenos Aires por el cincuenta aniversario de la unidad de Italia; hoy solo se enciende en ocasiones especiales.",
+  ],
+  highlights: [
+    { name: "Monumento a Garibaldi", note: "Estatua ecuestre de 1895 en la terraza principal.", lat: 41.8917, lng: 12.461 },
+    { name: "Faro del Gianicolo", note: "Un poco más al norte, con vistas a San Pedro y al Monte Mario.", lat: 41.89475, lng: 12.46086 },
+    { name: "Cañonazo del mediodía", note: "Todos los días a las doce se dispara un cañón desde la colina." },
   ],
 };
 
@@ -330,8 +507,23 @@ const museosVaticanos: Stop = {
 export const days: Day[] = [
   {
     id: "1",
-    title: "Roma antigua y Trastevere",
-    stops: [circoMassimo, coliseo, foroRomano, trastevere],
+    title: "Roma antigua, Aventino y Trastevere",
+    stops: [
+      cosmedin,
+      foroRomano,
+      montePalatino,
+      arcoConstantino,
+      coliseo,
+      circoMassimo,
+      cavalieriMalta,
+      jardinNaranjos,
+      portaPortese,
+      santaCecilia,
+      pontesisto,
+      sanPietroMontorio,
+      acquaPaola,
+      gianicolo,
+    ],
   },
   {
     id: "2",
