@@ -2,7 +2,6 @@
 :root {
   --marble: #e9ece7;
   --paper: #f7f8f5;
-  --plaque: #fbfbf8;
   --ink: #15201d;
   --muted: #55615c;
   --nasone: #183a32;
@@ -115,82 +114,185 @@ h2 {
   }
 }
 
-/* ---------- Portada ---------- */
-.hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+/* ---------- Portada: foto a sangre con el título encima ---------- */
+.home {
+  margin: -24px -16px 0;
 }
-.hero h1 {
-  font-size: clamp(2rem, 8.5vw, 3rem);
-  line-height: 1.02;
+@media (min-width: 900px) {
+  .home {
+    margin: -40px -32px 0;
+  }
 }
-.emperor {
-  flex: none;
-  width: clamp(112px, 30vw, 144px);
-  margin: 0;
-}
-/* Marco de la animación: arco con doble filete, como las placas */
-.emperor-frame {
+.home-hero {
   position: relative;
-  aspect-ratio: 4 / 5;
+  height: min(82vh, 640px);
+  min-height: 460px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: #fff;
   overflow: hidden;
-  border-radius: 999px 999px 10px 10px;
-  border: 2px solid var(--ink);
-  background: #4a4a48;
-  box-shadow:
-    inset 0 0 0 3px var(--paper),
-    inset 0 0 0 4px var(--ink);
 }
-.emperor-frame video,
-.emperor-frame img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* Encuadra al emperador y deja fuera la marca de agua del vídeo, arriba a la derecha */
-  object-position: 71% 30%;
-}
-.emperor-frame video {
-  cursor: pointer;
-}
-.emperor-replay {
+/* Capa de fondo separada del contenido para poder animarla sin mover el texto encima. */
+.home-hero-bg {
   position: absolute;
-  left: 50%;
-  bottom: 10px;
-  transform: translateX(-50%);
-  padding: 4px 12px;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
-  color: var(--ink);
+  inset: 0;
+  background-size: cover;
+  background-position: center 30%;
+  transform-origin: center 30%;
+  animation: home-zoom-out 26s ease-out both;
+}
+@keyframes home-zoom-out {
+  from {
+    transform: scale(1.18);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+.home-hero-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(21, 32, 29, 0.05) 0%,
+    rgba(21, 32, 29, 0.35) 45%,
+    rgba(21, 32, 29, 0.92) 92%
+  );
+}
+.home-hero-copy {
+  position: relative;
+  padding: 0 20px;
+  text-align: center;
+}
+.home-kicker {
+  margin: 0;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: clamp(1.25rem, 5vw, 1.6rem);
+  color: var(--marble);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+.home-hero-copy h1 {
+  margin: 2px 0 0;
+  font-size: clamp(3rem, 15vw, 4.5rem);
+  line-height: 0.98;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+}
+.home-sub {
+  margin: 10px 0 0;
   font-size: 0.8125rem;
   font-weight: 600;
-  white-space: nowrap;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
 }
-.emperor-custom {
-  display: block;
-  width: min(100%, 320px);
-  height: auto;
-  margin: 0 auto;
-  animation: float 4s ease-in-out infinite;
+.home-features {
+  position: relative;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: clamp(14px, 6vw, 32px);
+  margin: 22px 0 0;
+  padding: 18px 16px 26px;
 }
-.emperor figcaption {
-  margin-top: 6px;
+.home-features li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
   font-size: 0.6875rem;
-  line-height: 1.35;
-  color: var(--muted);
+  line-height: 1.25;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  text-align: center;
 }
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
+.home-feature-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--nasone);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+}
+
+/* ---------- Selector de día y tira de fotos ---------- */
+.home-days {
+  padding: 48px 16px 8px;
+}
+@media (min-width: 900px) {
+  .home-days {
+    padding: 48px 32px 8px;
   }
-  50% {
-    transform: translateY(-5px);
-  }
+}
+.home-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.home-tabs button {
+  flex: 1;
+  padding: 9px 4px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  font-family: var(--display);
+  font-size: 0.9375rem;
+}
+.home-tabs button.on {
+  background: var(--ink);
+  color: var(--paper);
+}
+.home-day-title {
+  font-size: 1.5rem;
+  line-height: 1.15;
+}
+.home-day-meta {
+  margin: 4px 0 18px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.home-strip {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 4px 4px 14px;
+  margin: 0 -4px;
+  scroll-snap-type: x proximity;
+}
+.home-thumb {
+  flex: none;
+  scroll-snap-align: start;
+  width: 132px;
+  display: block;
+  text-decoration: none;
+  color: var(--ink);
+}
+.home-thumb img {
+  width: 132px;
+  height: 168px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid var(--ink);
+  display: block;
+}
+.home-thumb span {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.home-cta {
+  display: block;
+  text-align: center;
+  margin-top: 6px;
 }
 
 /* ---------- Botones y campos ---------- */
@@ -238,63 +340,6 @@ h2 {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-/* ---------- Placas de día ---------- */
-.plaques {
-  display: grid;
-  gap: 14px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-.plaque {
-  display: grid;
-  grid-template-columns: 64px 1fr;
-  align-items: stretch;
-  text-decoration: none;
-  background: var(--plaque);
-  border: 2px solid var(--ink);
-  border-radius: 8px;
-  box-shadow:
-    inset 0 0 0 4px var(--plaque),
-    inset 0 0 0 5px var(--ink);
-  overflow: hidden;
-}
-.plaque:hover {
-  background: #fff;
-}
-.rione {
-  display: grid;
-  place-items: center;
-  font-family: var(--display);
-  font-size: 1.6rem;
-  margin: 9px 0 9px 9px;
-  border-right: 1px solid var(--ink);
-}
-.plaque-body {
-  padding: 14px 18px 14px 16px;
-  display: grid;
-  gap: 2px;
-}
-.plaque-title {
-  font-family: var(--display);
-  font-size: 1.4rem;
-  line-height: 1.15;
-}
-.plaque-sub {
-  color: var(--muted);
-  font-size: 0.9375rem;
-}
-.plaque-meta {
-  display: flex;
-  gap: 14px;
-  margin-top: 6px;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-.plaque-meta .todo {
-  color: var(--porpora);
-}
-
 .note {
   margin: 28px 0 0;
   color: var(--muted);
@@ -1168,7 +1213,7 @@ a.step:hover .step-name {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .emperor-custom,
+  .home-hero-bg,
   .hot.active::after,
   .audio.playing .wave i {
     animation: none;
