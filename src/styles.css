@@ -758,6 +758,27 @@ a.step:hover .step-name {
   display: block;
   width: 100%;
 }
+.podcast-speed {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.podcast-speed button {
+  padding: 4px 11px;
+  border: 1.5px solid var(--stone);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.podcast-speed button.on {
+  background: var(--nasone);
+  border-color: var(--nasone);
+  color: #fff;
+}
 .podcast-note {
   margin: 8px 0 0;
   color: var(--muted);
