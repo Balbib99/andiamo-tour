@@ -29,8 +29,13 @@ export const podcasts: Record<string, Podcast> = {
   "campo-de-fiori": { file: "piazza-navona-y-campo-de-fiori", min: 20 },
   trevi: { file: "fontana-di-trevi", min: 28 },
   "museos-capitolinos": { file: "campidoglio-y-museos-capitolinos", min: 12 },
-  // Pendientes de audio todavía: monti, san-pietro-in-vincoli, largo-argentina, barrio-judio,
-  // mercados-trajano, panteon, vittoriano. Se añaden en cuanto lleguen sus podcasts.
+  panteon: { file: "panteon", min: 14 },
+  "mercados-trajano": { file: "mercados-de-trajano-y-foro-de-trajano", min: 14 },
+  monti: { file: "monti-y-san-pietro-in-vincoli", min: 25 },
+  "san-pietro-in-vincoli": { file: "monti-y-san-pietro-in-vincoli", min: 25 },
+  vittoriano: { file: "vittoriano", min: 15 },
+  "largo-argentina": { file: "largo-argentina-y-barrio-judio", min: 20 },
+  "barrio-judio": { file: "largo-argentina-y-barrio-judio", min: 20 },
 };
 
 export const podcastSrc = (p: Podcast) => `/podcast/${p.file}.m4a`;
