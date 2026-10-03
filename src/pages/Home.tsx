@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { OfflineCard } from "../components/OfflineCard";
 import { days, romanNumerals } from "../data/itinerario";
 import { useApp } from "../state/AppState";
 import { useTracking } from "../state/Tracking";
 
-const HERO_IMG = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/1280px-Colosseo_2020.jpg";
+const HERO_IMG = "/img/monumentos/coliseo.jpg";
 
 function MicIcon() {
   return (
@@ -108,6 +109,8 @@ export function Home() {
         <Link className="btn btn-primary home-cta" to={`/dia/${day.id}`}>
           Ver la ruta del día {romanNumerals[active] ?? active + 1}
         </Link>
+
+        <OfflineCard />
 
         {visited.length > 0 && (
           <p className="note">

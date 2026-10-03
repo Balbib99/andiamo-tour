@@ -295,6 +295,94 @@ h2 {
   margin-top: 6px;
 }
 
+/* ---------- Usar sin conexión ---------- */
+.offline {
+  margin: 26px 0 0;
+  padding: 16px;
+  background: var(--marble);
+  border-radius: 12px;
+}
+.offline h3 {
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
+.offline-intro {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.offline-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.offline-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.offline-info {
+  min-width: 0;
+  flex: 1;
+}
+.offline-label {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+.offline-detail {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+.offline-bar {
+  margin-top: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--stone);
+  overflow: hidden;
+}
+.offline-bar i {
+  display: block;
+  height: 100%;
+  background: var(--nasone);
+  transition: width 0.25s;
+}
+.offline-done {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--nasone);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.offline-note,
+.offline-error {
+  margin: 12px 0 0;
+  font-size: 0.8125rem;
+}
+.offline-note {
+  color: var(--muted);
+}
+.offline-error {
+  color: var(--porpora);
+  font-weight: 500;
+}
+.offline-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 14px;
+}
+.offline-foot:empty {
+  display: none;
+}
+
 /* ---------- Botones y campos ---------- */
 .btn {
   border: 1.5px solid var(--nasone);

@@ -18,6 +18,7 @@ const SPEEDS = [1, 1.25, 1.5, 1.75, 2];
 /** Tarjeta con el podcast de una parada: una conversación larga, para escuchar sin mirar la pantalla. */
 export function PodcastCard({ podcast, name, audioRef, onPlay }: Props) {
   const [speed, setSpeed] = useState(() => load("podcastSpeed", 1));
+  const [missing, setMissing] = useState(false);
 
   // Cada parada crea su propio <audio>: al montarlo hay que aplicarle la velocidad ya elegida.
   useEffect(() => {
@@ -42,9 +43,24 @@ export function PodcastCard({ podcast, name, audioRef, onPlay }: Props) {
         </div>
       </div>
       {/* preload="none": el archivo no se descarga hasta que se pulsa reproducir, para no gastar datos. */}
-      <audio ref={audioRef} controls preload="none" src={podcastSrc(podcast)} onPlay={onPlay}>
+      <audio
+        ref={audioRef}
+        controls
+        preload="none"
+        src={podcastSrc(podcast)}
+        onPlay={() => {
+          setMissing(false);
+          onPlay();
+        }}
+        onError={() => setMissing(!navigator.onLine)}
+      >
         Este navegador no puede reproducir el podcast.
       </audio>
+      {missing && (
+        <p className="offline-error" role="alert">
+          Este podcast no está descargado y ahora no hay conexión. Puedes descargarlo desde la portada, con wifi.
+        </p>
+      )}
       <div className="podcast-speed" role="group" aria-label="Velocidad de reproducción">
         {SPEEDS.map((s) => (
           <button key={s} type="button" className={s === speed ? "on" : ""} aria-pressed={s === speed} onClick={() => chooseSpeed(s)}>

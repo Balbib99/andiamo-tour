@@ -145,6 +145,7 @@ export function RouteMap({ dayId, stopId }: Props) {
     L.control.zoom({ position: "topright" }).addTo(m);
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
+      crossOrigin: true, // permite guardar los mosaicos vistos para verlos sin conexión
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(m);
     // Orden de abajo arriba: fuentes, línea de la ruta, paradas y tu posición.

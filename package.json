@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && node scripts/generar-offline.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/marcellus": "^5.3.0",
+    "@fontsource/schibsted-grotesk": "^5.3.0",
     "leaflet": "^1.9.4",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",

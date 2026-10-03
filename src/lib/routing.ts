@@ -15,14 +15,17 @@ const cache = new Map<string, Promise<FootRoute | null>>();
 
 const keyOf = (points: LatLng[]) => points.map((p) => `${p.lng.toFixed(5)},${p.lat.toFixed(5)}`).join(";");
 
+/** Dirección con la que se pide al servicio una ruta a pie por esos puntos. */
+export const footRouteUrl = (points: LatLng[]) =>
+  `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${keyOf(points)}?overview=full&geometries=geojson&steps=false`;
+
 /** Ruta a pie por las calles, con el servicio gratuito de OpenStreetMap (FOSSGIS). */
 export function fetchFootRoute(points: LatLng[]): Promise<FootRoute | null> {
   const key = keyOf(points);
   const hit = cache.get(key);
   if (hit) return hit;
 
-  const url = `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${key}?overview=full&geometries=geojson&steps=false`;
-  const promise = fetch(url)
+  const promise = fetch(footRouteUrl(points))
     .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
     .then((json): FootRoute | null => {
       const route = json?.routes?.[0];

@@ -25,7 +25,7 @@ const panteon: Stop = {
   ],
   viator: { url: "https://audioviator.com/audioguia/el-panteon-de-agripa/" },
   photo: {
-    src: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Fa%C3%A7ade_of_the_Pantheon%2C_Rome%2C_Italy.jpg/1280px-Fa%C3%A7ade_of_the_Pantheon%2C_Rome%2C_Italy.jpg",
+    src: "/img/monumentos/panteon.jpg",
     alt: "Fachada del Panteón de Roma con su pórtico de columnas de granito",
     ratio: "1280 / 878",
     credit: "Foto: Wikimedia Commons, dominio público (CC0)",
@@ -142,7 +142,7 @@ const coliseo: Stop = {
     note: "Audioguía completa de unos 13 minutos.",
   },
   photo: {
-    src: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/1280px-Colosseo_2020.jpg",
+    src: "/img/monumentos/coliseo.jpg",
     alt: "El Coliseo de Roma visto desde el exterior, con sus tres pisos de arcos",
     ratio: "1280 / 897",
     credit: "Foto: FeaturedPics, Wikimedia Commons, CC BY-SA 4.0",

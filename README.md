@@ -65,6 +65,23 @@ Los podcasts descargados pesan decenas de MB, así que se comprimen antes de pub
 4. Solo `public/podcast/` se sube. No metas podcasts en `public/audio/`: ahí `generar-audios.py` borra los `.mp3` que no
    correspondan a una parada.
 
+## Uso sin conexión
+
+La web es una PWA: se puede instalar en el móvil y funciona sin internet con lo que se haya guardado antes.
+
+- **Se guarda sola al entrar** (muy poco): el código de la app, las tipografías y los iconos.
+- **Se descarga a propósito**, con los botones de la tarjeta «Usar sin conexión» de la portada: lo básico (fotos, guías
+  de voz y rutas a pie de cada día, unos 19 MB) y los podcasts de cada día (60, 16 y 53 MB).
+- **Se guarda lo que se va viendo**: los mosaicos del mapa (hasta 1.200) y las rutas calculadas.
+- Sin internet siguen funcionando el GPS, los avisos de cercanía y la reordenación de la ruta (con distancias en línea
+  recta). No funcionan los botones de Google Maps ni los mosaicos del mapa que no se hayan visto antes.
+
+Cómo está hecho: [public/sw.js](public/sw.js) es el service worker y [src/lib/offline.ts](src/lib/offline.ts) la parte de la
+página. Al construir, [scripts/generar-offline.mjs](scripts/generar-offline.mjs) (lo encadena `npm run build`) escribe
+`dist/offline-manifest.json` con la lista de archivos y le pone una versión al service worker, para que cada despliegue
+se actualice solo. No se registra en desarrollo (`npm run dev`); para probarlo, `npm run build` y `npm run preview`.
+Las tipografías están en el propio proyecto (paquetes `@fontsource`), no se piden a Google.
+
 ## Publicar en Vercel
 
 1. Sube el proyecto a un repositorio de GitHub.
