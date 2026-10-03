@@ -18,6 +18,12 @@ export const ChevronLeft = () => (
   </svg>
 );
 
+export const ChevronDown = () => (
+  <svg {...base} width={16} height={16}>
+    <path d="M3 6.5 9 12l6-5.5" />
+  </svg>
+);
+
 export const MapIcon = () => (
   <svg {...base}>
     <path d="M2 4.5 6.5 3l5 1.5L16 3v10.5L11.5 15l-5-1.5L2 15z" />
@@ -34,6 +40,13 @@ export const ExternalIcon = () => (
 export const PlayIcon = () => (
   <svg width={20} height={20} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
     <path d="M6 3.5v13l11-6.5z" />
+  </svg>
+);
+
+export const PauseIcon = () => (
+  <svg width={20} height={20} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+    <rect x="5" y="4" width="3.6" height="12" rx="1" />
+    <rect x="11.4" y="4" width="3.6" height="12" rx="1" />
   </svg>
 );
 

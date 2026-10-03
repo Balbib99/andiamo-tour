@@ -38,7 +38,7 @@ export function StopPage() {
 
       <div className="actions">
         <a
-          className="btn btn-primary"
+          className="btn btn-primary btn-wide"
           href={mapsDirectionsUrl({ destination: stop })}
           target="_blank"
           rel="noopener noreferrer"

@@ -44,6 +44,7 @@ export function OfflineCard() {
   const [busy, setBusy] = useState<string | null>(null);
   const [progress, setProgress] = useState<Progress | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [failed, setFailed] = useState<string | null>(null);
   const [install, setInstall] = useState<InstallPromptEvent | null>(null);
   const abort = useRef<AbortController | null>(null);
   const online = useOnline();
@@ -76,6 +77,7 @@ export function OfflineCard() {
 
   const run = async (id: string, needed: number, job: (onProgress: (p: Progress) => void, signal: AbortSignal) => Promise<void>) => {
     setError(null);
+    setFailed(null);
     const free = await freeSpace();
     if (free !== null && free < needed * 1.1) {
       setError("Parece que no queda espacio suficiente en el móvil para esta descarga.");
@@ -89,6 +91,7 @@ export function OfflineCard() {
       await job(setProgress, ctrl.signal);
     } catch (e) {
       if (!(e instanceof DOMException && e.name === "AbortError")) {
+        setFailed(id);
         setError(
           navigator.onLine
             ? "No se pudo completar la descarga. Vuelve a intentarlo: lo que ya se bajó no se repite."
@@ -110,19 +113,22 @@ export function OfflineCard() {
 
   const row = (id: string, label: string, detail: string, done: boolean, bytes: number, start: () => void) => {
     const active = busy === id;
+    const didFail = failed === id && !active;
     const pct = progress && progress.bytesTotal ? Math.round((progress.bytes / progress.bytesTotal) * 100) : 0;
     return (
-      <li className="offline-row" key={id}>
+      <li className={`offline-row${didFail ? " failed" : ""}`} key={id}>
         <div className="offline-info">
           <p className="offline-label">{label}</p>
           <p className="offline-detail">
             {active && progress
               ? `${progress.done} de ${progress.total} archivos · ${formatMB(progress.bytes)} de ${formatMB(progress.bytesTotal)}`
-              : `${detail} · ${formatMB(bytes)}`}
+              : didFail
+                ? "No se pudo descargar"
+                : `${detail} · ${formatMB(bytes)}`}
           </p>
           {active && (
             <div className="offline-bar" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={label}>
-              <i style={{ width: `${pct}%` }} />
+              <i style={{ transform: `scaleX(${pct / 100})` }} />
             </div>
           )}
         </div>
@@ -136,7 +142,7 @@ export function OfflineCard() {
           </span>
         ) : (
           <button type="button" className="btn btn-small btn-primary" disabled={busy !== null || !online} onClick={start}>
-            Descargar
+            {didFail ? "Reintentar" : "Descargar"}
           </button>
         )}
       </li>

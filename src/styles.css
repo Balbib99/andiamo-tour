@@ -10,6 +10,40 @@
   --you: #2b6cb0;
   --display: "Marcellus", "Times New Roman", serif;
   --text: "Schibsted Grotesk", system-ui, sans-serif;
+
+  /* Tonos para texto, bordes y lo que va sobre el fondo: cambian en modo oscuro. Los rellenos (--nasone, --porpora) no. */
+  --accent-ink: #183a32;
+  --porpora-ink: #7a2e6e;
+  --you-ink: #2b6cb0;
+  --card: #fff;
+  --hover: rgba(24, 58, 50, 0.08);
+  --primary-hover: #10291f;
+  --shadow: 21, 32, 29; /* sombras con el verde de la web, no negro puro */
+
+  /* Curvas con más ímpetu que las de CSS: la respuesta se nota desde el primer fotograma. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  color-scheme: light dark;
+}
+
+/* Modo oscuro: sigue el del móvil. El mapa se queda claro; las tarjetas que se abren sobre él, también. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --marble: #1b2623;
+    --paper: #121a18;
+    --ink: #e8ece8;
+    --muted: #9aa8a2;
+    --stone: #2c3a36;
+    --nasone: #2f6b5a;
+    --accent-ink: #7fd1b9;
+    --porpora-ink: #d49ac9;
+    --you-ink: #7db4ee;
+    --card: #1a2522;
+    --hover: rgba(127, 209, 185, 0.12);
+    --primary-hover: #3a7d6a;
+    --shadow: 0, 0, 0;
+  }
 }
 
 * {
@@ -35,7 +69,7 @@ a {
   color: inherit;
 }
 :focus-visible {
-  outline: 3px solid var(--porpora);
+  outline: 3px solid var(--porpora-ink);
   outline-offset: 2px;
 }
 h1,
@@ -85,6 +119,13 @@ h2 {
   min-width: 0;
   background: var(--paper);
 }
+/* En el móvil, con el mapa arriba, el panel sube un poco sobre él con las esquinas redondeadas. */
+.app:not([data-view="home"]) .panel {
+  position: relative;
+  z-index: 2;
+  margin-top: -18px;
+  border-radius: 22px 22px 0 0;
+}
 .panel-inner {
   max-width: 552px;
   margin: 0 auto;
@@ -105,9 +146,12 @@ h2 {
     height: 100dvh;
     position: relative;
   }
-  .panel {
+  .panel,
+  .app:not([data-view="home"]) .panel {
     overflow-y: auto;
     border-right: 1px solid var(--stone);
+    margin-top: 0;
+    border-radius: 0;
   }
   .panel-inner {
     padding: 40px 32px 48px;
@@ -126,6 +170,7 @@ h2 {
 .home-hero {
   position: relative;
   height: min(82vh, 640px);
+  height: min(82dvh, 640px);
   min-height: 460px;
   display: flex;
   flex-direction: column;
@@ -162,8 +207,7 @@ h2 {
 }
 .home-hero-copy {
   position: relative;
-  padding: 0 20px;
-  text-align: center;
+  padding: 0 22px 28px;
 }
 .home-kicker {
   margin: 0;
@@ -179,77 +223,106 @@ h2 {
   line-height: 0.98;
   text-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
 }
-.home-sub {
-  margin: 10px 0 0;
+.home-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
   font-size: 0.8125rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.9);
 }
-.home-features {
-  position: relative;
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  gap: clamp(14px, 6vw, 32px);
-  margin: 22px 0 0;
-  padding: 18px 16px 26px;
+.home-facts li + li::before {
+  content: "\00b7";
+  margin: 0 0.7em;
+  opacity: 0.7;
 }
-.home-features li {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.6875rem;
-  line-height: 1.25;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.92);
-  text-align: center;
-}
-.home-feature-icon {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: var(--nasone);
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
+.home-line {
+  margin: 12px 0 0;
+  max-width: 30ch;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.9375rem;
 }
 
 /* ---------- Selector de día y tira de fotos ---------- */
 .home-days {
-  padding: 48px 16px 8px;
+  padding: 28px 16px 8px;
 }
 @media (min-width: 900px) {
   .home-days {
-    padding: 48px 32px 8px;
+    padding: 32px 32px 8px;
   }
 }
 .home-tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 18px;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--marble);
+}
+/* El indicador se desliza de un día a otro; los botones van encima, sin fondo propio. */
+.home-tabs-pill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 3);
+  border-radius: 10px;
+  background: var(--ink);
+  transition: transform 240ms var(--ease-out);
 }
 .home-tabs button {
-  flex: 1;
-  padding: 9px 4px;
-  border: 2px solid var(--ink);
-  border-radius: 999px;
-  background: var(--paper);
+  position: relative;
+  z-index: 1;
+  min-height: 44px;
+  border: 0;
+  background: none;
   font-family: var(--display);
   font-size: 0.9375rem;
+  color: var(--muted);
+  transition:
+    color 200ms ease,
+    transform 160ms var(--ease-out);
 }
-.home-tabs button.on {
-  background: var(--ink);
+.home-tabs button[aria-selected="true"] {
   color: var(--paper);
+}
+.home-tabs button:active {
+  transform: scale(0.97);
+}
+.home-day-body {
+  margin-top: 18px;
+  animation: enter 220ms var(--ease-out) both;
+}
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes enter-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 .home-day-title {
   font-size: 1.5rem;
   line-height: 1.15;
 }
 .home-day-meta {
-  margin: 4px 0 18px;
+  margin: 4px 0 14px;
   color: var(--muted);
   font-size: 0.875rem;
 }
@@ -257,9 +330,14 @@ h2 {
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  padding: 4px 4px 14px;
-  margin: 0 -4px;
+  padding: 4px 16px 16px;
+  margin: 0 -16px;
   scroll-snap-type: x proximity;
+  scroll-padding-inline: 16px;
+  scrollbar-width: none;
+}
+.home-strip::-webkit-scrollbar {
+  display: none;
 }
 .home-thumb {
   flex: none;
@@ -268,18 +346,39 @@ h2 {
   display: block;
   text-decoration: none;
   color: var(--ink);
+  opacity: 0;
+  animation: enter 300ms var(--ease-out) forwards;
+  transition: transform 160ms var(--ease-out);
+}
+.home-thumb:active {
+  transform: scale(0.97);
+}
+/* Las fotos entran en cascada, una tras otra. */
+.home-thumb:nth-child(2) {
+  animation-delay: 50ms;
+}
+.home-thumb:nth-child(3) {
+  animation-delay: 100ms;
+}
+.home-thumb:nth-child(4) {
+  animation-delay: 150ms;
+}
+.home-thumb:nth-child(5) {
+  animation-delay: 200ms;
+}
+.home-thumb:nth-child(n + 6) {
+  animation-delay: 250ms;
 }
 .home-thumb img {
   width: 132px;
   height: 168px;
   object-fit: cover;
   border-radius: 12px;
-  border: 2px solid var(--ink);
   display: block;
+  box-shadow: 0 8px 18px -8px rgba(var(--shadow), 0.5);
 }
 .home-thumb span {
-  display: block;
-  margin-top: 6px;
+  margin-top: 7px;
   font-size: 0.8125rem;
   font-weight: 600;
   line-height: 1.2;
@@ -289,18 +388,13 @@ h2 {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
-.home-cta {
-  display: block;
-  text-align: center;
-  margin-top: 6px;
-}
 
 /* ---------- Usar sin conexión ---------- */
 .offline {
   margin: 26px 0 0;
   padding: 16px;
   background: var(--marble);
-  border-radius: 12px;
+  border-radius: 16px;
 }
 .offline h3 {
   font-size: 1.2rem;
@@ -316,7 +410,7 @@ h2 {
   margin: 14px 0 0;
   padding: 0;
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 .offline-row {
   display: flex;
@@ -338,6 +432,10 @@ h2 {
   color: var(--muted);
   font-size: 0.8125rem;
 }
+.offline-row.failed .offline-detail {
+  color: var(--porpora-ink);
+  font-weight: 500;
+}
 .offline-bar {
   margin-top: 6px;
   height: 6px;
@@ -345,18 +443,21 @@ h2 {
   background: var(--stone);
   overflow: hidden;
 }
+/* La barra se estira con transform (no con width): no obliga al navegador a recolocar nada en cada paso. */
 .offline-bar i {
   display: block;
   height: 100%;
   background: var(--nasone);
-  transition: width 0.25s;
+  transform-origin: left;
+  transition: transform 250ms linear;
 }
 .offline-done {
   flex: none;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  color: var(--nasone);
+  min-height: 44px;
+  color: var(--accent-ink);
   font-size: 0.8125rem;
   font-weight: 600;
 }
@@ -369,7 +470,7 @@ h2 {
   color: var(--muted);
 }
 .offline-error {
-  color: var(--porpora);
+  color: var(--porpora-ink);
   font-weight: 500;
 }
 .offline-foot {
@@ -385,21 +486,34 @@ h2 {
 
 /* ---------- Botones y campos ---------- */
 .btn {
-  border: 1.5px solid var(--nasone);
+  min-height: 44px;
+  border: 1.5px solid var(--accent-ink);
   background: transparent;
-  color: var(--nasone);
-  padding: 9px 16px;
-  border-radius: 999px;
+  color: var(--accent-ink);
+  padding: 0 18px;
+  border-radius: 12px;
   font-weight: 500;
   font-size: 0.9375rem;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   line-height: 1.3;
+  transition:
+    transform 160ms var(--ease-out),
+    background-color 160ms ease;
 }
-.btn:hover:not(:disabled) {
-  background: rgba(24, 58, 50, 0.08);
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover:not(:disabled) {
+    background: var(--hover);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--primary-hover);
+  }
 }
 .btn:disabled {
   opacity: 0.4;
@@ -407,14 +521,16 @@ h2 {
 }
 .btn-primary {
   background: var(--nasone);
+  border-color: var(--nasone);
   color: #fff;
-}
-.btn-primary:hover:not(:disabled) {
-  background: #10291f;
+  box-shadow: 0 6px 16px -6px rgba(var(--shadow), 0.55);
 }
 .btn-small {
-  padding: 6px 14px;
+  padding: 0 14px;
   font-size: 0.875rem;
+}
+.btn-wide {
+  width: 100%;
 }
 .btn-done {
   background: var(--marble);
@@ -424,7 +540,10 @@ h2 {
   background: none;
   border: 0;
   padding: 0;
-  color: var(--porpora);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--porpora-ink);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -440,10 +559,11 @@ h2 {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 8px 6px 0;
+  min-height: 44px;
+  padding: 0 10px 0 0;
   color: var(--muted);
   font-weight: 500;
-  margin-bottom: 14px;
+  margin: -8px 0 6px -2px;
   text-decoration: none;
 }
 .back:hover {
@@ -476,6 +596,48 @@ h2 {
   gap: 10px;
   margin-bottom: 18px;
 }
+/* Acciones secundarias del día, plegadas bajo «Más opciones». */
+.more {
+  flex: 1 1 100%;
+}
+.more-toggle {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px;
+  border: 0;
+  border-top: 1px solid var(--stone);
+  background: none;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+.more-chev {
+  display: grid;
+  transition: transform 200ms var(--ease-out);
+}
+.more.open .more-chev {
+  transform: rotate(180deg);
+}
+.more-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 220ms var(--ease-out);
+}
+.more.open .more-panel {
+  grid-template-rows: 1fr;
+}
+.more-list {
+  overflow: hidden;
+  display: grid;
+  gap: 8px;
+  min-height: 0;
+}
+.more.open .more-list {
+  padding-bottom: 4px;
+}
 .hint {
   margin: 0 0 18px;
   color: var(--muted);
@@ -501,12 +663,22 @@ h2 {
 }
 .segmented label {
   position: relative;
-  padding: 6px 14px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
   border: 1.5px solid var(--stone);
   border-radius: 999px;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms var(--ease-out);
+}
+.segmented label:active {
+  transform: scale(0.97);
 }
 .segmented label.on {
   background: var(--nasone);
@@ -521,7 +693,7 @@ h2 {
   cursor: pointer;
 }
 .segmented label:has(input:focus-visible) {
-  outline: 3px solid var(--porpora);
+  outline: 3px solid var(--porpora-ink);
   outline-offset: 2px;
 }
 .hint-tight {
@@ -555,7 +727,7 @@ h2 {
   top: 34px;
   bottom: -6px;
   width: 2px;
-  background: var(--porpora);
+  background: var(--porpora-ink);
   opacity: 0.35;
 }
 .route li:last-child::before {
@@ -581,17 +753,19 @@ a.step:hover .step-name {
   display: grid;
   place-items: center;
   background: var(--paper);
-  border: 2px solid var(--nasone);
+  border: 2px solid var(--accent-ink);
   font-weight: 600;
   font-size: 0.9375rem;
-  color: var(--nasone);
+  color: var(--accent-ink);
 }
 .step-dot.origin {
   background: var(--nasone);
+  border-color: var(--nasone);
   color: #fff;
 }
 .step-dot.done {
   background: var(--nasone);
+  border-color: var(--nasone);
   color: #fff;
 }
 .step-dot.you {
@@ -617,7 +791,7 @@ a.step:hover .step-name {
   gap: 4px 12px;
   margin-top: 6px;
   font-size: 0.8125rem;
-  color: var(--porpora);
+  color: var(--porpora-ink);
   font-weight: 500;
 }
 .step-tags > span {
@@ -626,12 +800,13 @@ a.step:hover .step-name {
   gap: 4px;
 }
 .step-tags .seen {
-  color: var(--nasone);
+  color: var(--accent-ink);
 }
 .step-tags .near-now {
-  color: var(--you);
+  color: var(--you-ink);
 }
 .step-maps {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -641,11 +816,26 @@ a.step:hover .step-name {
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--nasone);
+  color: var(--accent-ink);
   text-decoration: none;
+  transition: transform 160ms var(--ease-out);
 }
-.step-maps:hover {
-  border-color: var(--nasone);
+/* El botón se ve pequeño, pero la zona que responde al dedo llega a los 44 px. */
+.step-maps::after,
+.hl-maps::after {
+  content: "";
+  position: absolute;
+  inset: -8px -4px;
+}
+.step-maps:active,
+.hl-maps:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+  .step-maps:hover,
+  .hl-maps:hover {
+    border-color: var(--accent-ink);
+  }
 }
 .leg {
   display: block;
@@ -691,19 +881,27 @@ a.step:hover .step-name {
   margin: -20px 0 0 -20px;
   border-radius: 50%;
   border: 2px solid #fff;
-  background: var(--nasone);
+  background: #183a32;
   color: #fff;
   font-weight: 600;
   font-size: 0.9375rem;
   display: grid;
   place-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 2px 10px rgba(21, 32, 29, 0.4);
   transition:
-    transform 0.2s,
-    background 0.2s;
+    transform 200ms var(--ease-out),
+    background-color 200ms ease;
 }
-.hot:hover {
-  transform: scale(1.1);
+/* El punto se ve pequeño, pero responde al dedo en una zona mayor. */
+.hot::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .hot:hover {
+    transform: scale(1.1);
+  }
 }
 .hot.active {
   background: var(--porpora);
@@ -715,7 +913,7 @@ a.step:hover .step-name {
   inset: -2px;
   border-radius: 50%;
   border: 2px solid #fff;
-  animation: ring 2s ease-out infinite;
+  animation: ring 1.6s var(--ease-out) 2 both;
 }
 @keyframes ring {
   from {
@@ -754,8 +952,8 @@ a.step:hover .step-name {
   gap: 14px;
   align-items: center;
   padding: 14px;
-  border: 1.5px solid var(--porpora);
-  border-radius: 12px;
+  border: 1.5px solid var(--porpora-ink);
+  border-radius: 16px;
   margin-bottom: 14px;
 }
 .play {
@@ -767,9 +965,16 @@ a.step:hover .step-name {
   color: #fff;
   display: grid;
   place-items: center;
+  box-shadow: 0 6px 14px -6px rgba(var(--shadow), 0.6);
+  transition: transform 160ms var(--ease-out);
 }
-.play:hover {
-  background: #64245a;
+.play:active {
+  transform: scale(0.94);
+}
+@media (hover: hover) and (pointer: fine) {
+  .play:hover {
+    background: #64245a;
+  }
 }
 .audio-title {
   font-weight: 600;
@@ -789,7 +994,7 @@ a.step:hover .step-name {
 }
 .wave i {
   flex: 1;
-  background: var(--porpora);
+  background: var(--porpora-ink);
   opacity: 0.35;
   border-radius: 2px;
   min-width: 2px;
@@ -809,28 +1014,12 @@ a.step:hover .step-name {
 .audio-all {
   margin-bottom: 8px;
 }
-/* Podcast de una parada */
+/* Podcast de una parada: reproductor propio */
 .podcast {
   margin: 22px 0 6px;
-  padding: 14px;
+  padding: 16px;
   background: var(--marble);
-  border-radius: 12px;
-}
-.podcast-head {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-.podcast-icon {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--nasone);
-  color: #fff;
+  border-radius: 18px;
 }
 .podcast h3 {
   font-size: 1.15rem;
@@ -840,35 +1029,113 @@ a.step:hover .step-name {
 .podcast-sub {
   margin: 0;
   color: var(--muted);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 }
-.podcast audio {
-  display: block;
-  width: 100%;
-}
-.podcast-speed {
+.podcast-main {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+}
+.podcast-skip {
+  min-width: 56px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--paper);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  line-height: 1.05;
+  transition: transform 160ms var(--ease-out);
+}
+.podcast-skip:active {
+  transform: scale(0.95);
+}
+.podcast-play {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--porpora);
+  color: #fff;
+  box-shadow: 0 8px 18px -6px rgba(var(--shadow), 0.6);
+  transition: transform 160ms var(--ease-out);
+}
+.podcast-play:active {
+  transform: scale(0.94);
+}
+/* Play y pausa están uno encima del otro y se cambian con un fundido breve y algo de desenfoque. */
+.podcast-play svg {
+  grid-area: 1 / 1;
+  width: 26px;
+  height: 26px;
+  transition:
+    opacity 150ms ease,
+    transform 150ms var(--ease-out),
+    filter 150ms ease;
+}
+.podcast-play svg:nth-child(2),
+.podcast-play.playing svg:nth-child(1) {
+  opacity: 0;
+  transform: scale(0.7);
+  filter: blur(2px);
+}
+.podcast-play.playing svg:nth-child(2) {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+.podcast-seek {
+  margin-top: 14px;
+}
+.podcast-seek input {
+  display: block;
+  width: 100%;
+  height: 28px;
+  margin: 0;
+  accent-color: var(--porpora-ink);
+}
+.podcast-times {
+  display: flex;
+  justify-content: space-between;
+  margin-top: -2px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+.podcast-speed {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 6px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 .podcast-speed button {
-  padding: 4px 11px;
-  border: 1.5px solid var(--stone);
-  border-radius: 999px;
-  background: #fff;
-  font-size: 0.8125rem;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: var(--paper);
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--ink);
+  transition:
+    transform 160ms var(--ease-out),
+    background-color 160ms ease,
+    color 160ms ease;
+}
+.podcast-speed button:active {
+  transform: scale(0.95);
 }
 .podcast-speed button.on {
   background: var(--nasone);
-  border-color: var(--nasone);
   color: #fff;
 }
 .podcast-note {
-  margin: 8px 0 0;
+  margin: 10px 0 0;
   color: var(--muted);
   font-size: 0.75rem;
   line-height: 1.35;
@@ -906,6 +1173,7 @@ a.step:hover .step-name {
   max-width: 60ch;
 }
 .hl-maps {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -915,11 +1183,9 @@ a.step:hover .step-name {
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--nasone);
+  color: var(--accent-ink);
   text-decoration: none;
-}
-.hl-maps:hover {
-  border-color: var(--nasone);
+  transition: transform 160ms var(--ease-out);
 }
 .viator {
   display: flex;
@@ -932,9 +1198,15 @@ a.step:hover .step-name {
   color: inherit;
   text-decoration: none;
   margin-top: 22px;
+  transition: transform 160ms var(--ease-out);
 }
-.viator:hover {
-  background: #dfe3dd;
+.viator:active {
+  transform: scale(0.98);
+}
+@media (hover: hover) and (pointer: fine) {
+  .viator:hover {
+    background: color-mix(in srgb, var(--marble) 88%, var(--ink));
+  }
 }
 .viator strong {
   display: block;
@@ -945,7 +1217,7 @@ a.step:hover .step-name {
 }
 .viator svg {
   flex: none;
-  color: var(--nasone);
+  color: var(--accent-ink);
 }
 .next {
   margin-top: 28px;
@@ -998,7 +1270,7 @@ a.step:hover .step-name {
 .sim {
   margin-bottom: 18px;
   padding: 12px 14px;
-  border: 1.5px dashed var(--porpora);
+  border: 1.5px dashed var(--porpora-ink);
   border-radius: 12px;
 }
 .sim .hint {
@@ -1027,8 +1299,9 @@ a.step:hover .step-name {
   background: var(--marble);
 }
 .alert {
-  background: #fff;
-  border: 2px solid var(--porpora);
+  background: var(--card);
+  color: var(--ink);
+  border: 2px solid var(--porpora-ink);
   padding: 12px 14px;
 }
 .alert-arrived {
@@ -1066,19 +1339,23 @@ a.step:hover .step-name {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: var(--paper);
-  border: 2px solid var(--nasone);
-  color: var(--nasone);
+  background: #f7f8f5;
+  border: 2px solid #183a32;
+  color: #183a32;
   font: 600 13px var(--text);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgba(21, 32, 29, 0.35);
+  transition:
+    transform 200ms var(--ease-out),
+    background-color 200ms ease,
+    color 200ms ease;
 }
 .pin.origin {
-  background: var(--nasone);
+  background: #183a32;
   color: #fff;
 }
 .pin.done {
-  background: var(--nasone);
-  border-color: var(--nasone);
+  background: #183a32;
+  border-color: #183a32;
   color: #fff;
 }
 .pin.small {
@@ -1100,7 +1377,7 @@ a.step:hover .step-name {
   border: 2px solid #fff;
   display: grid;
   place-items: center;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgba(21, 32, 29, 0.35);
 }
 .map-locate {
   position: absolute;
@@ -1110,11 +1387,16 @@ a.step:hover .step-name {
   padding: 7px 14px;
   border: 0;
   border-radius: 999px;
+  min-height: 44px;
   background: #fff;
   color: var(--you);
   font-weight: 600;
   font-size: 0.875rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(21, 32, 29, 0.3);
+  transition: transform 160ms var(--ease-out);
+}
+.map-locate:active {
+  transform: scale(0.97);
 }
 .map-locate[aria-pressed="true"] {
   background: var(--you);
@@ -1130,11 +1412,45 @@ a.step:hover .step-name {
   padding: 8px 12px;
   border-radius: 8px;
   background: #fff;
+  color: #15201d;
   font-size: 0.875rem;
   max-width: 320px;
 }
 .leaflet-container {
   font-family: var(--text);
+}
+/* Las tarjetas que se abren sobre el mapa son siempre claras: llevan sus propios tonos aunque la web esté en oscuro. */
+.leaflet-popup {
+  --ink: #15201d;
+  --muted: #55615c;
+  --stone: #d8d4c8;
+  --paper: #f7f8f5;
+  --accent-ink: #183a32;
+  --nasone: #183a32;
+  --porpora-ink: #7a2e6e;
+  --hover: rgba(24, 58, 50, 0.08);
+  --primary-hover: #10291f;
+  --shadow: 21, 32, 29;
+}
+.leaflet-popup-content-wrapper {
+  background: #fff;
+  color: #15201d;
+}
+/* La tarjeta crece desde el pin (el pico apunta abajo): aparece desde ahí, no de la nada. */
+.stop-popup .leaflet-popup-content-wrapper,
+.fountain-popup .leaflet-popup-content-wrapper {
+  transform-origin: 50% 100%;
+  animation: popup-in 150ms var(--ease-out) both;
+}
+@keyframes popup-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* Tarjeta de una fuente de agua: foto vertical a la izquierda y texto a la derecha */
@@ -1210,11 +1526,12 @@ a.step:hover .step-name {
   gap: 6px;
 }
 .fountain-body .btn {
-  padding: 5px 12px;
+  min-height: 40px;
+  padding: 0 12px;
   font-size: 0.8125rem;
 }
 .leaflet-container .fountain-card a.btn {
-  color: var(--nasone);
+  color: #183a32;
 }
 .leaflet-container .fountain-card a.btn-primary {
   color: #fff;
@@ -1301,11 +1618,15 @@ a.step:hover .step-name {
   gap: 6px;
 }
 .stop-actions .btn {
-  padding: 5px 11px;
+  min-height: 40px;
+  padding: 0 11px;
   font-size: 0.8125rem;
 }
 .leaflet-container .stop-card a.btn {
-  color: var(--nasone);
+  color: #183a32;
+}
+.leaflet-container .stop-card a.btn-primary {
+  color: #fff;
 }
 .stop-popup a.leaflet-popup-close-button {
   top: 4px;
@@ -1321,6 +1642,7 @@ a.step:hover .step-name {
   }
 }
 
+/* Con «reducir movimiento»: sin zooms ni desplazamientos; se conservan los fundidos, que ayudan a entender el cambio. */
 @media (prefers-reduced-motion: reduce) {
   .home-hero-bg,
   .hot.active::after,
@@ -1330,7 +1652,33 @@ a.step:hover .step-name {
   .audio.playing .wave i {
     opacity: 0.9;
   }
-  .hot {
+  .home-day-body,
+  .home-thumb {
+    animation: enter-fade 200ms ease both;
+  }
+  .stop-popup .leaflet-popup-content-wrapper,
+  .fountain-popup .leaflet-popup-content-wrapper {
+    animation: enter-fade 150ms ease both;
+  }
+  .home-tabs-pill,
+  .more-panel,
+  .more-chev,
+  .hot,
+  .pin {
     transition: none;
+  }
+  .btn:active:not(:disabled),
+  .play:active,
+  .podcast-skip:active,
+  .podcast-play:active,
+  .podcast-speed button:active,
+  .home-thumb:active,
+  .home-tabs button:active,
+  .segmented label:active,
+  .viator:active,
+  .step-maps:active,
+  .hl-maps:active,
+  .map-locate:active {
+    transform: none;
   }
 }

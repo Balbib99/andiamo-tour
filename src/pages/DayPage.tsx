@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
-import { AudioIcon, ChevronLeft, CheckIcon, MapIcon, MicIcon, PhotoIcon } from "../components/Icons";
-import { findDay } from "../data/itinerario";
+import { AudioIcon, ChevronDown, ChevronLeft, CheckIcon, MapIcon, MicIcon, PhotoIcon } from "../components/Icons";
+import { findDay, romanNumerals } from "../data/itinerario";
 import { podcasts } from "../data/podcasts";
 import { stopAudioLabel, useAudioManifest } from "../lib/audio";
 import { distanceM, formatDistance, mapsDirectionsUrl } from "../lib/geo";
@@ -25,6 +26,7 @@ export function DayPage() {
   const testMode = params.has("prueba");
   const { live, pending, foot, stops, replanned } = useLiveRoute(day);
   const manifest = useAudioManifest();
+  const [moreOpen, setMoreOpen] = useState(false);
 
   if (!day) return <Navigate to="/" replace />;
 
@@ -55,7 +57,7 @@ export function DayPage() {
         <ChevronLeft /> Todos los días
       </Link>
       <h2>
-        Día <span className="num">{day.id}</span>: {day.title}
+        Día {romanNumerals[Number(day.id) - 1] ?? day.id}: {day.title}
       </h2>
 
       {day.stops.length === 0 ? (
@@ -88,38 +90,57 @@ export function DayPage() {
 
           <div className="actions">
             {following ? (
-              <button type="button" className="btn btn-primary" onClick={stop}>
+              <button type="button" className="btn btn-primary btn-wide" onClick={stop}>
                 Parar ruta
               </button>
             ) : (
-              <button type="button" className="btn btn-primary" onClick={() => start(day.id)}>
+              <button type="button" className="btn btn-primary btn-wide" onClick={() => start(day.id)}>
                 Empezar ruta
               </button>
             )}
-            {chunks.map((chunk, k) => {
-              // Sin origen, Maps sale de la ubicación del móvil.
-              const origin = k === 0 ? undefined : chunks[k - 1][chunks[k - 1].length - 1];
-              const from = mapsOffset + k * MAPS_STOPS + 1;
-              const to = mapsOffset + k * MAPS_STOPS + chunk.length;
-              return (
-                <a
-                  key={from}
-                  className="btn"
-                  href={mapsDirectionsUrl({
-                    origin,
-                    destination: chunk[chunk.length - 1],
-                    waypoints: chunk.slice(0, -1),
+            {/* Lo demás (abrir en Maps, ver el recorrido entero) queda plegado para que la acción principal destaque. */}
+            <div className={`more${moreOpen ? " open" : ""}`}>
+              <button
+                type="button"
+                className="more-toggle"
+                aria-expanded={moreOpen}
+                aria-controls="day-more"
+                onClick={() => setMoreOpen((o) => !o)}
+              >
+                Más opciones
+                <span className="more-chev">
+                  <ChevronDown />
+                </span>
+              </button>
+              <div className="more-panel" id="day-more" inert={!moreOpen}>
+                <div className="more-list">
+                  {chunks.map((chunk, k) => {
+                    // Sin origen, Maps sale de la ubicación del móvil.
+                    const origin = k === 0 ? undefined : chunks[k - 1][chunks[k - 1].length - 1];
+                    const from = mapsOffset + k * MAPS_STOPS + 1;
+                    const to = mapsOffset + k * MAPS_STOPS + chunk.length;
+                    return (
+                      <a
+                        key={from}
+                        className="btn btn-wide"
+                        href={mapsDirectionsUrl({
+                          origin,
+                          destination: chunk[chunk.length - 1],
+                          waypoints: chunk.slice(0, -1),
+                        })}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <MapIcon /> {chunks.length === 1 ? "Ruta del día en Maps" : from === to ? `Maps: parada ${from}` : `Maps: paradas ${from} a ${to}`}
+                      </a>
+                    );
                   })}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <MapIcon /> {chunks.length === 1 ? "Ruta del día en Maps" : from === to ? `Maps: parada ${from}` : `Maps: paradas ${from} a ${to}`}
-                </a>
-              );
-            })}
-            <button type="button" className="btn" onClick={requestFit}>
-              Ver todo el recorrido
-            </button>
+                  <button type="button" className="btn btn-wide" onClick={requestFit}>
+                    Ver todo el recorrido
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
           {testMode && (

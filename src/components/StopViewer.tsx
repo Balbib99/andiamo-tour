@@ -212,6 +212,7 @@ export function StopViewer({ stop }: { stop: Stop }) {
           podcast={podcast}
           name={stop.name}
           audioRef={podcastRef}
+          artwork={stop.photo?.src}
           onPlay={() => {
             stopSpeech();
             setPlayingAll(false);

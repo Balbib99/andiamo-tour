@@ -1,42 +1,16 @@
-import { useState } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 import { Link } from "react-router-dom";
 import { OfflineCard } from "../components/OfflineCard";
 import { days, romanNumerals } from "../data/itinerario";
+import { podcasts } from "../data/podcasts";
 import { useApp } from "../state/AppState";
 import { useTracking } from "../state/Tracking";
 
 const HERO_IMG = "/img/monumentos/coliseo.jpg";
 
-function MicIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="6.5" y="2" width="5" height="9" rx="2.5" />
-      <path d="M3.5 8.5a5.5 5.5 0 0 0 11 0M9 14v2.5M6.5 16.5h5" />
-    </svg>
-  );
-}
-function GpsIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="9" cy="9" r="2.3" fill="currentColor" stroke="none" />
-      <circle cx="9" cy="9" r="6" />
-      <path d="M9 1.2v2.4M9 14.4v2.4M1.2 9h2.4M14.4 9h2.4" />
-    </svg>
-  );
-}
-function DropIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M9 2.3S3.6 8.4 3.6 11.7a5.4 5.4 0 0 0 10.8 0C14.4 8.4 9 2.3 9 2.3Z" />
-    </svg>
-  );
-}
-
-const FEATURES = [
-  { Icon: MicIcon, label: ["Audioguía", "en cada parada"] },
-  { Icon: GpsIcon, label: ["Mapa con", "GPS en vivo"] },
-  { Icon: DropIcon, label: ["Fuentes de", "agua potable"] },
-];
+const totalStops = days.reduce((n, d) => n + d.stops.length, 0);
+// Varias paradas comparten podcast: se cuentan los archivos distintos.
+const totalPodcasts = new Set(Object.values(podcasts).map((p) => p.file)).size;
 
 /**
  * Portada: una foto a sangre con el título (con un zoom lento de alejamiento), y debajo un
@@ -46,9 +20,24 @@ export function Home() {
   const { visited, resetVisited } = useApp();
   const { resetAlerts } = useTracking();
   const [active, setActive] = useState(0);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const day = days[active];
   const photos = day.stops.filter((s) => s.photo);
+
+  // Flechas, inicio y fin para moverse entre los días, como en cualquier selector de pestañas.
+  const onTabKey = (e: KeyboardEvent) => {
+    const to =
+      e.key === "ArrowRight" ? (active + 1) % days.length
+      : e.key === "ArrowLeft" ? (active + days.length - 1) % days.length
+      : e.key === "Home" ? 0
+      : e.key === "End" ? days.length - 1
+      : null;
+    if (to === null) return;
+    e.preventDefault();
+    setActive(to);
+    tabs.current[to]?.focus();
+  };
 
   return (
     <div className="home">
@@ -57,34 +46,31 @@ export function Home() {
         <div className="home-hero-scrim" aria-hidden="true" />
         <div className="home-hero-copy">
           <p className="home-kicker">Bienvenidos a</p>
-          <h1>Andiamo!!</h1>
-          <p className="home-sub">3 días &middot; todo a pie &middot; noviembre 2026</p>
+          <h1>Andiamo</h1>
+          <ul className="home-facts">
+            <li>{days.length} días</li>
+            <li>{totalStops} paradas</li>
+            <li>{totalPodcasts} podcasts</li>
+          </ul>
+          <p className="home-line">Roma a pie, en noviembre de 2026.</p>
         </div>
-        <ul className="home-features">
-          {FEATURES.map(({ Icon, label }) => (
-            <li key={label[0]}>
-              <span className="home-feature-icon">
-                <Icon />
-              </span>
-              <span>
-                {label[0]}
-                <br />
-                {label[1]}
-              </span>
-            </li>
-          ))}
-        </ul>
       </header>
 
       <section className="home-days">
-        <div className="home-tabs" role="tablist" aria-label="Elegir día">
+        <div className="home-tabs" role="tablist" aria-label="Elegir día" onKeyDown={onTabKey}>
+          <span className="home-tabs-pill" style={{ transform: `translateX(${active * 100}%)` }} aria-hidden="true" />
           {days.map((d, i) => (
             <button
               key={d.id}
+              ref={(el) => {
+                tabs.current[i] = el;
+              }}
+              id={`tab-${d.id}`}
               type="button"
               role="tab"
               aria-selected={i === active}
-              className={i === active ? "on" : ""}
+              aria-controls="home-day-panel"
+              tabIndex={i === active ? 0 : -1}
               onClick={() => setActive(i)}
             >
               Día {romanNumerals[i] ?? i + 1}
@@ -92,23 +78,24 @@ export function Home() {
           ))}
         </div>
 
-        <h2 className="home-day-title">{day.title}</h2>
-        <p className="home-day-meta">
-          {photos.length} paradas con foto de {day.stops.length} en total
-        </p>
+        {/* Con key, al cambiar de día el contenido se vuelve a montar y entra con un fundido corto. */}
+        <div key={day.id} className="home-day-body" id="home-day-panel" role="tabpanel" aria-labelledby={`tab-${day.id}`}>
+          <h2 className="home-day-title">{day.title}</h2>
+          <p className="home-day-meta">{day.stops.length === 1 ? "1 parada" : `${day.stops.length} paradas`}</p>
 
-        <div className="home-strip">
-          {photos.map((s) => (
-            <Link key={s.id} to={`/dia/${day.id}/parada/${s.id}`} className="home-thumb">
-              <img src={s.photo?.src} alt="" loading="lazy" />
-              <span>{s.name}</span>
-            </Link>
-          ))}
+          <div className="home-strip">
+            {photos.map((s) => (
+              <Link key={s.id} to={`/dia/${day.id}/parada/${s.id}`} className="home-thumb">
+                <img src={s.photo?.src} alt="" loading="lazy" />
+                <span>{s.name}</span>
+              </Link>
+            ))}
+          </div>
+
+          <Link className="btn btn-primary btn-wide" to={`/dia/${day.id}`}>
+            Ver la ruta del día {romanNumerals[active] ?? active + 1}
+          </Link>
         </div>
-
-        <Link className="btn btn-primary home-cta" to={`/dia/${day.id}`}>
-          Ver la ruta del día {romanNumerals[active] ?? active + 1}
-        </Link>
 
         <OfflineCard />
 

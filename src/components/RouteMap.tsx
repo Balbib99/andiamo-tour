@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router-dom";
-import { allStops, findDay, startPoint } from "../data/itinerario";
+import { allStops, findDay, romanNumerals, startPoint } from "../data/itinerario";
 import type { LatLng, Stop } from "../data/types";
 import { distanceM, formatDistance, mapsDirectionsUrl, routePoints, streetViewUrl } from "../lib/geo";
 import { fetchFountains, type Fountain } from "../lib/places";
@@ -190,7 +190,7 @@ export function RouteMap({ dayId, stopId }: Props) {
     if (!day) {
       allStops.forEach(({ stop, dayId: d }) => {
         L.marker([stop.lat, stop.lng], { icon: pinIcon("", "small"), title: stop.name })
-          .bindPopup(() => stopCard(stop, `Día ${d}`, positionRef.current, () => navigate(`/dia/${d}/parada/${stop.id}`)), STOP_POPUP)
+          .bindPopup(() => stopCard(stop, `Día ${romanNumerals[Number(d) - 1] ?? d}`, positionRef.current, () => navigate(`/dia/${d}/parada/${stop.id}`)), STOP_POPUP)
           .addTo(layer);
       });
       return;
