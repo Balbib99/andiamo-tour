@@ -42,7 +42,7 @@ Las cifras entre paréntesis como (F5) remiten a la lista de fuentes del final. 
 | Año 64 d. C. | El Gran Incendio de Roma destruye el templo de Vesta (F12) | Documentado |
 | Año 69 | Asesinato del emperador Galba junto al Lacus Curtius (F1) | Documentado |
 | Hacia el año 81 | Domiciano levanta el Arco de Tito (F8) | Documentado |
-| Año 141 | Antonino Pío dedica el templo a su esposa Faustina (F14) | Documentado |
+| Año 141 | Antonino Pío empieza a construir el templo para su esposa Faustina, ya divinizada (F14) | Documentado |
 | Año 203 | Arco de Septimio Severo (F1) | Documentado |
 | Hacia 284-305 | Diocleciano reconstruye la Curia tras un incendio (F15) | Documentado |
 | 308-312 | Majencio empieza la Basílica y Constantino la termina (F10) | Documentado |
@@ -100,7 +100,7 @@ La plataforma desde la que hablaban los oradores se llama *Rostra* porque en el 
 
 Dos historias de la tribuna, con el cuidado de separar lo cierto de lo dudoso:
 
-- **Volverse hacia el pueblo [Tradición]:** los oradores hablaban de espaldas al pueblo, de cara a la Curia. Se cuenta que hacia el 361 a. C. el tribuno Licinio fue el primero que se volvió hacia la plaza, y que Gayo Graco lo repitió dos siglos después. Era un gesto político: hablarle al pueblo y no a la élite (F1).
+- **Volverse hacia el pueblo [Tradición]:** los oradores hablaban de espaldas al pueblo, de cara a la Curia. Según la tradición, el tribuno Gayo Licinio Craso fue el primero que, en el 145 a. C., se volvió hacia la plaza; otras versiones se lo atribuyen a Gayo Graco, unos veinte años después. Las fuentes antiguas no coinciden en quién fue el primero. Era un gesto político: hablarle al pueblo y no a la élite (F1).
 - **La cabeza y las manos de Cicerón [Documentado]:** tras ser ejecutado en el 43 a. C., durante las proscripciones, Marco Antonio ordenó exponer su cabeza y sus manos en los Rostra (F1, F9). Hay una anécdota famosa sobre Fulvia, la esposa de Antonio, pinchando la lengua de la cabeza con una horquilla. La cuenta Dion Casio, pero no aparece en las fuentes consultadas, así que hay que presentarla como anécdota y no como hecho.
 
 ### 3.5 El funeral de César
@@ -121,7 +121,7 @@ Una leyenda que sirve para dar escalofríos: se decía que las lanzas sagradas d
 
 Domiciano lo levantó hacia el año 81, poco después de la muerte de su hermano Tito, para honrarlo (F8). Recuerda la victoria romana en la guerra judía y **la toma de Jerusalén en el año 70**. Uno de sus relieves muestra a los soldados llevando el botín del templo, con la **menorá** de oro como centro, además de las trompetas y la mesa de los panes de la proposición: es una de las pocas representaciones contemporáneas de esos objetos (F8).
 
-Dos curiosidades que la fuente recoge: durante siglos las autoridades judías de Roma prohibieron a los judíos pasar bajo el arco, prohibición que se levantó en 1947 tras la fundación de Israel; y la menorá del relieve sirvió de modelo para la que figura en el emblema del Estado de Israel (F8). En la Edad Media la familia Frangipani lo convirtió en torre fortificada, y en 1821 Valadier lo restauró. Influyó en arcos posteriores como el Arco del Triunfo de París y el de Washington Square, en Nueva York (F8).
+Dos curiosidades que la fuente recoge: durante siglos las autoridades judías de Roma prohibieron a los judíos pasar bajo el arco, prohibición que se levantó en 1948, con la fundación del Estado de Israel; y la menorá del relieve sirvió de modelo para la que figura en el emblema del Estado de Israel (F8). En la Edad Media la familia Frangipani lo convirtió en torre fortificada, y en 1821 Valadier lo restauró. Influyó en arcos posteriores como el Arco del Triunfo de París y el de Washington Square, en Nueva York (F8).
 
 ### 3.8 La Basílica de Majencio: el edificio más grande del Foro
 
@@ -131,9 +131,9 @@ Hoy solo se conserva la nave norte, con **tres enormes bóvedas de cañón**. En
 
 ### 3.9 Antonino y Faustina: un templo que se salvó siendo iglesia
 
-Antonino Pío lo dedicó en el año 141 a su esposa Faustina, ya divinizada, y a su muerte, en el 161, Marco Aurelio lo redecoró en honor de ambos. Faustina fue así la primera emperatriz con una presencia permanente en el Foro (F14). Tiene ocho columnas monolíticas de mármol *cipollino* de unos 17 metros y un friso de grifos y candelabros (F14).
+Antonino Pío empezó a construirlo en el año 141 para su esposa Faustina, ya divinizada, y a su muerte, en el 161, Marco Aurelio lo dedicó también a él. Faustina fue así la primera emperatriz con una presencia permanente en el Foro (F14). Tiene ocho columnas monolíticas de mármol *cipollino* de unos 17 metros y un friso de grifos y candelabros (F14).
 
-Se salvó porque hacia el siglo VII se transformó en la iglesia de **San Lorenzo in Miranda** (F14). Y si se miran las columnas se ven **surcos profundos**: en el Renacimiento se intentó derribarlas atando cuerdas y tirando, para aprovechar el material (F2, F14).
+Se salvó porque se transformó en la iglesia de **San Lorenzo in Miranda**, quizá ya en el siglo VII, aunque solo consta desde el siglo XI (F14). Y si se miran las columnas se ven **surcos profundos**: se atribuyen a un intento medieval de desmontar el pórtico para aprovechar el material (también pudieron servir para sujetar un tejado provisional) (F14).
 
 ### 3.10 La Curia Julia: el Senado, sus incendios y sus puertas de bronce
 

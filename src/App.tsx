@@ -1,12 +1,14 @@
-import { useEffect, useRef } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import { BrowserRouter, Navigate, Outlet, Route, Routes, useLocation, useMatch } from "react-router-dom";
 import { LiveStack } from "./components/LiveStack";
-import { RouteMap } from "./components/RouteMap";
 import { DayPage } from "./pages/DayPage";
 import { Home } from "./pages/Home";
 import { StopPage } from "./pages/StopPage";
 import { AppProvider } from "./state/AppState";
 import { TrackingProvider } from "./state/Tracking";
+
+// El mapa (con Leaflet) es lo más pesado de la web: se descarga aparte, para que la portada y los textos salgan antes.
+const RouteMap = lazy(() => import("./components/RouteMap").then((m) => ({ default: m.RouteMap })));
 
 /** Marco de la web: el mapa siempre presente y el panel de contenido que cambia según la ruta. */
 function Layout() {
@@ -24,7 +26,9 @@ function Layout() {
 
   return (
     <div className="app" data-view={view}>
-      <RouteMap dayId={dayMatch?.params.dayId} stopId={stopMatch?.params.stopId} />
+      <Suspense fallback={<div className="map" aria-hidden="true" />}>
+        <RouteMap dayId={dayMatch?.params.dayId} stopId={stopMatch?.params.stopId} />
+      </Suspense>
       <main className="panel" ref={panel}>
         <div className="panel-inner">
           <Outlet />

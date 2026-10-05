@@ -101,7 +101,7 @@ La comunidad judía de Roma es **una de las más antiguas del mundo fuera de Ori
 - En época de **Julio César**, los judíos obtuvieron derechos de propiedad y exención del servicio militar (L4).
 - **Filón** documentó la comunidad en **Trastevere** hacia los años 40 (L4).
 - Tras la **primera guerra judeo-romana** (66-73), llegaron a Roma **cautivos esclavizados** (L4). Enlaza con el dosier del Foro (el Arco de Tito) y del Coliseo (el botín de Jerusalén).
-- En **1101**, el rabino **Natán ben Yejiel** fundó una sinagoga, cuyos restos aún se ven en Trastevere (L4).
+- Hacia el siglo XI, el rabino **Natán ben Yejiel** se vincula con una sinagoga de Trastevere, cuyos restos aún se ven; las fuentes dan fechas distintas (L4).
 - Tras las **expulsiones de españoles y portugueses**, de **1492 a 1497**, llegaron refugiados a Roma (L4) **[Documentado]**. Es un dato que conecta con España: los sefardíes expulsados por los Reyes Católicos.
 
 ### 3.8 El gueto (1555-1870)

@@ -117,7 +117,7 @@ const foroRomano: Stop = {
     { name: "Arco de Tito", note: "Del año 81. Conmemora la conquista de Jerusalén y uno de sus relieves muestra el candelabro de siete brazos.", lat: 41.8907, lng: 12.48865 },
     { name: "Vía Sacra", note: "La calle principal del Foro. Por ella desfilaban los generales que celebraban un triunfo.", lat: 41.89049, lng: 12.48939 },
     { name: "Basílica de Majencio y Constantino", note: "La empezó Majencio en el año 308 y la terminó Constantino. Se conservan las enormes bóvedas de una nave lateral.", lat: 41.89197, lng: 12.4882 },
-    { name: "Templo de Antonino y Faustina", note: "Del año 141. En la Edad Media se convirtió en iglesia y por eso se conserva tan bien.", lat: 41.89225, lng: 12.48683 },
+    { name: "Templo de Antonino y Faustina", note: "Se empezó a construir en el año 141. Más tarde se convirtió en iglesia y por eso se conserva tan bien.", lat: 41.89225, lng: 12.48683 },
     { name: "Casa de las Vestales", note: "Aquí vivían las sacerdotisas de Vesta, encargadas de mantener el fuego sagrado de Roma.", lat: 41.89141, lng: 12.48664 },
     { name: "Templo de Vesta", note: "Pequeño templo redondo donde ardía el fuego sagrado de la ciudad.", lat: 41.89171, lng: 12.48621 },
     { name: "Templo de Julio César", note: "Lo levantó Augusto en el año 29 antes de Cristo en el lugar donde fue incinerado César.", lat: 41.89207, lng: 12.48602 },
@@ -184,7 +184,7 @@ const coliseo: Stop = {
 const circoMassimo: Stop = {
   id: "circo-massimo",
   name: "Circo Massimo",
-  era: "Siglo VI a. C. al siglo IV d. C.",
+  era: "Siglo VI a. C. al siglo VI d. C.",
   lat: 41.8862,
   lng: 12.4853,
   audio: "1 min",
@@ -375,7 +375,7 @@ const sanPietroInVincoli: Stop = {
   teaser: "La basílica que guarda las cadenas de san Pedro y el Moisés de Miguel Ángel.",
   text: [
     "La basílica se construyó en el siglo V para guardar las cadenas con las que, según la tradición, san Pedro estuvo preso. De ahí su nombre: «vincoli» significa cadenas.",
-    "Dentro está el Moisés de Miguel Ángel, esculpido hacia 1513 para la tumba del papa Julio II. Fijaos en los cuernos de la cabeza, que vienen de un error de traducción de la Biblia.",
+    "Dentro está el Moisés de Miguel Ángel, esculpido hacia 1513 para la tumba del papa Julio II. Fijaos en los cuernos de la cabeza, que vienen de la traducción latina de la Biblia: muchos creen que el texto original hablaba de rayos de luz.",
   ],
   highlights: [
     { name: "Moisés de Miguel Ángel", note: "La escultura que más visitantes atrae de la basílica. La entrada es gratuita. Los horarios cambian según la fuente: la web oficial de la basílica da de lunes a sábado 7:30–12:20 y por la tarde hasta las 17:50 en hora de invierno; conviene comprobarlo." },
@@ -467,13 +467,13 @@ const campoDeFiori: Stop = {
 const largoArgentina: Stop = {
   id: "largo-argentina",
   name: "Largo di Torre Argentina",
-  era: "Siglos IV a II a. C.",
+  era: "Siglos III a II a. C.",
   lat: 41.8953,
   lng: 12.4769,
   audio: "1 min",
   teaser: "Cuatro templos republicanos en pleno centro, junto al lugar donde mataron a César.",
   text: [
-    "Es una excavación en pleno centro con cuatro templos de la época republicana, levantados entre los siglos IV y II a. C.",
+    "Es una excavación en pleno centro con cuatro templos de la época republicana, levantados entre los siglos III y II a. C.",
     "Junto a estas ruinas estaba la Curia de Pompeyo, donde fue asesinado Julio César en el año 44 a. C. Hoy el recinto es también un refugio de gatos callejeros.",
   ],
 };

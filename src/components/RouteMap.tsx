@@ -232,12 +232,13 @@ export function RouteMap({ dayId, stopId }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [day, stops, visited, stopId]);
 
-  /* Sitios para comer o tomar algo: los de todo el día, o los de la parada abierta */
+  /* Sitios para comer o tomar algo: los de la parada abierta siempre, y los de todo el día solo si se pide (por defecto
+     se ocultan para que en la vista del día se vean la ruta y los números) */
   useEffect(() => {
     const layer = eatLayer.current;
     if (!layer) return;
     layer.clearLayers();
-    if (!day || !showEats) return;
+    if (!day || !(showEats || stopId)) return;
     day.stops
       .filter((s) => !stopId || s.id === stopId)
       .forEach((s) =>
@@ -279,7 +280,7 @@ export function RouteMap({ dayId, stopId }: Props) {
       const active = stops.find((s) => s.id === stopId);
       if (active) {
         // Con sitios para comer cerca, se encuadran junto a la parada para que se vean en el mapa.
-        const near = showEats ? (active.eat ?? []) : [];
+        const near = active.eat ?? [];
         if (near.length > 0) {
           const bounds = L.latLngBounds([[active.lat, active.lng], ...near.map((e) => [e.lat, e.lng] as L.LatLngTuple)]);
           m.flyToBounds(bounds, { padding, maxZoom: 17, duration: 0.8 });

@@ -2,7 +2,7 @@ import { useEffect, useState, type RefObject } from "react";
 import type { Podcast } from "../data/podcasts";
 import { podcastSrc } from "../data/podcasts";
 import { load, save } from "../lib/storage";
-import { PauseIcon, PlayIcon } from "./Icons";
+import { ChevronDown, PauseIcon, PlayIcon } from "./Icons";
 
 interface Props {
   podcast: Podcast;
@@ -35,6 +35,7 @@ export function PodcastCard({ podcast, name, audioRef, artwork, onPlay }: Props)
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [open, setOpen] = useState(false);
 
   // Hasta que el audio cargue (no se descarga hasta pulsar play) se usan los minutos redondeados del catálogo.
   const total = duration || podcast.min * 60;
@@ -114,10 +115,7 @@ export function PodcastCard({ podcast, name, audioRef, artwork, onPlay }: Props)
   };
 
   return (
-    <section className="podcast" aria-label={`Podcast: ${name}`}>
-      <h3>Podcast: {name}</h3>
-      <p className="podcast-sub">Conversación de unos {podcast.min} minutos</p>
-
+    <section className="podcast" id="podcast" aria-label={`Podcast: ${name}`}>
       {/* preload="none": el archivo no se descarga hasta que se pulsa reproducir, para no gastar datos. */}
       <audio
         ref={audioRef}
@@ -140,11 +138,8 @@ export function PodcastCard({ podcast, name, audioRef, artwork, onPlay }: Props)
         onError={() => setMissing(!navigator.onLine)}
       />
 
-      <div className="podcast-main">
-        <button type="button" className="podcast-skip" onClick={() => skip(-BACK_S)} aria-label={`Retroceder ${BACK_S} segundos`}>
-          −{BACK_S}
-          <br />s
-        </button>
+      {/* Compacto: reproducir y título en una línea; saltos, barra y velocidad se despliegan aparte. */}
+      <div className="podcast-head">
         <button
           type="button"
           className={`podcast-play${playing ? " playing" : ""}`}
@@ -154,26 +149,62 @@ export function PodcastCard({ podcast, name, audioRef, artwork, onPlay }: Props)
           <PlayIcon />
           <PauseIcon />
         </button>
-        <button type="button" className="podcast-skip" onClick={() => skip(FORWARD_S)} aria-label={`Avanzar ${FORWARD_S} segundos`}>
-          +{FORWARD_S}
-          <br />s
+        <div className="podcast-title">
+          <h3>Podcast · {podcast.min} min</h3>
+          <p className="podcast-sub">{playing || time > 0 ? `${clock(time)} de ${clock(total)}` : name}</p>
+        </div>
+        <button
+          type="button"
+          className={`podcast-toggle${open ? " open" : ""}`}
+          aria-expanded={open}
+          aria-controls="podcast-more"
+          aria-label={open ? "Ocultar los controles del podcast" : "Mostrar los controles del podcast"}
+          onClick={() => setOpen((o) => !o)}
+        >
+          <ChevronDown />
         </button>
       </div>
 
-      <div className="podcast-seek">
-        <input
-          type="range"
-          min={0}
-          max={Math.floor(total)}
-          step={1}
-          value={Math.min(time, total)}
-          onChange={(e) => seekTo(Number(e.target.value))}
-          aria-label="Posición del podcast"
-          aria-valuetext={`${clock(time)} de ${clock(total)}`}
-        />
-        <div className="podcast-times" aria-hidden="true">
-          <span>{clock(time)}</span>
-          <span>{clock(total)}</span>
+      <div className={`podcast-more${open ? " open" : ""}`} id="podcast-more" inert={!open}>
+        <div className="podcast-more-inner">
+          <div className="podcast-main">
+            <button type="button" className="podcast-skip" onClick={() => skip(-BACK_S)} aria-label={`Retroceder ${BACK_S} segundos`}>
+              −{BACK_S}
+              <br />s
+            </button>
+            <button type="button" className="podcast-skip" onClick={() => skip(FORWARD_S)} aria-label={`Avanzar ${FORWARD_S} segundos`}>
+              +{FORWARD_S}
+              <br />s
+            </button>
+          </div>
+
+          <div className="podcast-seek">
+            <input
+              type="range"
+              min={0}
+              max={Math.floor(total)}
+              step={1}
+              value={Math.min(time, total)}
+              onChange={(e) => seekTo(Number(e.target.value))}
+              aria-label="Posición del podcast"
+              aria-valuetext={`${clock(time)} de ${clock(total)}`}
+            />
+            <div className="podcast-times" aria-hidden="true">
+              <span>{clock(time)}</span>
+              <span>{clock(total)}</span>
+            </div>
+          </div>
+
+          <div className="podcast-speed" role="group" aria-label="Velocidad de reproducción">
+            {SPEEDS.map((s) => (
+              <button key={s} type="button" className={s === speed ? "on" : ""} aria-pressed={s === speed} onClick={() => chooseSpeed(s)}>
+                {Number.isInteger(s) ? `${s}x` : `${s}x`.replace(".", ",")}
+              </button>
+            ))}
+          </div>
+          <p className="podcast-note">
+            Generado con inteligencia artificial a partir de nuestros dosieres de investigación. Puede contener errores.
+          </p>
         </div>
       </div>
 
@@ -183,16 +214,6 @@ export function PodcastCard({ podcast, name, audioRef, artwork, onPlay }: Props)
         </p>
       )}
 
-      <div className="podcast-speed" role="group" aria-label="Velocidad de reproducción">
-        {SPEEDS.map((s) => (
-          <button key={s} type="button" className={s === speed ? "on" : ""} aria-pressed={s === speed} onClick={() => chooseSpeed(s)}>
-            {Number.isInteger(s) ? `${s}x` : `${s}x`.replace(".", ",")}
-          </button>
-        ))}
-      </div>
-      <p className="podcast-note">
-        Generado con inteligencia artificial a partir de nuestros dosieres de investigación. Puede contener errores.
-      </p>
     </section>
   );
 }

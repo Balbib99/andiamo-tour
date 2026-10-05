@@ -97,3 +97,39 @@ export const MicIcon = () => (
     <path d="M3.5 8.5a5.5 5.5 0 0 0 11 0M9 14v2.5M6.5 16.5h5" />
   </svg>
 );
+
+export const SunIcon = () => (
+  <svg {...base}>
+    <circle cx="9" cy="9" r="3.2" />
+    <path d="M9 1.8v1.6M9 14.6v1.6M1.8 9h1.6M14.6 9h1.6M3.9 3.9l1.1 1.1M13 13l1.1 1.1M3.9 14.1 5 13M13 5l1.1-1.1" />
+  </svg>
+);
+
+export const MoonIcon = () => (
+  <svg {...base}>
+    <path d="M15 10.4A6.4 6.4 0 0 1 7.6 3 6.4 6.4 0 1 0 15 10.4Z" />
+  </svg>
+);
+
+/** Círculo partido: «el tema del móvil». */
+export const AutoThemeIcon = () => (
+  <svg {...base}>
+    <circle cx="9" cy="9" r="6.2" />
+    <path d="M9 2.8v12.4" />
+    <path d="M9 2.8a6.2 6.2 0 0 1 0 12.4Z" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+export const SlidersIcon = () => (
+  <svg {...base}>
+    <path d="M3 5.5h7M13 5.5h2M3 12.5h2M8 12.5h7" />
+    <circle cx="11.5" cy="5.5" r="1.5" />
+    <circle cx="6.5" cy="12.5" r="1.5" />
+  </svg>
+);
+
+export const ArrowRight = () => (
+  <svg {...base} width={16} height={16}>
+    <path d="M3 9h12M10.5 4.5 15 9l-4.5 4.5" />
+  </svg>
+);

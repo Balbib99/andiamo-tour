@@ -1,6 +1,7 @@
 import { useRef, useState, type KeyboardEvent } from "react";
 import { Link } from "react-router-dom";
 import { OfflineCard } from "../components/OfflineCard";
+import { ThemeToggle } from "../components/ThemeToggle";
 import { days, romanNumerals } from "../data/itinerario";
 import { podcasts } from "../data/podcasts";
 import { useApp } from "../state/AppState";
@@ -19,7 +20,21 @@ const totalPodcasts = new Set(Object.values(podcasts).map((p) => p.file)).size;
 export function Home() {
   const { visited, resetVisited } = useApp();
   const { resetAlerts } = useTracking();
-  const [active, setActive] = useState(0);
+
+  // Para retomar el paseo: la siguiente parada sin ver del día de la última que se marcó como vista.
+  const resume = (() => {
+    const lastId = visited[visited.length - 1];
+    const day = days.find((d) => d.stops.some((s) => s.id === lastId));
+    const next = day?.stops.find((s) => !visited.includes(s.id));
+    if (!day || !next) return null;
+    return {
+      day,
+      stop: next,
+      seen: day.stops.filter((s) => visited.includes(s.id)).length,
+    };
+  })();
+
+  const [active, setActive] = useState(() => (resume ? days.indexOf(resume.day) : 0));
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const day = days[active];
@@ -44,6 +59,7 @@ export function Home() {
       <header className="home-hero">
         <div className="home-hero-bg" style={{ backgroundImage: `url(${HERO_IMG})` }} aria-hidden="true" />
         <div className="home-hero-scrim" aria-hidden="true" />
+        <ThemeToggle />
         <div className="home-hero-copy">
           <p className="home-kicker">Bienvenidos a</p>
           <h1>Andiamo</h1>
@@ -52,11 +68,26 @@ export function Home() {
             <li>{totalStops} paradas</li>
             <li>{totalPodcasts} podcasts</li>
           </ul>
-          <p className="home-line">Roma a pie, en noviembre de 2026.</p>
         </div>
       </header>
 
       <section className="home-days">
+        {resume && (
+          <Link className="resume" to={`/dia/${resume.day.id}/parada/${resume.stop.id}`}>
+            {resume.stop.photo && <img src={resume.stop.photo.src} alt="" />}
+            <span className="resume-body">
+              <small>
+                Día {romanNumerals[days.indexOf(resume.day)] ?? resume.day.id} · {resume.seen} de {resume.day.stops.length} vistas
+              </small>
+              <strong>Continuar en {resume.stop.name}</strong>
+              <span className="resume-go">Retomar la ruta</span>
+              <span className="resume-bar" aria-hidden="true">
+                <i style={{ width: `${(resume.seen / resume.day.stops.length) * 100}%` }} />
+              </span>
+            </span>
+          </Link>
+        )}
+
         <div className="home-tabs" role="tablist" aria-label="Elegir día" onKeyDown={onTabKey}>
           <span className="home-tabs-pill" style={{ transform: `translateX(${active * 100}%)` }} aria-hidden="true" />
           {days.map((d, i) => (
@@ -115,7 +146,7 @@ export function Home() {
           </p>
         )}
         <p className="note">
-          Los textos de las paradas son un borrador que iremos afinando. Lo que lleva «(ejemplo)» es de prueba.
+          Los textos de las paradas son un borrador que seguimos contrastando con fuentes fiables.
         </p>
       </section>
     </div>

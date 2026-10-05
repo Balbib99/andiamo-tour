@@ -71,9 +71,9 @@ Ya en época imperial el Aventino se transformó en un barrio **residencial eleg
 
 La basílica de **Santa Sabina** la construyó entre los años **422 y 432** un sacerdote dálmata, **Pedro de Iliria**, cerca de un templo de Juno, sobre casas romanas, una de las cuales se dice que era la de **Sabina**, una matrona romana del Abruzo mártir bajo Adriano, en el 126 (V4) **[Tradición]**.
 
-- **Las puertas.** Son de madera de **ciprés**, hechas hacia el 430-432, con **dieciocho paneles** conservados que representan escenas bíblicas. Uno de ellos contiene, según la fuente, **la primera representación pública conocida de la crucifixión** de Jesús entre los dos ladrones, una imagen importantísima en la historia del arte cristiano (V4) **[Documentado]**.
+- **Las puertas.** Son de madera de **ciprés**, hechas hacia el 430-432, con **dieciocho paneles** conservados (originalmente eran veintiocho) que representan escenas bíblicas. Uno de ellos contiene **una de las primeras representaciones seguras de la crucifixión** de Jesús entre los dos ladrones, una imagen importantísima en la historia del arte cristiano (V4) **[Documentado]**.
 - **Las columnas.** Por dentro hay **veinticuatro columnas de mármol de Proconeso**, con capiteles corintios iguales, **reutilizadas del templo de Juno** (V4). La iglesia muestra cómo la basílica romana (un edificio civil) se convirtió en la iglesia cristiana (V4).
-- **Los dominicos.** En 1220, el papa **Honorio III** invitó a **santo Domingo** a instalarse aquí, y Santa Sabina es la **iglesia madre de la Orden de Predicadores**, los dominicos. En su convento vivieron santo Domingo (1220-1221), **santo Tomás de Aquino** (1265-1268) y más tarde el papa Pío V (V4).
+- **Los dominicos.** En 1220, el papa **Honorio III** invitó a **santo Domingo** a instalarse aquí, y Santa Sabina es la **iglesia madre de la Orden de Predicadores**, los dominicos. En su convento vivieron santo Domingo, desde 1220, **santo Tomás de Aquino** (1265-1268) y más tarde el papa Pío V (V4).
 
 ### 3.6 El naranjo de santo Domingo
 
@@ -122,7 +122,7 @@ Otro detalle: la plaza central rinde homenaje al actor **Fiorenzo Fiorentini**, 
 
 ## 6. Datos poco conocidos
 
-- Las puertas de Santa Sabina tienen, según la fuente, la primera crucifixión pública conocida (V4).
+- Las puertas de Santa Sabina tienen, según la fuente, una de las primeras crucifixiones seguras que se conocen (V4).
 - La palabra "secesión del Aventino" se usó en los años veinte del siglo XX en Italia (V1).
 - La fortaleza de los Savelli reemplazó a un castillo del siglo X de los Crescencio (V3).
 - Santo Tomás de Aquino vivió en el convento de Santa Sabina (V4).

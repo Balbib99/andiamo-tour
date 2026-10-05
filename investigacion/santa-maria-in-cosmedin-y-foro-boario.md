@@ -28,8 +28,8 @@ Las cifras entre paréntesis como (B1) remiten a la lista de fuentes del final. 
 | Siglo VI o V a. C. | Se levanta el altar de Hércules, la **Ara Maxima**; su núcleo de toba se conserva dentro de la iglesia (B4, B1) | Documentado con reservas |
 | Hacia 600 a. C. | La tradición atribuye a los reyes etruscos la construcción de la **Cloaca Maxima**, que drenó el Velabro (B5) | Tradición / Documentado |
 | Año 264 a. C. | Primer combate de gladiadores de Roma, como ritual funerario, en este foro (B4) | Documentado |
-| Año 215 a. C. | Se entierra vivos a un hombre y una mujer galos y a un hombre y una mujer griegos como sacrificio (B4) | Tradición |
-| Hacia 143-132 a. C. | Se dedica el templo redondo de Hércules Víctor (B2) | Debatido en la fecha |
+| Año 216 a. C. | Tras la derrota de Cannas, se entierra vivos a un hombre y una mujer galos y a un hombre y una mujer griegos como sacrificio (B4) | Tradición |
+| Hacia 120-100 a. C. | Se construye el templo redondo de Hércules Víctor, a finales del siglo II a. C. (B2) | Debatido en la fecha |
 | Hacia 120-80 a. C. | Se reconstruye el templo de Portuno (B3) | Documentado |
 | Hacia 550 | Se construye aquí una *diaconia*, un centro de ayuda a los pobres (B1) | Documentado |
 | Siglos VI y VII | La zona es un barrio de griegos que huyen de guerras y persecuciones de Oriente (B1) | Documentado |
@@ -57,7 +57,7 @@ Lo curioso es que ese altar **no es solo mito**: el núcleo de toba de un altar 
 En el Foro Boario ocurrieron dos cosas muy distintas, pero igual de romanas (B4):
 
 - **El primer combate de gladiadores de la historia de Roma**, en el año **264 a. C.**, no fue un espectáculo, sino un **ritual funerario**: se hizo aquí, en honor de un difunto **[Documentado]**. Los combates acabaron siendo un espectáculo de masas, del que el Coliseo es el gran ejemplo (ver el dosier del Coliseo).
-- En el **215 a. C.**, en plena guerra contra Aníbal y tras la derrota de Cannas, se enterró vivos, como **sacrificio humano**, a **un hombre y una mujer galos y a un hombre y una mujer griegos**. Lo cuenta Livio **[Tradición]**. Roma, que se consideraba civilizada, recurrió a un rito muy antiguo en un momento de pánico.
+- En el **216 a. C.**, en plena guerra contra Aníbal y tras la derrota de Cannas, se enterró vivos, como **sacrificio humano**, a **un hombre y una mujer galos y a un hombre y una mujer griegos**. Lo cuenta Livio **[Tradición]**. Roma, que se consideraba civilizada, recurrió a un rito muy antiguo en un momento de pánico.
 
 ### 3.3 La cloaca que hizo posible el Foro
 
@@ -73,7 +73,7 @@ Junto al Foro Boario desemboca la **Cloaca Maxima**, "la gran cloaca", una de la
 
 El pequeño templo circular es el de **Hércules Víctor** y es **el edificio de mármol más antiguo que se conserva casi entero en Roma**, y el único hecho con mármol griego (B2) **[Documentado]**.
 
-- Mide **14,8 metros de diámetro** y tiene **veinte columnas corintias** de unos 10,7 metros. Diecinueve son originales; diez se sustituyeron con mármol de Luna en el siglo I d. C. tras algún daño (B2).
+- Mide **14,8 metros de diámetro** y tenía **veinte columnas corintias** de unos 10,7 metros; se conservan diecinueve. Diez de ellas son sustituciones del siglo I d. C., hechas con mármol de Luna tras algún daño (B2).
 - Se le atribuye el diseño al arquitecto **Hermodoro de Salamina** (B2) **[Tradición]**. Se discute quién lo pagó: un general, **Lucio Mumio**, el conquistador de Corinto, o el comerciante **Marco Octavio Herreno** (B2) **[Debatido]**.
 - **Se confundió durante siglos con el templo de Vesta**, por su forma redonda. Lo corrigió el prefecto de Roma de Napoleón, **Camille de Tournon**, que lo identificó como templo de Hércules Víctor (o Hércules Olivario, "el que lleva olivo") (B2).
 - Se conservó porque en 1132 pasó a ser una iglesia, **Santo Stefano alle Carozze**, y en 1140 el papa **Inocencio II** la consagró (B2).
@@ -105,7 +105,7 @@ En 1718 se le puso una fachada barroca. Entre 1894 y 1899, el arquitecto **Giova
 
 ### 3.7 La Bocca della Verità
 
-La **Bocca della Verità**, "la boca de la verdad", es una **enorme máscara de mármol** de la época romana, que se cree que era una **tapa de alcantarilla** y que representa al dios **Océano**. Se trasladó a la iglesia en el siglo XII (B1) **[Documentado con reservas]**.
+La **Bocca della Verità**, "la boca de la verdad", es una **enorme máscara de mármol** de la época romana, que se cree que era una **tapa de alcantarilla** y que representa al dios **Océano**. En la Edad Media se colocó junto a la pared de la iglesia y desde 1632 está en el pórtico (B1) **[Documentado con reservas]**.
 
 La leyenda medieval dice que **si alguien mete la mano en la boca y jura en falso, la boca se cierra y le corta la mano** (B1) **[Tradición]**. Es una historia perfecta para las fotos, y sirve para hablar de cómo un objeto útil (una tapa) se convierte en objeto de superstición.
 
@@ -139,7 +139,7 @@ Su fama moderna viene de **Vacaciones en Roma** (1953): en la película, el pers
 - Los templos se han salvado porque se convirtieron en iglesias: uno de los pocos ejemplos en los que la Iglesia conservó, sin quererlo, un edificio pagano (B2, B3).
 - Una iglesia armenia funcionó en un templo romano hasta el siglo XX (B3).
 - El nombre **Cosmedin** viene de un monasterio de Constantinopla que ya no existe (B1).
-- Los romanos enterraron vivas a cuatro personas en este foro en 215 a. C. (B4).
+- Los romanos enterraron vivas a cuatro personas en este foro en 216 a. C. (B4).
 
 ---
 
@@ -162,4 +162,4 @@ Las páginas de Wikipedia se han usado como fuente de síntesis y remiten a auto
 - **B4.** Wikipedia (inglés), "Forum Boarium": https://en.wikipedia.org/wiki/Forum_Boarium
 - **B5.** Wikipedia (inglés), "Cloaca Maxima": https://en.wikipedia.org/wiki/Cloaca_Maxima
 
-**Límites de esta investigación.** No se pudieron consultar Britannica ni las fuentes clásicas originales (Livio, Plinio, Virgilio). Lo que se les atribuye viene de las páginas anteriores. La afirmación de que el campanario no ha sido restaurado desde el siglo XII y la fecha del traslado de la Bocca della Verità (siglo XII) son las que da la Wikipedia inglesa y otras fuentes las discuten. Los datos del Arco de Jano son solo los que constan en la página del Foro Boario.
+**Límites de esta investigación.** No se pudieron consultar Britannica ni las fuentes clásicas originales (Livio, Plinio, Virgilio). Lo que se les atribuye viene de las páginas anteriores. La afirmación de que el campanario no ha sido restaurado desde el siglo XII es la que da la Wikipedia inglesa y otras fuentes la discuten. La Bocca della Verità se colocó en el pórtico en 1632 (pie de foto de la Wikipedia); su traslado medieval junto a la iglesia se fecha entre los siglos XII y XIII. Los datos del Arco de Jano son solo los que constan en la página del Foro Boario.

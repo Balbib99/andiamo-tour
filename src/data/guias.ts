@@ -157,7 +157,7 @@ export const guides: Record<string, Guide> = {
         455,
         200,
         "Templo de Antonino y Faustina",
-        "Se levantó en el año 141 para la emperatriz Faustina y, después de su muerte, se dedicó también a su marido, el emperador Antonino Pío. Se conserva tan bien porque siglos después se convirtió en la iglesia de San Lorenzo in Miranda, cuya fachada barroca se ve encima.",
+        "Antonino Pío empezó a levantarlo en el año 141 para su esposa, la emperatriz Faustina, y cuando él murió, en el 161, se dedicó también a su nombre. Se conserva tan bien porque siglos después se convirtió en la iglesia de San Lorenzo in Miranda, cuya fachada barroca se ve encima.",
       ),
       foro(
         950,
@@ -547,7 +547,7 @@ export const guides: Record<string, Guide> = {
         740,
         470,
         "El Moisés",
-        "El Moisés de Miguel Ángel, esculpido hacia 1513 para la tumba del papa Julio segundo, es la gran razón para entrar. Fijaos en los cuernos de la cabeza: vienen de un error de traducción de la Biblia, que confundió los rayos de luz con cuernos.",
+        "El Moisés de Miguel Ángel, esculpido hacia 1513 para la tumba del papa Julio segundo, es la gran razón para entrar. Fijaos en los cuernos de la cabeza: vienen de la traducción latina de la Biblia, que describe el rostro de Moisés con cuernos; muchos creen que el original hablaba de rayos de luz.",
       ),
     ],
   },
@@ -715,7 +715,7 @@ export const guides: Record<string, Guide> = {
         200,
         650,
         "Templos republicanos",
-        "En este hueco, más bajo que la calle, hay cuatro templos de la época de la República, de entre los siglos cuatro y dos antes de Cristo. El redondo es el llamado templo B, dedicado a Fortuna Huiusce Diei, la Fortuna de este mismo día.",
+        "En este hueco, más bajo que la calle, hay cuatro templos de la época de la República, de entre los siglos tres y dos antes de Cristo. El redondo es el llamado templo B, dedicado a Fortuna Huiusce Diei, la Fortuna de este mismo día.",
       ),
       largo(
         330,
@@ -751,7 +751,7 @@ export const guides: Record<string, Guide> = {
         610,
         660,
         "Los Cuatro Ríos",
-        "La Fuente de los Cuatro Ríos, de Bernini, se terminó en 1651. Los cuatro gigantes representan los grandes ríos de cuatro continentes: el Danubio, el Ganges, el Nilo y el Río de la Plata. Al Nilo se le tapa la cabeza con un paño, porque en aquella época no se conocía su nacimiento.",
+        "La Fuente de los Cuatro Ríos, de Bernini, se terminó en 1651. Los cuatro gigantes representan los grandes ríos de cuatro continentes: el Danubio, el Ganges, el Nilo y el Río de la Plata. Al Nilo se le tapa la cabeza con un paño; se suele explicar porque en aquella época no se conocía su nacimiento.",
       ),
       navona(
         1040,

@@ -34,8 +34,9 @@ Las cifras entre paréntesis como (T1) remiten a la lista de fuentes del final. 
 | Año 822 | El papa Pascual I reconstruye la iglesia de Santa Cecilia y traslada el cuerpo de la santa desde las catacumbas de San Calixto (T1) | Documentado |
 | Siglo XII | Se levanta el campanario de Santa Cecilia (T1) | Documentado |
 | Hacia 1293 | Arnolfo di Cambio hace el baldaquino de Santa Cecilia (T1) | Documentado |
-| Hacia 1295-1300 | Pietro Cavallini pinta el *Juicio Final* (T1) | Documentado |
-| Siglo XV | Sixto IV introduce el adoquinado con *sampietrini* (T4) | Documentado |
+| Hacia 1293 (finales del siglo XIII) | Pietro Cavallini pinta el *Juicio Final*; la fuente da también 1295-1300 (T1) | Documentado |
+| Siglo XV | Sixto IV hace pavimentar con ladrillo las calles del barrio, que eran de tierra (T4) | Documentado |
+| Hacia 1585 | Con Sixto V se empiezan a usar los *sampietrini*, primero cerca de San Pedro; no se generalizan en Roma hasta el siglo XVIII | Documentado |
 | Año 1450 | Un Jubileo provoca una peligrosa aglomeración en el puente de Sant'Angelo (T2) | Documentado |
 | 1473-1479 | Sixto IV reconstruye el puente sobre los cimientos romanos, con Baccio Pontelli (T2) | Documentado |
 | Año 1599 | El cardenal Sfondrato abre la tumba de santa Cecilia (T1) | Documentado |
@@ -51,11 +52,11 @@ Las cifras entre paréntesis como (T1) remiten a la lista de fuentes del final. 
 
 ### 3.1 Un barrio de fuera que se hizo el más romano
 
-Trastevere estuvo siempre separado del centro por el Tíber. La única conexión al principio era un puente de madera, el **Pons Sublicius** (T4). Eso favoreció una población distinta: **marineros y pescadores** que vivían del río, e **inmigrantes de Oriente** (T4). Una **comunidad judía** importante se estableció aquí y fue un centro de vida judía durante toda la Edad Media. La sinagoga más antigua que queda, construida en el año 980 y convertida en sinagoga en 1073, tenía un baño ritual y se conserva escritura hebrea en su base (T4) **[Documentado]**.
+Trastevere estuvo siempre separado del centro por el Tíber. La única conexión al principio era un puente de madera, el **Pons Sublicius** (T4). Eso favoreció una población distinta: **marineros y pescadores** que vivían del río, e **inmigrantes de Oriente** (T4). Una **comunidad judía** importante se estableció aquí y fue un centro de vida judía durante toda la Edad Media. Se conserva el rastro de una sinagoga medieval, con un baño ritual y escritura hebrea en su base; las fuentes la fechan en los siglos XI y XII, con fechas que no coinciden (T4) **[Documentado en general]**.
 
 **Augusto** lo convirtió en la **Región XIV** de su reorganización de Roma, y gente rica levantó aquí fincas: **Julio César** tuvo unos jardines, los *Horti Caesaris* (T4). Aparecieron dos de las iglesias más antiguas de Roma: el *Titulus Callixti* (la actual Santa María in Trastevere) y el *Titulus Caeciliae* (Santa Cecilia) (T4).
 
-En la Edad Media era un laberinto de **calles estrechas, torcidas e irregulares**, con construcciones que impedían el paso de carruajes. Sixto IV cambió los ladrillos del suelo por los **sampietrini**, los adoquines negros tan típicos (T4). Aquella población aislada y multicultural creó una identidad propia, los **trasteverinos**: gente que presume de ser la romana más auténtica, con su dialecto y sus tradiciones (T4) **[Documentado]**.
+En la Edad Media era un laberinto de **calles estrechas, torcidas e irregulares**, con construcciones que impedían el paso de carruajes. Sixto IV hizo pavimentar con ladrillo las calles, que antes eran de tierra; los **sampietrini**, los adoquines negros tan típicos, llegaron después: se empezaron a usar con Sixto V, hacia 1585, cerca de San Pedro, y no se generalizaron en Roma hasta el siglo XVIII (T4). Aquella población aislada y multicultural creó una identidad propia, los **trasteverinos**: gente que presume de ser la romana más auténtica, con su dialecto y sus tradiciones (T4) **[Documentado]**.
 
 ### 3.2 Cecilia, la casa y el cuerpo
 
@@ -63,7 +64,7 @@ Según la tradición, **santa Cecilia** fue una joven romana martirizada en el s
 
 **El cuerpo.** En el año **822**, el papa **Pascual I** reconstruyó la iglesia y trasladó a ella los restos de la santa, desde las catacumbas de San Calixto (T1). Casi ocho siglos después, en **1599**, el **cardenal Sfondrato** abrió la tumba. Lo que se cuenta que vieron, y que quedó fijado en la escultura de **Stefano Maderno**, de **1600**, es el cuerpo de la santa en la postura en que apareció, con **tres heridas de hacha** en el cuello, que coinciden con el relato de su martirio (T1). En la propia escultura, Maderno escribió que había representado el cuerpo "tal como lo vio" (T1) **[Tradición; el testimonio es del propio artista]**. Es una de las obras más impresionantes y más sobrias de Roma.
 
-**El *Juicio Final*.** **Pietro Cavallini** pintó hacia **1295-1300** un fresco del Juicio Final en la pared de entrada, una obra clave de la pintura romana medieval (T1) **[Documentado]**. En el ábside, un **mosaico del siglo IX** representa al Redentor con san Pablo, santa Cecilia, el papa Pascual I, san Pedro, Valeriano y santa Ágata (T1). El baldaquino de **Arnolfo di Cambio**, de 1293, tiene columnas de mármol y ángeles (T1).
+**El *Juicio Final*.** **Pietro Cavallini** pintó hacia **1293**, a finales del siglo XIII, un fresco del Juicio Final en la pared de entrada, una obra clave de la pintura romana medieval (T1) **[Documentado]**. En el ábside, un **mosaico del siglo IX** representa al Redentor con san Pablo, santa Cecilia, el papa Pascual I, san Pedro, Valeriano y santa Ágata (T1). El baldaquino de **Arnolfo di Cambio**, de 1293, tiene columnas de mármol y ángeles (T1).
 
 **Fachada y patio.** La fachada actual, con el patio de entrada que tiene mosaicos antiguos, es de **Ferdinando Fuga (1725)**, y el campanario es del siglo XII (T1).
 
@@ -93,7 +94,7 @@ Cerca de la puerta estaba el **Ripa Grande**, el **puerto fluvial** principal de
 
 ## 4. Cosas en las que fijarse mientras se camina
 
-1. **Los adoquines negros**, los *sampietrini*, que vienen de Sixto IV (T4).
+1. **Los adoquines negros**, los *sampietrini*, que se empezaron a usar en el siglo XVI y se generalizaron en el XVIII (T4).
 2. **La casa romana bajo Santa Cecilia**, si se baja a la cripta; y el patio con sus mosaicos.
 3. **La escultura de Maderno**, con la postura del cuerpo y las heridas.
 4. **El *Juicio Final* de Cavallini** y el mosaico del ábside, de siglos distintos.
@@ -113,10 +114,10 @@ Cerca de la puerta estaba el **Ripa Grande**, el **puerto fluvial** principal de
 ## 6. Datos poco conocidos
 
 - Julio César tuvo un jardín aquí (T4).
-- Hay una sinagoga del siglo X en el barrio, con escritura hebrea visible (T4).
+- Hay restos de una sinagoga medieval en el barrio, con escritura hebrea visible (T4).
 - El Ponte Sisto se hizo, en parte, para descongestionar el puente de Sant'Angelo tras el Jubileo de 1450 (T2).
 - El mercadillo de Porta Portese está donde estuvo el gran puerto fluvial de Roma (T3).
-- El adoquinado con *sampietrini* de Roma viene del siglo XV (T4).
+- Los *sampietrini* de Roma se empezaron a usar en el siglo XVI, cerca de San Pedro (T4).
 
 ---
 

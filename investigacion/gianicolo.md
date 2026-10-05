@@ -26,7 +26,7 @@ Las cifras entre paréntesis como (G1) remiten a la lista de fuentes del final. 
 
 | Fecha | Qué pasa | Etiqueta |
 |---|---|---|
-| Hacia el siglo VI a. C. | El rey Anco Marcio incorpora el Gianicolo a Roma, lo fortifica y construye un puente sobre el Tíber (G2) | Tradición |
+| Siglo VII a. C. (reinado tradicional de 640 a 616 a. C.) | El rey Anco Marcio incorpora el Gianicolo a Roma, lo fortifica y construye un puente sobre el Tíber (G2) | Tradición |
 | Siglo IX | Ya hay una iglesia en el lugar de San Pietro in Montorio (G1) | Documentado |
 | 1481-1500 | Se reconstruye San Pietro in Montorio, con el dinero de Fernando e Isabel; se consagra en 1500 bajo Alejandro VI (G1) | Documentado |
 | Hacia 1502 | Bramante proyecta el Tempietto, por encargo de los Reyes Católicos (G1) | Documentado |
@@ -50,7 +50,7 @@ Las cifras entre paréntesis como (G1) remiten a la lista de fuentes del final. 
 
 El nombre viene de **Jano**, el dios romano de los comienzos (el de las dos caras, el que da nombre a enero). Según la leyenda, el propio Jano fundó aquí "una antigua ciudad" que se llamó Janículo. En la *Eneida* de Virgilio, el rey Evandro enseña a Eneas las ruinas de dos ciudades antiguas, Saturnia y Janículo (G2) **[Tradición]**.
 
-**¿Por qué no es una de las siete colinas?** El Gianicolo es la segunda colina más alta de Roma, pero está **al oeste del Tíber y fuera de los límites de la ciudad antigua**, por eso no figura entre las siete colinas legendarias (G2) **[Documentado]**. Según la tradición, el rey **Anco Marcio** lo incorporó a Roma en el siglo VI a. C., lo fortificó y construyó un puente sobre el río (G2) **[Tradición]**.
+**¿Por qué no es una de las siete colinas?** El Gianicolo es la segunda colina más alta de Roma, pero está **al oeste del Tíber y fuera de los límites de la ciudad antigua**, por eso no figura entre las siete colinas legendarias (G2) **[Documentado]**. Según la tradición, el rey **Anco Marcio** lo incorporó a Roma en el siglo VII a. C. (reinó, según la tradición, de 640 a 616 a. C.), lo fortificó y construyó un puente sobre el río (G2) **[Tradición]**.
 
 ### 3.2 La colina donde se dice que crucificaron a san Pedro
 
@@ -145,4 +145,4 @@ Las páginas de Wikipedia se han usado como fuente de síntesis y remiten a auto
 - **G2.** Wikipedia (inglés), "Janiculum": https://en.wikipedia.org/wiki/Janiculum
 - **G3.** Wikipedia (inglés), "Fontana dell'Acqua Paola": https://en.wikipedia.org/wiki/Fontana_dell%27Acqua_Paola
 
-**Límites de esta investigación.** No se pudieron consultar Britannica ni las fuentes originales (Virgilio, Livio). Lo marcado "de memoria" no se ha comprobado: la Academia de España, el faro, la lectura del Tempietto como "templo a escala humana" y el motivo del cañonazo. La fecha de la fuente ("hacia el siglo VI a. C." para Anco Marcio) es tradición.
+**Límites de esta investigación.** No se pudieron consultar Britannica ni las fuentes originales (Virgilio, Livio). Lo marcado "de memoria" no se ha comprobado: la Academia de España, el faro, la lectura del Tempietto como "templo a escala humana" y el motivo del cañonazo. La fecha de Anco Marcio (siglo VII a. C.) es tradición.

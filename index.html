@@ -12,7 +12,19 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Andiamo" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:title" content="Andiamo: Roma a pie" />
+    <meta property="og:description" content="Guía interactiva para recorrer Roma a pie: mapa, historia, audio y podcasts en cada parada." />
+    <meta name="twitter:card" content="summary" />
     <title>Andiamo</title>
+    <script>
+      /* Aplica el tema elegido antes de pintar, para que no haya un destello del tema contrario. */
+      try {
+        var t = JSON.parse(localStorage.getItem("andiamo:theme"));
+        if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

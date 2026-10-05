@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
-import { AudioIcon, ChevronDown, ChevronLeft, CheckIcon, MapIcon, MicIcon, PhotoIcon } from "../components/Icons";
+import { AudioIcon, ChevronDown, ChevronLeft, CheckIcon, MapIcon, MicIcon, SlidersIcon } from "../components/Icons";
 import { findDay, romanNumerals } from "../data/itinerario";
 import { podcasts } from "../data/podcasts";
 import { stopAudioLabel, useAudioManifest } from "../lib/audio";
@@ -27,6 +27,7 @@ export function DayPage() {
   const { live, pending, foot, stops, replanned } = useLiveRoute(day);
   const manifest = useAudioManifest();
   const [moreOpen, setMoreOpen] = useState(false);
+  const hasEats = Boolean(day?.stops.some((s) => s.eat?.length));
 
   if (!day) return <Navigate to="/" replace />;
 
@@ -98,48 +99,32 @@ export function DayPage() {
                 Empezar ruta
               </button>
             )}
-            {/* Lo demás (abrir en Maps, ver el recorrido entero) queda plegado para que la acción principal destaque. */}
-            <div className={`more${moreOpen ? " open" : ""}`}>
-              <button
-                type="button"
-                className="more-toggle"
-                aria-expanded={moreOpen}
-                aria-controls="day-more"
-                onClick={() => setMoreOpen((o) => !o)}
-              >
-                Más opciones
-                <span className="more-chev">
-                  <ChevronDown />
-                </span>
+            {/* Maps y «Ver todo» van en una fila de botones pequeños: la acción grande sigue siendo empezar la ruta. */}
+            <div className="action-row">
+              {chunks.map((chunk, k) => {
+                // Sin origen, Maps sale de la ubicación del móvil.
+                const origin = k === 0 ? undefined : chunks[k - 1][chunks[k - 1].length - 1];
+                const from = mapsOffset + k * MAPS_STOPS + 1;
+                const to = mapsOffset + k * MAPS_STOPS + chunk.length;
+                return (
+                  <a
+                    key={from}
+                    className="btn btn-small"
+                    href={mapsDirectionsUrl({
+                      origin,
+                      destination: chunk[chunk.length - 1],
+                      waypoints: chunk.slice(0, -1),
+                    })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <MapIcon /> {chunks.length === 1 ? "Ruta en Maps" : from === to ? `Maps: parada ${from}` : `Maps: ${from} a ${to}`}
+                  </a>
+                );
+              })}
+              <button type="button" className="btn btn-small" onClick={requestFit}>
+                Ver todo
               </button>
-              <div className="more-panel" id="day-more" inert={!moreOpen}>
-                <div className="more-list">
-                  {chunks.map((chunk, k) => {
-                    // Sin origen, Maps sale de la ubicación del móvil.
-                    const origin = k === 0 ? undefined : chunks[k - 1][chunks[k - 1].length - 1];
-                    const from = mapsOffset + k * MAPS_STOPS + 1;
-                    const to = mapsOffset + k * MAPS_STOPS + chunk.length;
-                    return (
-                      <a
-                        key={from}
-                        className="btn btn-wide"
-                        href={mapsDirectionsUrl({
-                          origin,
-                          destination: chunk[chunk.length - 1],
-                          waypoints: chunk.slice(0, -1),
-                        })}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <MapIcon /> {chunks.length === 1 ? "Ruta del día en Maps" : from === to ? `Maps: parada ${from}` : `Maps: paradas ${from} a ${to}`}
-                      </a>
-                    );
-                  })}
-                  <button type="button" className="btn btn-wide" onClick={requestFit}>
-                    Ver todo el recorrido
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -160,51 +145,75 @@ export function DayPage() {
           )}
 
           {!following && status === "off" && (
-            <p className="hint">
-              Al empezar, la web sigue vuestra posición y avisa al acercaros a cada parada. Mantened la pantalla
-              encendida y aceptad el permiso de ubicación.
+            <p className="hint hint-small">
+              Al empezar, la web sigue vuestra posición y avisa al acercaros a cada parada.
             </p>
           )}
 
-          <fieldset className="fountains">
-            <legend>Fuentes de agua en el mapa</legend>
-            <div className="segmented">
-              {FOUNTAIN_OPTIONS.map((o) => (
-                <label key={o.mode} className={fountainMode === o.mode ? "on" : ""}>
-                  <input
-                    type="radio"
-                    name="fountain-mode"
-                    value={o.mode}
-                    checked={fountainMode === o.mode}
-                    onChange={() => setFountainMode(o.mode)}
-                  />
-                  {o.label}
-                </label>
-              ))}
-            </div>
-            {fountainMode !== "off" && (
-              <p className="hint hint-tight">
-                {FOUNTAIN_OPTIONS.find((o) => o.mode === fountainMode)?.help} Toca un punto del mapa para verla.
-              </p>
-            )}
-          </fieldset>
+          <div className={`more${moreOpen ? " open" : ""}`}>
+            <button
+              type="button"
+              className="more-toggle"
+              aria-expanded={moreOpen}
+              aria-controls="day-settings"
+              onClick={() => setMoreOpen((o) => !o)}
+            >
+              <span className="more-label">
+                <SlidersIcon /> Ajustes del mapa
+              </span>
+              <span className="more-summary">
+                {fountainMode === "off" ? "Sin fuentes" : fountainMode === "fotos" ? "Fuentes con foto" : "Todas las fuentes"}
+                {hasEats && showEats ? " · comida" : ""}
+              </span>
+              <span className="more-chev">
+                <ChevronDown />
+              </span>
+            </button>
+            <div className="more-panel" id="day-settings" inert={!moreOpen}>
+              <div className="more-list">
+                <fieldset className="fountains">
+                  <legend>Fuentes de agua</legend>
+                  <div className="segmented">
+                    {FOUNTAIN_OPTIONS.map((o) => (
+                      <label key={o.mode} className={fountainMode === o.mode ? "on" : ""}>
+                        <input
+                          type="radio"
+                          name="fountain-mode"
+                          value={o.mode}
+                          checked={fountainMode === o.mode}
+                          onChange={() => setFountainMode(o.mode)}
+                        />
+                        {o.label}
+                      </label>
+                    ))}
+                  </div>
+                  {fountainMode !== "off" && (
+                    <p className="hint hint-tight">
+                      {FOUNTAIN_OPTIONS.find((o) => o.mode === fountainMode)?.help} Toca un punto del mapa para verla.
+                    </p>
+                  )}
+                </fieldset>
 
-          {day.stops.some((s) => s.eat?.length) && (
-            <fieldset className="fountains">
-              <legend>Sitios para comer en el mapa</legend>
-              <div className="segmented">
-                {[
-                  { value: true, label: "Mostrar" },
-                  { value: false, label: "Ocultar" },
-                ].map((o) => (
-                  <label key={o.label} className={showEats === o.value ? "on" : ""}>
-                    <input type="radio" name="show-eats" checked={showEats === o.value} onChange={() => setShowEats(o.value)} />
-                    {o.label}
-                  </label>
-                ))}
+                {hasEats && (
+                  <fieldset className="fountains">
+                    <legend>Sitios para comer en el mapa</legend>
+                    <div className="segmented">
+                      {[
+                        { value: true, label: "Mostrar" },
+                        { value: false, label: "Ocultar" },
+                      ].map((o) => (
+                        <label key={o.label} className={showEats === o.value ? "on" : ""}>
+                          <input type="radio" name="show-eats" checked={showEats === o.value} onChange={() => setShowEats(o.value)} />
+                          {o.label}
+                        </label>
+                      ))}
+                    </div>
+                    <p className="hint hint-tight">En cada parada, el mapa muestra siempre los sitios de comer que tiene cerca.</p>
+                  </fieldset>
+                )}
               </div>
-            </fieldset>
-          )}
+            </div>
+          </div>
 
           {live && replanned && (
             <p className="hint hint-tight">
@@ -218,7 +227,7 @@ export function DayPage() {
           <ol className="route">
             {live && foot ? (
               <li>
-                <div className="step">
+                <div className="step step-plain">
                   <span className="step-dot you" aria-hidden="true" />
                   <span className="step-name">Tu ubicación</span>
                   <span className="step-teaser">
@@ -233,7 +242,7 @@ export function DayPage() {
               </li>
             ) : (
               <li>
-                <div className="step">
+                <div className="step step-plain">
                   <span className="step-dot origin" aria-hidden="true" />
                   <span className="step-name">Punto de inicio</span>
                   {foot && <span className="leg">{foot.legs[0].min} min andando hasta la parada 1</span>}
@@ -249,24 +258,26 @@ export function DayPage() {
                     <span className={`step-dot${isSeen ? " done" : ""}`} aria-hidden="true">
                       {isSeen ? <CheckIcon /> : i + 1}
                     </span>
-                    <span className="step-name">{s.name}</span>
-                    <span className="step-teaser">{s.teaser}</span>
-                    <span className="step-tags">
-                      <span>
-                        <AudioIcon /> Audio {stopAudioLabel(s, manifest)}
+                    {s.photo ? (
+                      <img className="step-photo" src={s.photo.src} alt="" width={64} height={64} loading="lazy" />
+                    ) : (
+                      <span className="step-photo" aria-hidden="true" />
+                    )}
+                    <span className="step-text">
+                      <span className="step-name">{s.name}</span>
+                      <span className="step-teaser">{s.teaser}</span>
+                      <span className="step-tags">
+                        <span>
+                          <AudioIcon /> Audio {stopAudioLabel(s, manifest)}
+                        </span>
+                        {podcasts[s.id] && (
+                          <span>
+                            <MicIcon /> Podcast {podcasts[s.id].min} min
+                          </span>
+                        )}
+                        {isSeen && <span className="seen">Vista</span>}
+                        {position && !isSeen && <span className="near-now">a {formatDistance(distanceM(position, s))}</span>}
                       </span>
-                      {podcasts[s.id] && (
-                        <span>
-                          <MicIcon /> Podcast {podcasts[s.id].min} min
-                        </span>
-                      )}
-                      {s.photo && (
-                        <span>
-                          <PhotoIcon /> Fotos
-                        </span>
-                      )}
-                      {isSeen && <span className="seen">Vista</span>}
-                      {position && !isSeen && <span className="near-now">a {formatDistance(distanceM(position, s))}</span>}
                     </span>
                   </Link>
                   <a
@@ -276,7 +287,7 @@ export function DayPage() {
                     rel="noopener noreferrer"
                     aria-label={`Abrir en Google Maps la ruta a ${s.name} desde mi ubicación`}
                   >
-                    <MapIcon /> Abrir en Maps
+                    <MapIcon />
                   </a>
                   {next && (
                     <span className="leg">

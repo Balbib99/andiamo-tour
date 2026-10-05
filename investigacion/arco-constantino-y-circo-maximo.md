@@ -117,7 +117,7 @@ En la Edad Media los **Frangipani** lo integraron en su fortaleza. En **1534**, 
 | Año 36 d. C. | Otro incendio, en un taller de cestos bajo las gradas del Aventino; Tiberio indemniza a los afectados (A2) | Documentado |
 | Año 64 d. C. | El Gran Incendio de Roma se declara en el extremo curvo del circo y arrasa gradas y tiendas (A2) | Documentado |
 | 98-117 d. C. | Trajano reconstruye todo en piedra y añade unos 5.000 asientos y un nuevo palco imperial (A2) | Documentado |
-| Hacia el 140 d. C. | Se hunde una parte de las gradas, con un número de muertos altísimo (A2) | Documentado / Debatido en la cifra |
+| Siglo II (hacia el 140, con Antonino Pío) | Se hunde una parte de las gradas; las fuentes dan cifras de víctimas muy distintas (A2) | Documentado / Debatido en la cifra |
 | 198-217 d. C. | Caracalla reforma la zona de las salidas (A2) | Documentado |
 | Año 523 d. C. | Última cacería documentada (A2) | Documentado |
 | Año 549 d. C. | Las últimas carreras, ofrecidas por el rey ostrogodo Totila (A2) | Documentado |
@@ -150,7 +150,7 @@ Para los romanos, el circo era también un símbolo del **universo**: el dios So
 ### Fuego y desastres
 
 - En el **año 64**, el Gran Incendio de Roma empezó en el extremo curvo del circo, en tiendas de madera que había bajo las gradas, y "arrasó gradas y tiendas y destruyó gran parte de la ciudad" (A2) **[Documentado]**. Es el fuego que, según la tradición, dio a Nerón el terreno para su Domus Aurea (ver el dosier del Coliseo).
-- Hacia el **140** se hundió una zona de las gradas, con una cifra de víctimas enorme. Una fuente da 13.000 muertos, pero esa cifra debe tomarse con mucha cautela **[Debatido]**.
+- Hacia el **140**, con Antonino Pío, se hundió una zona de las gradas. Las cifras de víctimas que dan las fuentes van desde algo más de mil hasta 13.000 (esta última la sitúa la Wikipedia inglesa en tiempos de Diocleciano), así que no conviene dar ningún número **[Debatido]**.
 
 ### Los obeliscos: dos viajes a Roma y a otros lugares
 

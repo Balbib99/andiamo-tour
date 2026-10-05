@@ -1,5 +1,6 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useEffect, useContext, useMemo, useState, type ReactNode } from "react";
 import { load, save } from "../lib/storage";
+import { applyTheme, loadTheme, type Theme } from "../lib/theme";
 
 /** Qué fuentes de agua se dibujan en el mapa: ninguna, solo las que tienen foto real, o todas. */
 export type FountainMode = "off" | "fotos" | "todas";
@@ -12,9 +13,12 @@ interface AppContextValue {
   resetVisited: () => void;
   fountainMode: FountainMode;
   setFountainMode: (mode: FountainMode) => void;
-  /** Si el mapa dibuja los sitios para comer o tomar algo. */
+  /** Si el mapa dibuja los sitios para comer o tomar algo (oculto por defecto, para que se vea la ruta). */
   showEats: boolean;
   setShowEats: (show: boolean) => void;
+  /** Tema claro u oscuro; «auto» sigue el del móvil. Se guarda en el móvil. */
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
   /** Sube cada vez que se pide encuadrar de nuevo la ruta en el mapa. */
   fitSignal: number;
   requestFit: () => void;
@@ -35,8 +39,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const saved = load<string>("fountainMode", "off");
     return saved === "fotos" || saved === "todas" ? saved : "off";
   });
-  const [showEats, setShowEatsState] = useState<boolean>(() => load<boolean>("showEats", true) !== false);
+  const [showEats, setShowEatsState] = useState<boolean>(() => load<boolean>("showEats", false) === true);
   const [fitSignal, setFitSignal] = useState(0);
+  const [theme, setThemeState] = useState<Theme>(loadTheme);
+
+  const setTheme = useCallback((next: Theme) => setThemeState(next), []);
+  // Pone el tema en <html> al arrancar (por si lo eligió la visita anterior) y cada vez que cambia.
+  useEffect(() => applyTheme(theme), [theme]);
 
   const setFountainMode = useCallback((mode: FountainMode) => {
     setFountainModeState(mode);
@@ -67,10 +76,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setFountainMode,
       showEats,
       setShowEats,
+      theme,
+      setTheme,
       fitSignal,
       requestFit: () => setFitSignal((n) => n + 1),
     }),
-    [visited, update, fountainMode, setFountainMode, showEats, setShowEats, fitSignal],
+    [visited, update, fountainMode, setFountainMode, showEats, setShowEats, theme, setTheme, fitSignal],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

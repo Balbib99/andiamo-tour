@@ -14,7 +14,7 @@ import {
   type Progress,
   type SavedState,
 } from "../lib/offline";
-import { CheckIcon } from "./Icons";
+import { CheckIcon, ChevronDown } from "./Icons";
 
 interface InstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -152,9 +152,27 @@ export function OfflineCard() {
   const basicBytes = totalBytes(manifest.basico);
   const anySaved = saved.basico.done > 0 || Object.values(saved.dias).some((d) => d.done > 0);
 
+  const basicDone = saved.basico.done === saved.basico.total;
+  const daysDone = manifest.dias.filter((d) => saved.dias[d.id]?.done === d.archivos.length).length;
+  const summary = busy
+    ? "Descargando…"
+    : basicDone
+      ? daysDone === manifest.dias.length
+        ? "Todo guardado en el móvil"
+        : `Fotos y guías de voz guardadas · podcasts ${daysDone} de ${manifest.dias.length} días`
+      : "Aún sin descargar";
+
   return (
-    <section className="offline" aria-label="Usar sin conexión">
-      <h3>Usar sin conexión</h3>
+    <details className="offline" open={!basicDone || undefined}>
+      <summary className="offline-summary">
+        <span>
+          <strong>Usar sin conexión</strong>
+          <small>{summary}</small>
+        </span>
+        <span className="offline-chev" aria-hidden="true">
+          <ChevronDown />
+        </span>
+      </summary>
       <p className="offline-intro">
         Descárgalo con wifi para no gastar datos ni depender de la cobertura. El GPS y los avisos de cercanía
         funcionan igual sin internet.
@@ -212,6 +230,6 @@ export function OfflineCard() {
       {isIOS() && !isStandalone() && (
         <p className="offline-note">En iPhone, para instalarla: pulsa Compartir en Safari y elige «Añadir a pantalla de inicio».</p>
       )}
-    </section>
+    </details>
   );
 }

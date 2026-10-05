@@ -55,7 +55,7 @@ En **1536**, **Miguel Ángel** recibió el encargo de diseñar la **Piazza del C
 
 ### 3.5 Un museo que empezó como una devolución
 
-En **1471**, el papa **Sixto IV** donó al pueblo de Roma un grupo de **bronces antiguos**: la **Loba Capitolina**, el **Spinario** (el niño que se saca una espina), el **Camilo** y fragmentos colosales de **Constantino** (C1). La fuente lo describe como una **"restitución"** del patrimonio artístico de Roma, no como un regalo (C1) **[Documentado]**.
+En **1471**, el papa **Sixto IV** donó al pueblo de Roma un grupo de **bronces antiguos**: la **Loba Capitolina**, el **Spinario** (el niño que se saca una espina), el **Camilo** y fragmentos de una estatua colosal de bronce (la Wikipedia inglesa los atribuye a Domiciano; otras fuentes, a Constantino) (C1). La fuente lo describe como una **"restitución"** del patrimonio artístico de Roma, no como un regalo (C1) **[Documentado]**.
 
 Por eso se dice que es el museo público más antiguo del mundo. Una precisión: fue en **1734** cuando **Clemente XII** abrió el museo al público, y por eso se le considera "entre los primeros museos del mundo accesibles a todos los ciudadanos" (C1) **[Debatido: depende de qué se entienda por museo público]**.
 

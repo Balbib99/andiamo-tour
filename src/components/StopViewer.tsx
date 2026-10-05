@@ -4,13 +4,69 @@ import type { Stop } from "../data/types";
 import { audioFile, audioSrc, useAudioManifest } from "../lib/audio";
 import { mapsDirectionsUrl } from "../lib/geo";
 import { useSpeech, type Playable } from "../lib/useSpeech";
-import { EatIcon, ExternalIcon, MapIcon, PlayIcon, StopIcon } from "./Icons";
+import { ChevronDown, EatIcon, ExternalIcon, MapIcon, PlayIcon, StopIcon } from "./Icons";
 import { PodcastCard } from "./PodcastCard";
 
 const wave = Array.from({ length: 40 }, (_, i) => ({
   height: 30 + Math.round(Math.abs(Math.sin(i * 1.7)) * 70),
   delay: (i % 8) * 0.11,
 }));
+
+interface Section {
+  id: string;
+  label: string;
+}
+
+/** Barra fija de enlaces a las secciones de la parada: con ella se llega a cualquiera sin recorrer toda la página. */
+function SectionNav({ sections }: { sections: Section[] }) {
+  const [current, setCurrent] = useState(sections[0]?.id);
+  const key = sections.map((s) => s.id).join();
+
+  // La sección activa es la última cuyo comienzo ya ha pasado de la barra, o la última de todas si se llega al final.
+  // Se escucha el desplazamiento de cualquier contenedor (en el móvil, la página; en el ordenador, el panel).
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const atEnd = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      let active = sections[0]?.id;
+      sections.forEach((s) => {
+        const el = document.getElementById(s.id);
+        if (el && el.getBoundingClientRect().top <= 140) active = s.id;
+      });
+      setCurrent(atEnd ? sections[sections.length - 1]?.id : active);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    document.addEventListener("scroll", onScroll, { capture: true, passive: true });
+    return () => {
+      document.removeEventListener("scroll", onScroll, { capture: true });
+      cancelAnimationFrame(frame);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+
+  const go = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el instanceof HTMLDetailsElement) el.open = true;
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });
+    setCurrent(id);
+  };
+
+  if (sections.length < 2) return null;
+  return (
+    <nav className="section-nav" aria-label="Secciones de la parada">
+      {sections.map((s) => (
+        <button key={s.id} type="button" className={s.id === current ? "on" : ""} aria-current={s.id === current} onClick={() => go(s.id)}>
+          {s.label}
+        </button>
+      ))}
+    </nav>
+  );
+}
 
 /** Contenido de una parada: foto con puntos (o texto), audio, lugares que ver y enlace externo. */
 export function StopViewer({ stop }: { stop: Stop }) {
@@ -88,10 +144,23 @@ export function StopViewer({ stop }: { stop: Stop }) {
     speak(items.slice(from), (i) => setActive(from + i));
   };
 
+  const [allEats, setAllEats] = useState(false);
+  const eats = stop.eat ?? [];
+  const shownEats = allEats ? eats : eats.slice(0, 1);
+
+  const sections: Section[] = [
+    { id: "fotos", label: hasPhoto ? "Fotos" : "Historia" },
+    ...(podcast ? [{ id: "podcast", label: "Podcast" }] : []),
+    ...(stop.highlights?.length ? [{ id: "que-ver", label: "Qué ver" }] : []),
+    ...(eats.length ? [{ id: "comer", label: "Comer" }] : []),
+  ];
+
   const allLabel = `Escuchar toda la guía, ${points.length} puntos`;
 
   return (
     <>
+      <SectionNav sections={sections} />
+      <div id="fotos" className="anchor" />
       {hasPhoto && stop.photo && (
         <>
           <figure className="viewer">
@@ -221,8 +290,14 @@ export function StopViewer({ stop }: { stop: Stop }) {
       )}
 
       {stop.highlights && stop.highlights.length > 0 && (
-        <section className="highlights" aria-label="Qué ver aquí">
-          <h3>Qué ver aquí</h3>
+        <details className="highlights" id="que-ver">
+          <summary>
+            <h3>Qué ver aquí</h3>
+            <span className="fold-count">{stop.highlights.length} lugares</span>
+            <span className="fold-chev" aria-hidden="true">
+              <ChevronDown />
+            </span>
+          </summary>
           <ol>
             {stop.highlights.map((h) => (
               <li key={h.name}>
@@ -244,11 +319,11 @@ export function StopViewer({ stop }: { stop: Stop }) {
               </li>
             ))}
           </ol>
-        </section>
+        </details>
       )}
 
       {stop.eat && stop.eat.length > 0 && (
-        <section className="eat" aria-label="Para comer o tomar algo">
+        <section className="eat" id="comer" aria-label="Para comer o tomar algo">
           <header className="eat-head">
             <span className="eat-badge">
               <EatIcon />
@@ -259,7 +334,7 @@ export function StopViewer({ stop }: { stop: Stop }) {
             </div>
           </header>
           <ul className="eat-list">
-            {stop.eat.map((e) => (
+            {shownEats.map((e) => (
               <li className="eat-item" key={e.name}>
                 <figure className="eat-photo">
                   <img src={e.photo.src} alt={e.photo.alt} loading="lazy" />
@@ -281,6 +356,11 @@ export function StopViewer({ stop }: { stop: Stop }) {
               </li>
             ))}
           </ul>
+          {eats.length > 1 && (
+            <button type="button" className="btn btn-small eat-more" aria-expanded={allEats} onClick={() => setAllEats((v) => !v)}>
+              {allEats ? "Ver menos" : `Ver ${eats.length - 1} más`}
+            </button>
+          )}
           <p className="eat-foot">Sitios del itinerario de la familia. Los detalles salen de las webs de los locales, guías y reseñas; comprobad el horario antes de ir.</p>
           <details className="eat-credits">
             <summary>Créditos de las fotos</summary>

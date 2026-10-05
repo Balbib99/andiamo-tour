@@ -22,7 +22,7 @@ Las cifras entre paréntesis como (N1) remiten a la lista de fuentes del final. 
 
 | Fecha | Qué pasa | Etiqueta |
 |---|---|---|
-| Año 80 o 86 d. C. | Domiciano construye un estadio de unos 275 por 106 metros y capacidad de 15.000 espectadores, para competiciones atléticas de estilo griego (N1) | Documentado |
+| Año 80 o 86 d. C. | Domiciano construye un estadio de unos 275 por 106 metros, para competiciones atléticas de estilo griego; las fuentes dan capacidades muy distintas (N1) | Documentado |
 | Época medieval | El estadio cae en desuso y sobre sus gradas se levantan casas (N1) | Documentado |
 | Siglo XIII | Los Orsini se establecen en el lado sur del Campo de' Fiori (N2) | Documentado |
 | Año 1456 | El cardenal Ludovico Trevisani pavimenta el Campo de' Fiori, con Calixto III (N2) | Documentado |
@@ -44,7 +44,7 @@ Las cifras entre paréntesis como (N1) remiten a la lista de fuentes del final. 
 
 ### 3.1 Un estadio bajo las casas
 
-La plaza tiene esa forma alargada y curva por una razón: debajo está el **estadio de Domiciano**, construido hacia el año **80 o 86 d. C.**, con unos **275 metros de largo por 106 de ancho** y capacidad de **15.000 espectadores** (N1) **[Documentado]**. No se hacían combates de gladiadores, sino competiciones atléticas de estilo griego, el **Agon Capitolinus** (N1). Con los siglos, sobre las gradas se construyeron casas, y el contorno del estadio se convirtió en el contorno de la plaza.
+La plaza tiene esa forma alargada y curva por una razón: debajo está el **estadio de Domiciano**, construido hacia el año **80 o 86 d. C.**, con unos **275 metros de largo por 106 de ancho**. La capacidad no se conoce bien: las fuentes dan entre 15.000 y 30.000 espectadores, así que no conviene dar un número (N1) **[Documentado en las medidas]**. No se hacían combates de gladiadores, sino competiciones atléticas de estilo griego, el **Agon Capitolinus** (N1). Con los siglos, sobre las gradas se construyeron casas, y el contorno del estadio se convirtió en el contorno de la plaza.
 
 **El nombre.** *Navona* viene de una deformación: el **circo agonal** (*Circus Agonalis*, "el circo de las competiciones") pasó a **"in agone"**, luego a **"n'agone"** y finalmente a **"navone"** (N1) **[Documentado como explicación habitual]**. Es un buen juego para el podcast: la palabra "agonía" no tiene que ver con sufrir, sino con competir.
 

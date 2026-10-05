@@ -1,9 +1,9 @@
 import { Link, Navigate, useParams } from "react-router-dom";
-import { CheckIcon, ChevronLeft, MapIcon } from "../components/Icons";
+import { ArrowRight, CheckIcon, ChevronLeft, MapIcon } from "../components/Icons";
 import { StopViewer } from "../components/StopViewer";
 import { findDay, findStop } from "../data/itinerario";
 import { distanceM, formatDistance, mapsDirectionsUrl } from "../lib/geo";
-import { useDayOrder } from "../lib/useLiveRoute";
+import { useLiveRoute } from "../lib/useLiveRoute";
 import { useApp } from "../state/AppState";
 import { useTracking } from "../state/Tracking";
 
@@ -12,15 +12,19 @@ export function StopPage() {
   const day = findDay(dayId);
   const stop = findStop(day, stopId);
   const { visited, toggleVisited } = useApp();
-  const { position } = useTracking();
+  const { position, status, alert } = useTracking();
   // El orden y la numeración de las paradas cambian cuando se empieza la ruta y se recalcula desde tu posición.
-  const { stops } = useDayOrder(day);
+  const { stops, live, foot } = useLiveRoute(day);
 
   if (!day || !stop) return <Navigate to={day ? `/dia/${day.id}` : "/"} replace />;
 
   const index = stops.findIndex((s) => s.id === stop.id);
   const next = stops[index + 1];
   const isSeen = visited.includes(stop.id);
+  // Minutos andando hasta la siguiente: solo se conocen con la ruta prevista (con la ruta en marcha sale de tu ubicación).
+  const legMin = !live && next ? foot?.legs[index + 1]?.min : undefined;
+  // Con el seguimiento en marcha, la barra de abajo la ocupa el aviso de la ruta: «Siguiente parada» se queda en su sitio.
+  const tracking = status !== "off" || alert !== null;
 
   return (
     <>
@@ -36,43 +40,44 @@ export function StopPage() {
         {position && <span className="chip">a {formatDistance(distanceM(position, stop))} de ti</span>}
       </div>
 
-      <div className="actions">
+      <div className="quick">
         <a
-          className="btn btn-primary btn-wide"
+          className="btn btn-primary"
           href={mapsDirectionsUrl({ destination: stop })}
           target="_blank"
           rel="noopener noreferrer"
         >
-          <MapIcon /> Abrir en Maps desde mi ubicación
+          <MapIcon /> Cómo llegar desde aquí
         </a>
         <button
           type="button"
-          className={`btn${isSeen ? " btn-done" : ""}`}
+          className={`btn quick-seen${isSeen ? " btn-done" : ""}`}
           aria-pressed={isSeen}
+          aria-label={isSeen ? "Vista. Quitar la marca de vista" : "Marcar como vista"}
+          title={isSeen ? "Vista" : "Marcar como vista"}
           onClick={() => toggleVisited(stop.id)}
         >
-          {isSeen ? (
-            <>
-              <CheckIcon /> Vista
-            </>
-          ) : (
-            "Marcar como vista"
-          )}
+          <CheckIcon />
         </button>
       </div>
 
       <StopViewer key={stop.id} stop={stop} />
 
-      <div className="next">
+      <div className={`next-bar${tracking ? " is-static" : ""}`}>
         {next ? (
           <>
-            <span>Después: {next.name}</span>
+            <span className="next-info">
+              <small>Después{legMin ? ` · ${legMin} min andando` : ""}</small>
+              <strong>{next.name}</strong>
+            </span>
             <Link className="btn btn-primary" to={`/dia/${day.id}/parada/${next.id}`}>
-              Siguiente parada
+              Siguiente <ArrowRight />
             </Link>
           </>
         ) : (
-          <span>Última parada del día</span>
+          <span className="next-info">
+            <strong>Última parada del día</strong>
+          </span>
         )}
       </div>
     </>
