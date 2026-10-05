@@ -11,7 +11,7 @@ export interface Guide {
 }
 
 const photo = (id: string, w: number, h: number, alt: string, author: string, license: string): Photo => ({
-  src: `/img/monumentos/${id}.jpg`,
+  src: `/img/monumentos/${id}.webp`,
   alt,
   ratio: `${w} / ${h}`,
   credit: `Foto: ${author}, Wikimedia Commons, ${license}`,
@@ -52,6 +52,8 @@ const largo = on(1280, 960);
 const navona = on(1280, 906);
 const sanPedro = on(1280, 719);
 const vaticanos = on(1280, 960);
+const castel = on(1280, 1146);
+const basilica = on(1280, 1708);
 
 export const guides: Record<string, Guide> = {
   trevi: {
@@ -804,6 +806,78 @@ export const guides: Record<string, Guide> = {
     ],
   },
 
+  "castel-sant-angelo": {
+    photo: photo(
+      "castel-sant-angelo",
+      1280,
+      1146,
+      "Castel Sant'Angelo de noche, visto desde el Ponte Sant'Angelo, con los ángeles del puente a los lados y el arcángel de bronce en lo alto",
+      "Livioandronico2013",
+      "CC BY-SA 4.0",
+    ),
+    points: [
+      castel(
+        648,
+        250,
+        "El arcángel de la cima",
+        "Sobre el castillo se alza un arcángel Miguel de bronce, obra del escultor Peter Anton von Verschaffelt, colocado en 1753. Según la tradición, en el año 590 el papa Gregorio Magno vio al arcángel envainar su espada sobre el edificio, señal de que terminaba una peste. De ahí viene el nombre del castillo.",
+      ),
+      castel(
+        650,
+        520,
+        "La tumba de un emperador",
+        "El castillo nació como mausoleo del emperador Adriano, que murió en el año 138. Lo terminó su sucesor, Antonino Pío, en el año 139. Aquí se guardaron las cenizas de Adriano y de su familia.",
+      ),
+      castel(
+        700,
+        690,
+        "De mausoleo a fortaleza",
+        "Siglos después, el edificio se incorporó a las murallas de la ciudad y pasó a ser una fortaleza, que más tarde sirvió de refugio a los papas. Desde el Vaticano llega hasta aquí el Passetto di Borgo, un pasadizo elevado de unos ochocientos metros. Se atribuye al papa Nicolás tercero, hacia 1277, aunque la fecha no es segura. En 1527, durante el saqueo de Roma, el papa Clemente séptimo huyó por él.",
+      ),
+      castel(
+        1130,
+        470,
+        "Los ángeles de Bernini",
+        "El puente está flanqueado por diez ángeles que llevan los símbolos de la Pasión de Cristo. En 1668, el papa Clemente nueve encargó el proyecto a Bernini. Él mismo solo esculpió dos, el de la corona de espinas y el del letrero de la cruz. El papa se los quedó y hoy están en la iglesia de Sant'Andrea delle Fratte. Los demás los hicieron otros escultores.",
+      ),
+      castel(
+        640,
+        940,
+        "El puente de Adriano",
+        "El puente se llamaba Pons Aelius, por el apellido de Adriano, y se terminó en el año 134 para cruzar el Tíber hasta su mausoleo. Siglos más tarde fue el paso de los peregrinos hacia San Pedro.",
+      ),
+    ],
+  },
+  "basilica-san-pedro": {
+    photo: photo(
+      "basilica-san-pedro",
+      1280,
+      1708,
+      "El baldaquino de bronce de Bernini en el interior de San Pedro, con sus cuatro columnas retorcidas y, al fondo, la Cátedra de San Pedro entre rayos dorados",
+      "Jebulon",
+      "CC0",
+    ),
+    points: [
+      basilica(
+        640,
+        700,
+        "El baldaquino",
+        "Bernini lo realizó entre 1624 y 1633 por encargo del papa Urbano octavo. Es de bronce y mide casi veintinueve metros de altura, como un edificio de diez plantas. Se alza sobre el altar mayor, bajo el que está, según la tradición, la tumba de San Pedro.",
+      ),
+      basilica(
+        860,
+        1100,
+        "Las columnas retorcidas",
+        "Las cuatro columnas helicoidales se inspiran en las de mármol que rodeaban la tumba de San Pedro en la antigua basílica. Su forma en espiral da una sensación de movimiento a una obra enorme y pesada.",
+      ),
+      basilica(
+        190,
+        1140,
+        "La Cátedra de San Pedro",
+        "Al fondo, entre rayos dorados y con una paloma que representa al Espíritu Santo, está la Cátedra de San Pedro, que también diseñó Bernini.",
+      ),
+    ],
+  },
   "museos-vaticanos": {
     photo: photo("museos-vaticanos", 1280, 960, "El Cortile della Pigna de los Museos Vaticanos, con la esfera dorada y la gran piña de bronce ante un nicho enorme", "Lalupa", "CC BY-SA 3.0"),
     points: [

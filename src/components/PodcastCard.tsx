@@ -81,7 +81,7 @@ export function PodcastCard({ podcast, name, audioRef, artwork, onPlay }: Props)
     ms.metadata = new MediaMetadata({
       title: name,
       artist: "Andiamo · Podcast",
-      artwork: artwork ? [{ src: artwork, sizes: "512x512", type: "image/jpeg" }] : [],
+      artwork: artwork ? [{ src: artwork, sizes: "512x512", type: artwork.endsWith(".webp") ? "image/webp" : "image/jpeg" }] : [],
     });
     const a = audioRef.current;
     const set = (action: MediaSessionAction, handler: MediaSessionActionHandler | null) => {

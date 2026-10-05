@@ -7,7 +7,7 @@ import { podcasts } from "../data/podcasts";
 import { useApp } from "../state/AppState";
 import { useTracking } from "../state/Tracking";
 
-const HERO_IMG = "/img/monumentos/coliseo.jpg";
+const HERO_IMG = "/img/monumentos/coliseo.webp";
 
 const totalStops = days.reduce((n, d) => n + d.stops.length, 0);
 // Varias paradas comparten podcast: se cuentan los archivos distintos.

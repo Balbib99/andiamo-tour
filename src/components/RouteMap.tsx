@@ -63,10 +63,10 @@ function fountainCard(f: Fountain, from: LatLng | null): string {
     ? "Foto de esta fuente, un nasone de Roma"
     : "Un nasone, la fuente de hierro típica de Roma, con su caño curvo";
   // Si la foto de Wikimedia no carga, se cambia por la de ejemplo y se avisa de que lo es.
-  const fallback = "this.onerror=null;this.src='/img/nasone.jpg';this.nextElementSibling.hidden=false;this.parentElement.classList.remove('real')";
+  const fallback = "this.onerror=null;this.src='/img/nasone.webp';this.nextElementSibling.hidden=false;this.parentElement.classList.remove('real')";
   return `<article class="fountain-card">
     <figure class="fountain-photo${photo ? " real" : ""}">
-      <img src="${photo ? esc(photo.url) : "/img/nasone.jpg"}" width="96" height="170" loading="lazy" alt="${alt}"${photo ? ` onerror="${fallback}"` : ""}>
+      <img src="${photo ? esc(photo.url) : "/img/nasone.webp"}" width="96" height="170" loading="lazy" alt="${alt}"${photo ? ` onerror="${fallback}"` : ""}>
       <figcaption${photo ? " hidden" : ""}>Foto de ejemplo</figcaption>
     </figure>
     <div class="fountain-body">

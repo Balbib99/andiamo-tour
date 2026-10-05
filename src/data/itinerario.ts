@@ -26,7 +26,7 @@ const panteon: Stop = {
   ],
   viator: { url: "https://audioviator.com/audioguia/el-panteon-de-agripa/" },
   photo: {
-    src: "/img/monumentos/panteon.jpg",
+    src: "/img/monumentos/panteon.webp",
     alt: "Fachada del Panteón de Roma con su pórtico de columnas de granito",
     ratio: "1280 / 878",
     credit: "Foto: Wikimedia Commons, dominio público (CC0)",
@@ -148,7 +148,7 @@ const coliseo: Stop = {
     note: "Audioguía completa de unos 13 minutos.",
   },
   photo: {
-    src: "/img/monumentos/coliseo.jpg",
+    src: "/img/monumentos/coliseo.webp",
     alt: "El Coliseo de Roma visto desde el exterior, con sus tres pisos de arcos",
     ratio: "1280 / 897",
     credit: "Foto: FeaturedPics, Wikimedia Commons, CC BY-SA 4.0",
@@ -495,6 +495,46 @@ const piazzaNavona: Stop = {
   ],
 };
 
+const castelSantAngelo: Stop = {
+  id: "castel-sant-angelo",
+  name: "Castel Sant'Angelo y Ponte Sant'Angelo",
+  era: "Años 134 a 139",
+  lat: 41.9031,
+  lng: 12.4663,
+  audio: "1 min",
+  teaser: "El mausoleo del emperador Adriano, convertido en fortaleza de los papas, y el puente de los ángeles de Bernini.",
+  text: [
+    "El puente se terminó en el año 134 para cruzar el Tíber hasta el mausoleo que el emperador Adriano se hizo construir. Adriano murió en el año 138 y su sucesor, Antonino Pío, terminó el edificio en el año 139.",
+    "Siglos después se incorporó a las murallas de la ciudad y pasó a ser una fortaleza. Un pasadizo elevado de unos 800 metros, el Passetto di Borgo, lo une con el Vaticano.",
+    "En 1668, el papa Clemente IX encargó a Bernini los diez ángeles que flanquean el puente.",
+  ],
+  highlights: [
+    { name: "Ponte Sant'Angelo", note: "El puente de Adriano, del año 134, con los diez ángeles de la Pasión. Se cruza para llegar al castillo.", lat: 41.90192, lng: 12.46645 },
+    { name: "Terraza del castillo", note: "En lo alto, junto al arcángel de bronce, hay vistas de la basílica de San Pedro y de la ciudad." },
+    { name: "Passetto di Borgo", note: "El pasadizo elevado que une el castillo con el Vaticano. Clemente VII huyó por él durante el saqueo de Roma de 1527." },
+    { name: "Via della Conciliazione", note: "La avenida que va del castillo a la plaza de San Pedro, abierta entre 1936 y 1950.", lat: 41.9023, lng: 12.462 },
+  ],
+};
+
+const basilicaSanPedro: Stop = {
+  id: "basilica-san-pedro",
+  name: "Interior de la Basílica de San Pedro",
+  era: "Años 1506 a 1626",
+  lat: 41.9022,
+  lng: 12.4533,
+  audio: "1 min",
+  teaser: "Bajo la cúpula de Miguel Ángel, el baldaquino de bronce de Bernini y la Piedad.",
+  text: [
+    "La primera piedra de la basílica actual se puso en 1506 y el papa Urbano VIII la consagró el 18 de noviembre de 1626.",
+    "Bajo la gran cúpula, Bernini levantó entre 1624 y 1633 un baldaquino de bronce de casi 29 metros de altura.",
+    "En la primera capilla de la nave derecha está la Piedad de Miguel Ángel, de los años 1498 y 1499.",
+  ],
+  highlights: [
+    { name: "La Piedad de Miguel Ángel", note: "Está en la primera capilla de la nave derecha. La esculpió con 23 años y es la única obra que firmó." },
+    { name: "La cúpula", note: "Miguel Ángel la proyectó, pero murió con ella construida solo hasta el tambor. La terminaron en 1590 Giacomo della Porta y Domenico Fontana. Con la cruz alcanza unos 136 metros." },
+  ],
+};
+
 const plazaSanPedro: Stop = {
   id: "plaza-san-pedro",
   name: "Plaza y Basílica de San Pedro",
@@ -554,7 +594,9 @@ const baseDays: Day[] = [
   {
     id: "2",
     title: "Vaticano y sus museos",
-    stops: [plazaSanPedro, museosVaticanos],
+    // Orden de ruta hecho a mano, de este a oeste: el castillo, la avenida hasta la plaza, la basílica y, al final, los museos.
+    fixedOrder: true,
+    stops: [castelSantAngelo, plazaSanPedro, basilicaSanPedro, museosVaticanos],
   },
   {
     id: "3",

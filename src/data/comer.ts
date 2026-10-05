@@ -19,7 +19,7 @@ export const eats: Record<string, Eat[]> = {
       lat: 41.8889038,
       lng: 12.4754685,
       photo: {
-        src: "/img/comer/caffe-67.jpg",
+        src: "/img/comer/caffe-67.webp",
         alt: "Un panino de jamón crudo y queso",
         author: "Pava",
         license: "CC BY-SA 3.0 it",
@@ -36,7 +36,7 @@ export const eats: Record<string, Eat[]> = {
       lat: 41.8958558,
       lng: 12.4715634,
       photo: {
-        src: "/img/comer/forno-campo-de-fiori.jpg",
+        src: "/img/comer/forno-campo-de-fiori.webp",
         alt: "Bandejas de pizza al corte en un local de Roma",
         author: "Jon Gudorf Photography",
         license: "CC BY-SA 2.0",
@@ -51,7 +51,7 @@ export const eats: Record<string, Eat[]> = {
       lat: 41.8961235,
       lng: 12.4716678,
       photo: {
-        src: "/img/comer/osteria-da-fortunata.jpg",
+        src: "/img/comer/osteria-da-fortunata.webp",
         alt: "Un plato de pasta a la carbonara",
         author: "philip.mallis",
         license: "CC BY-SA 2.0",
@@ -66,7 +66,7 @@ export const eats: Record<string, Eat[]> = {
       lat: 41.8940972,
       lng: 12.4730667,
       photo: {
-        src: "/img/comer/nonna-vincenza.jpg",
+        src: "/img/comer/nonna-vincenza.webp",
         alt: "Cannoli sicilianos rellenos de crema y con cerezas confitadas",
         author: "Stefano Mortellaro",
         license: "CC BY 2.0",
@@ -81,7 +81,7 @@ export const eats: Record<string, Eat[]> = {
       lat: 41.8970566,
       lng: 12.469997,
       photo: {
-        src: "/img/comer/barnum.jpg",
+        src: "/img/comer/barnum.webp",
         alt: "Café de filtro goteando sobre una mesa",
         author: "Kim Sanso",
         license: "CC0",
@@ -98,7 +98,7 @@ export const eats: Record<string, Eat[]> = {
       lat: 41.8980142,
       lng: 12.471566,
       photo: {
-        src: "/img/comer/two-sizes.jpg",
+        src: "/img/comer/two-sizes.webp",
         alt: "Una porción de tiramisú en un plato",
         author: "Navneet Sharma",
         license: "CC BY-SA 4.0",
@@ -113,7 +113,7 @@ export const eats: Record<string, Eat[]> = {
       lat: 41.8982333,
       lng: 12.4704548,
       photo: {
-        src: "/img/comer/frigidarium.jpg",
+        src: "/img/comer/frigidarium.webp",
         alt: "Un cucurucho de helado bañado en chocolate",
         author: "Tomwsulcer",
         license: "CC0",
@@ -130,7 +130,7 @@ export const eats: Record<string, Eat[]> = {
       lat: 41.899434,
       lng: 12.477407,
       photo: {
-        src: "/img/comer/tazza-doro.jpg",
+        src: "/img/comer/tazza-doro.webp",
         alt: "Dos cappuccini y un cornetto en la barra del Caffè Tazza d'Oro",
         author: "Blackcat",
         license: "CC BY-SA 4.0",
@@ -145,7 +145,7 @@ export const eats: Record<string, Eat[]> = {
       lat: 41.8982749,
       lng: 12.4754254,
       photo: {
-        src: "/img/comer/sant-eustachio.jpg",
+        src: "/img/comer/sant-eustachio.webp",
         alt: "Un espresso en una taza sobre su plato",
         author: "Fraapal",
         license: "CC BY-SA 4.0",
@@ -160,7 +160,7 @@ export const eats: Record<string, Eat[]> = {
       lat: 41.8995074,
       lng: 12.4772941,
       photo: {
-        src: "/img/comer/venchi.jpg",
+        src: "/img/comer/venchi.webp",
         alt: "Tarrinas de helado de distintos sabores en una vitrina",
         author: "Sphilbrick",
         license: "CC BY-SA 3.0",
@@ -177,7 +177,7 @@ export const eats: Record<string, Eat[]> = {
       lat: 41.900629,
       lng: 12.481772,
       photo: {
-        src: "/img/comer/pane-e-salame.jpg",
+        src: "/img/comer/pane-e-salame.webp",
         alt: "Una tabla de embutidos y quesos",
         author: "Albarubescens",
         license: "CC BY-SA 4.0",
@@ -192,7 +192,7 @@ export const eats: Record<string, Eat[]> = {
       lat: 41.8990373,
       lng: 12.4825101,
       photo: {
-        src: "/img/comer/san-marcello.jpg",
+        src: "/img/comer/san-marcello.webp",
         alt: "Un café con leche y un cornetto sobre una barra",
         author: "Ensahequ",
         license: "CC BY-SA 4.0",
