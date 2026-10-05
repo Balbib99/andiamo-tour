@@ -1,7 +1,7 @@
 # Andiamo en la Raspberry Pi.  Arrancar / actualizar:  docker compose up -d --build
 #
-# No publica puertos: el Caddy común (~/homelab/infra, ver deploy/MIGRACION.md) entra por la red "edge" y lo ve como
-# "andiamo-web". La red la crea el proyecto infra: arráncalo antes.
+# No publica puertos: el Caddy común (en ~/homelab/infra de la Pi) entra por la red "edge" y lo ve como "andiamo-web".
+# La red la crea ese proyecto: tiene que estar arrancado antes.
 services:
   andiamo:
     build: .
