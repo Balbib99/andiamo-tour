@@ -1,0 +1,49 @@
+# Infraestructura común de la Raspberry Pi: un solo Caddy y un solo DuckDNS para todas las webs.
+# Va en ~/homelab/infra. Cada web (lista de la compra, Andiamo...) se une a la red "edge" y se declara en el Caddyfile.
+#
+# Arrancar:  docker compose up -d --build
+services:
+  caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile.caddy
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data # aquí está el certificado: se reutiliza el volumen que ya tenía el Caddy de la lista de la compra
+      - caddy_config:/config
+    environment:
+      - DUCKDNS_API_TOKEN=${DUCKDNS_API_TOKEN}
+      - DESPENSA_DOMAIN=${DESPENSA_DOMAIN}
+      - ANDIAMO_DOMAIN=${ANDIAMO_DOMAIN}
+      - ADMIN_USER=${ADMIN_USER}
+      - ADMIN_PASSWORD_HASH=${ADMIN_PASSWORD_HASH}
+    networks:
+      - edge
+
+  duckdns:
+    image: lscr.io/linuxserver/duckdns:latest
+    container_name: duckdns
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Madrid
+      - SUBDOMAINS=${DESPENSA_SUBDOMAIN},${ANDIAMO_SUBDOMAIN}
+      - TOKEN=${DUCKDNS_API_TOKEN}
+      - LOG_FILE=false
+
+networks:
+  edge:
+    name: edge
+
+volumes:
+  # Los volúmenes del Caddy antiguo (nombre = carpeta del proyecto + nombre del volumen). Comprueba con `docker volume ls`.
+  caddy_data:
+    external: true
+    name: lista-compra-nfc_caddy_data
+  caddy_config:
+    external: true
+    name: lista-compra-nfc_caddy_config

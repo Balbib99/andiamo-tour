@@ -1,0 +1,23 @@
+# Lista de la compra tras mover el Caddy y el DuckDNS a ~/homelab/infra.
+# Va en ~/homelab/lista-compra-nfc/docker-compose.yml (sustituye al anterior; guarda antes una copia como .bak).
+services:
+  pocketbase:
+    build:
+      context: .
+      dockerfile: Dockerfile.pocketbase
+    volumes:
+      - ./pb_data:/pb_data
+      - ./pb_public:/pb_public
+      - ./pb_migrations:/pb_migrations
+    ports:
+      - "8090:8090" # solo accesible dentro de tu red local, no expuesto a internet
+    restart: unless-stopped
+    networks:
+      edge:
+        aliases:
+          - despensa-pocketbase
+
+networks:
+  edge:
+    external: true
+    name: edge
