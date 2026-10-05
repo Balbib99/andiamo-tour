@@ -72,6 +72,11 @@ const trevi: Stop = {
     "La tradición pide lanzar una moneda de espaldas, con la mano derecha por encima del hombro izquierdo, para volver a Roma.",
   ],
   viator: { url: "https://audioviator.com/audioguia/la-fontana-di-trevi/" },
+  highlights: [
+    { name: "Via dei Pastini", note: "De camino desde el Panteón: la calle por la que se llega a la plaza del Templo de Adriano." },
+    { name: "Templo de Adriano", note: "De camino desde el Panteón: sus esbeltas columnas son del año 145.", lat: 41.8996, lng: 12.4795 },
+    { name: "Plaza Colonna", note: "De camino desde el Panteón: la preside la columna de Marco Aurelio.", lat: 41.9006, lng: 12.4799 },
+  ],
 };
 
 const vittoriano: Stop = {
@@ -371,6 +376,9 @@ const sanPietroInVincoli: Stop = {
     "La basílica se construyó en el siglo V para guardar las cadenas con las que, según la tradición, san Pedro estuvo preso. De ahí su nombre: «vincoli» significa cadenas.",
     "Dentro está el Moisés de Miguel Ángel, esculpido hacia 1513 para la tumba del papa Julio II. Fijaos en los cuernos de la cabeza, que vienen de un error de traducción de la Biblia.",
   ],
+  highlights: [
+    { name: "Moisés de Miguel Ángel", note: "La escultura que más visitantes atrae de la basílica. Según el itinerario, la entrada es gratuita y abre a las 8:00; conviene comprobar el horario." },
+  ],
 };
 
 const monti: Stop = {
@@ -385,6 +393,9 @@ const monti: Stop = {
     "Monti es el rione número I de Roma y uno de sus barrios más antiguos. En la Antigüedad fue la Subura, el arrabal popular y bullicioso de la ciudad.",
     "Hoy es un rincón de calles empinadas, tiendas de artesanía y trattorias. La plaza de la Madonna dei Monti, con su fuente, es el mejor sitio para hacer una parada.",
   ],
+  highlights: [
+    { name: "Escalinata Salita dei Borgia", note: "La bajada desde San Pietro in Vincoli que lleva al barrio de Monti." },
+  ],
 };
 
 const mercadosTrajano: Stop = {
@@ -398,6 +409,11 @@ const mercadosTrajano: Stop = {
   text: [
     "Formaban parte del gran complejo del foro de Trajano, levantado a comienzos del siglo II por el arquitecto Apolodoro de Damasco.",
     "Sus locales se escalonan por la ladera del Quirinal, y por eso se los suele llamar el primer centro comercial de la historia. Hoy alberga el Museo de los Foros Imperiales.",
+  ],
+  highlights: [
+    { name: "Templo de Trajano", note: "Sus ruinas están al aire libre, cerca de los mercados." },
+    { name: "Basílica Ulpia", note: "Otra de las ruinas del foro de Trajano que se ven desde la calle." },
+    { name: "Columna Trajana", note: "Sus relieves en espiral cuentan las victorias de Trajano.", lat: 41.8959, lng: 12.4844 },
   ],
 };
 
@@ -426,6 +442,10 @@ const barrioJudio: Stop = {
   text: [
     "La comunidad judía vive en Roma desde hace más de dos mil años, una de las más antiguas de Europa.",
     "El gueto se creó en 1555 por orden del papa Pablo IV y duró hasta 1870. Hoy el barrio conserva el Pórtico de Octavia, de época romana, y es el lugar para probar las alcachofas a la judía.",
+  ],
+  highlights: [
+    { name: "Plaza Mattei y la Fuente de las Tortugas", note: "Una plaza pequeña y muy bonita, con una fuente muy popular.", lat: 41.89392, lng: 12.47775 },
+    { name: "Via della Reginella", note: "Una calle con placas en el suelo con los nombres de los judíos deportados a los campos de concentración." },
   ],
 };
 
@@ -468,6 +488,9 @@ const piazzaNavona: Stop = {
   text: [
     "La plaza conserva la forma alargada del estadio de Domiciano, inaugurado hacia el año 86, donde se celebraban competiciones de atletismo.",
     "En el centro está la Fuente de los Cuatro Ríos, de Bernini, terminada en 1651. Frente a ella se alza la iglesia de Santa Inés en Agonía, barroca, con la fachada de Borromini.",
+  ],
+  highlights: [
+    { name: "Fuente de los Cuatro Ríos", note: "Representa los cuatro ríos más famosos de la época: el Danubio, el Nilo, el Ganges y el Río de la Plata." },
   ],
 };
 
@@ -535,18 +558,20 @@ const baseDays: Day[] = [
   {
     id: "3",
     title: "Monti y el centro histórico",
+    // El orden es el del itinerario de la familia: empieza en San Pietro in Vincoli y acaba en la Fontana di Trevi.
+    fixedOrder: true,
     stops: [
+      sanPietroInVincoli,
+      monti,
+      mercadosTrajano,
+      vittoriano,
+      museosCapitolinos,
+      barrioJudio,
       campoDeFiori,
+      largoArgentina,
       piazzaNavona,
       panteon,
       trevi,
-      mercadosTrajano,
-      monti,
-      sanPietroInVincoli,
-      museosCapitolinos,
-      vittoriano,
-      largoArgentina,
-      barrioJudio,
     ],
   },
 ];

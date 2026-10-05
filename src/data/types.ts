@@ -48,4 +48,6 @@ export interface Day {
   id: string;
   title: string;
   stops: Stop[];
+  /** true si el orden de las paradas es deliberado: la ruta lo respeta y no lo reordena por cercanía al empezar. */
+  fixedOrder?: boolean;
 }

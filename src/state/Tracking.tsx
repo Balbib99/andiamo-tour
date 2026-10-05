@@ -264,7 +264,7 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
       setSimulating(true);
 
       // Camino que se recorre: desde el punto de inicio, por las paradas en el orden más corto, como hará la ruta real.
-      const ordered = await planOrder(startPoint, day.stops);
+      const ordered = day.fixedOrder ? day.stops : await planOrder(startPoint, day.stops);
       const points = routePoints(startPoint, ordered);
       const route = await fetchFootRoute(points);
       if (token !== simToken.current) return; // se paró la simulación mientras se calculaba
@@ -318,7 +318,7 @@ export function TrackingProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const day = findDay(followingDay ?? undefined);
     const origin = originRef.current;
-    if (!day || !origin || !hasOrigin) return;
+    if (!day || day.fixedOrder || !origin || !hasOrigin) return;
     const pending = day.stops.filter((s) => !visited.includes(s.id));
     let alive = true;
     void planOrder(origin, pending).then((ordered) => {

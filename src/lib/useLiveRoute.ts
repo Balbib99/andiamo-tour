@@ -26,7 +26,7 @@ export function useDayOrder(day: Day | undefined): DayOrder {
   return useMemo(() => {
     const all = day?.stops ?? [];
     const notSeen = all.filter((s) => !visited.includes(s.id));
-    if (!day || followingDay !== day.id || plan?.dayId !== day.id) {
+    if (!day || day.fixedOrder || followingDay !== day.id || plan?.dayId !== day.id) {
       return { stops: all, pending: notSeen, replanned: false };
     }
     const byId = new Map(notSeen.map((s) => [s.id, s]));

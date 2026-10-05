@@ -205,7 +205,9 @@ export function DayPage() {
                   <span className="step-dot you" aria-hidden="true" />
                   <span className="step-name">Tu ubicación</span>
                   <span className="step-teaser">
-                    La ruta sale de donde estás y sigue por las paradas que faltan, en el orden que hace menos camino.
+                    {day.fixedOrder
+                      ? "La ruta sale de donde estás y sigue por las paradas que faltan, en el orden previsto para el día."
+                      : "La ruta sale de donde estás y sigue por las paradas que faltan, en el orden que hace menos camino."}
                   </span>
                   <span className="leg">
                     {foot.legs[0].min} min andando hasta la parada {firstPending + 1}
