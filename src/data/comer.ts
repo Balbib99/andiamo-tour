@@ -2,9 +2,10 @@ import type { Eat } from "./types";
 
 /**
  * Sitios para comer o tomar algo cerca de cada parada. Las coordenadas salen del mapa del itinerario de la familia;
- * cada sitio va en la parada más cercana. En `note` va lo que se recomienda: lo que dice el itinerario cuando lo dice, y
- * si no, lo más conocido del local según guías y reseñas (conviene comprobarlo). Las fotos son de Wikimedia Commons;
- * salvo la de Tazza d'Oro, enseñan el tipo de plato y no el local (`illustrative`).
+ * cada sitio va en la parada más cercana. En `note` solo va lo que se ha contrastado con la web del local, guías
+ * (Time Out, Katie Parla, Gambero Rosso, Wanted in Rome...) o reseñas coincidentes, además de lo que dice el itinerario.
+ * Un sitio sin información fiable no se añade. Las fotos son de Wikimedia Commons; salvo la de Tazza d'Oro, enseñan
+ * el tipo de plato y no el local (`illustrative`).
  * Para añadir uno: id de la parada, nombre, tipo, coordenadas de Google Maps, recomendación y foto en public/img/comer.
  */
 const commons = (file: string) => `https://commons.wikimedia.org/wiki/File:${file}`;
@@ -12,24 +13,9 @@ const commons = (file: string) => `https://commons.wikimedia.org/wiki/File:${fil
 export const eats: Record<string, Eat[]> = {
   "barrio-judio": [
     {
-      name: "Cappuccino Bar",
-      kind: "Bar",
-      note: "Un cappuccino decorado, tomado de pie en la barra.",
-      lat: 41.892136,
-      lng: 12.4748579,
-      photo: {
-        src: "/img/comer/cappuccino-bar.jpg",
-        alt: "Un cappuccino con un dibujo de espuma en forma de hoja",
-        author: "Drew Coffman",
-        license: "CC0",
-        page: commons("Latte_art_on_cappuccino_(Unsplash).jpg"),
-        illustrative: true,
-      },
-    },
-    {
       name: "Caffè 67",
       kind: "Café",
-      note: "Un cappuccino y un panino. Está en Trastevere, al otro lado del Tíber.",
+      note: "Cappuccino con dibujo en la espuma y panini, como el de jamón crudo y brie. Está en Trastevere, al otro lado del Tíber.",
       lat: 41.8889038,
       lng: 12.4754685,
       photo: {
@@ -46,7 +32,7 @@ export const eats: Record<string, Eat[]> = {
     {
       name: "Forno Campo de' Fiori",
       kind: "Panadería",
-      note: "Pizza bianca al corte, con aceite y sal, o pizza rossa. Se pide por trozos.",
+      note: "Pizza bianca o pizza rossa al corte: cortan el trozo, lo pesan y lo envuelven. También el bocadillo de pizza bianca con mortadela.",
       lat: 41.8958558,
       lng: 12.4715634,
       photo: {
@@ -61,7 +47,7 @@ export const eats: Record<string, Eat[]> = {
     {
       name: "Osteria da Fortunata",
       kind: "Restaurante",
-      note: "Pasta fresca hecha a mano, como la carbonara o la cacio e pepe. Conviene reservar.",
+      note: "Pasta fresca hecha a mano, que se ve preparar en el local. Probad los clásicos romanos, como la cacio e pepe o la carbonara. Admite reserva y suele haber cola.",
       lat: 41.8961235,
       lng: 12.4716678,
       photo: {
@@ -76,7 +62,7 @@ export const eats: Record<string, Eat[]> = {
     {
       name: "I Dolci di Nonna Vincenza",
       kind: "Pastelería siciliana",
-      note: "Un cannolo siciliano, o cualquier dulce de almendra o pistacho.",
+      note: "Un cannolo siciliano, su dulce más conocido.",
       lat: 41.8940972,
       lng: 12.4730667,
       photo: {
@@ -91,7 +77,7 @@ export const eats: Record<string, Eat[]> = {
     {
       name: "Barnum Roma",
       kind: "Café de especialidad",
-      note: "Un café de filtro o un cappuccino con bollería. Suele haber cola.",
+      note: "Café de especialidad con bollería de inspiración francesa y nórdica. Suele haber cola.",
       lat: 41.8970566,
       lng: 12.469997,
       photo: {
@@ -108,7 +94,7 @@ export const eats: Record<string, Eat[]> = {
     {
       name: "Two Sizes",
       kind: "Dulces",
-      note: "Perfecto para probar el tiramisú de pistacho.",
+      note: "Perfecto para probar el tiramisú de pistacho. Se toma para llevar, paseando.",
       lat: 41.8980142,
       lng: 12.471566,
       photo: {
@@ -123,7 +109,7 @@ export const eats: Record<string, Eat[]> = {
     {
       name: "Frigidarium",
       kind: "Heladería",
-      note: "Helados cubiertos de chocolate caliente.",
+      note: "Pedid el helado cubierto de chocolate negro o blanco: se endurece y forma una capa. Es un local pequeño y suele haber cola.",
       lat: 41.8982333,
       lng: 12.4704548,
       photo: {
@@ -140,7 +126,7 @@ export const eats: Record<string, Eat[]> = {
     {
       name: "La Casa del Caffè Tazza d'Oro",
       kind: "Café",
-      note: "Uno de los mejores cafés de Roma, al salir del Panteón. Un café o un cappuccino con cornetto.",
+      note: "Uno de los mejores cafés de Roma, al salir del Panteón. Su especialidad es la granita di caffè con panna en verano y el chocolate caliente con nata en invierno.",
       lat: 41.899434,
       lng: 12.477407,
       photo: {
@@ -155,7 +141,7 @@ export const eats: Record<string, Eat[]> = {
     {
       name: "Sant'Eustachio Caffè",
       kind: "Café",
-      note: "El gran caffè: un espresso más grande y dulce, con mucha crema. Se paga primero en la caja y con el ticket se pide en la barra.",
+      note: "El gran caffè, su especialidad: viene muy dulce (para sin azúcar, pedid «amaro»). Se paga primero en la caja y con el ticket se pide en la barra; sentados sale más caro.",
       lat: 41.8982749,
       lng: 12.4754254,
       photo: {
@@ -170,7 +156,7 @@ export const eats: Record<string, Eat[]> = {
     {
       name: "Venchi Cioccolato e Gelato",
       kind: "Helados y chocolate",
-      note: "Helado de pistacho, o el cucurucho bañado en chocolate y crujiente de nougatine.",
+      note: "El cucurucho bañado en chocolate con nougatine, antes de rellenarlo de helado.",
       lat: 41.8995074,
       lng: 12.4772941,
       photo: {
@@ -187,7 +173,7 @@ export const eats: Record<string, Eat[]> = {
     {
       name: "Pane e Salame",
       kind: "Panini y tablas",
-      note: "Para cenar un panini o una tabla de quesos y embutidos, cerca de la fuente.",
+      note: "Para cenar un panini o una tabla de quesos y embutidos, cerca de la fuente. Los preparan a la vista; tiene pocas mesas y también es para llevar.",
       lat: 41.900629,
       lng: 12.481772,
       photo: {
@@ -202,7 +188,7 @@ export const eats: Record<string, Eat[]> = {
     {
       name: "Bar San Marcello",
       kind: "Bar",
-      note: "Un cappuccino con cornetto, a un paso del Trevi.",
+      note: "Cornetto y cappuccino, a un paso del Trevi, y comida sencilla al mediodía. Según las fichas locales solo abre de lunes a viernes.",
       lat: 41.8990373,
       lng: 12.4825101,
       photo: {

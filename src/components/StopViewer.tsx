@@ -281,7 +281,7 @@ export function StopViewer({ stop }: { stop: Stop }) {
               </li>
             ))}
           </ul>
-          <p className="eat-foot">Recomendados en el itinerario. Comprobad el horario antes de ir.</p>
+          <p className="eat-foot">Sitios del itinerario de la familia. Los detalles salen de las webs de los locales, guías y reseñas; comprobad el horario antes de ir.</p>
           <details className="eat-credits">
             <summary>Créditos de las fotos</summary>
             <ul>

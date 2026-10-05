@@ -75,8 +75,8 @@ const trevi: Stop = {
   viator: { url: "https://audioviator.com/audioguia/la-fontana-di-trevi/" },
   highlights: [
     { name: "Via dei Pastini", note: "De camino desde el Panteón: la calle por la que se llega a la plaza del Templo de Adriano." },
-    { name: "Templo de Adriano", note: "De camino desde el Panteón: sus esbeltas columnas son del año 145.", lat: 41.8996, lng: 12.4795 },
-    { name: "Plaza Colonna", note: "De camino desde el Panteón: la preside la columna de Marco Aurelio.", lat: 41.9006, lng: 12.4799 },
+    { name: "Templo de Adriano", note: "De camino desde el Panteón: sus esbeltas columnas son del año 145.", lat: 41.8997, lng: 12.4794 },
+    { name: "Plaza Colonna", note: "De camino desde el Panteón: la preside la columna de Marco Aurelio.", lat: 41.9011, lng: 12.4799 },
   ],
 };
 
@@ -378,7 +378,7 @@ const sanPietroInVincoli: Stop = {
     "Dentro está el Moisés de Miguel Ángel, esculpido hacia 1513 para la tumba del papa Julio II. Fijaos en los cuernos de la cabeza, que vienen de un error de traducción de la Biblia.",
   ],
   highlights: [
-    { name: "Moisés de Miguel Ángel", note: "La escultura que más visitantes atrae de la basílica. Según el itinerario, la entrada es gratuita y abre a las 8:00; conviene comprobar el horario." },
+    { name: "Moisés de Miguel Ángel", note: "La escultura que más visitantes atrae de la basílica. La entrada es gratuita. Los horarios cambian según la fuente: la web oficial de la basílica da de lunes a sábado 7:30–12:20 y por la tarde hasta las 17:50 en hora de invierno; conviene comprobarlo." },
   ],
 };
 
@@ -414,7 +414,7 @@ const mercadosTrajano: Stop = {
   highlights: [
     { name: "Templo de Trajano", note: "Sus ruinas están al aire libre, cerca de los mercados." },
     { name: "Basílica Ulpia", note: "Otra de las ruinas del foro de Trajano que se ven desde la calle." },
-    { name: "Columna Trajana", note: "Sus relieves en espiral cuentan las victorias de Trajano.", lat: 41.8959, lng: 12.4844 },
+    { name: "Columna Trajana", note: "Sus relieves en espiral cuentan las victorias de Trajano.", lat: 41.8958, lng: 12.4842 },
   ],
 };
 
