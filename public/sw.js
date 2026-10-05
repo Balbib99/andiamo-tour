@@ -51,7 +51,7 @@ self.addEventListener("fetch", (event) => {
   if (url.origin === self.location.origin) {
     if (req.mode === "navigate") return event.respondWith(navegacion());
     if (url.pathname.startsWith("/podcast/")) return event.respondWith(soloGuardado(req, PODCASTS));
-    if (/^\/(img|audio|data|personajes)\//.test(url.pathname)) return event.respondWith(guardadoYRefresco(req, event));
+    if (/^\/(img|audio|data)\//.test(url.pathname)) return event.respondWith(guardadoYRefresco(req, event));
     return event.respondWith(app(req));
   }
   if (url.hostname === "tile.openstreetmap.org") return event.respondWith(mosaico(req));

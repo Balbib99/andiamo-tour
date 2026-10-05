@@ -69,20 +69,6 @@ export const AudioIcon = () => (
   </svg>
 );
 
-export const PhotoIcon = () => (
-  <svg {...base} width={14} height={14}>
-    <rect x="1.5" y="3.5" width="15" height="11" rx="2" />
-    <circle cx="9" cy="9" r="2.8" />
-  </svg>
-);
-
-export const PinIcon = () => (
-  <svg {...base}>
-    <path d="M9 16s5-4.6 5-8.5a5 5 0 0 0-10 0C4 11.400 9 16 9 16Z" />
-    <circle cx="9" cy="7.5" r="1.8" />
-  </svg>
-);
-
 /** Cubiertos: tenedor y cuchillo. Marca los sitios para comer o tomar algo. */
 export const EatIcon = () => (
   <svg {...base}>

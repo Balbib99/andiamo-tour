@@ -22,19 +22,11 @@ Todo el contenido está en [src/data/itinerario.ts](src/data/itinerario.ts):
 - Cada parada lleva coordenadas (clic derecho en Google Maps y se copian los dos números), una explicación corta
   (`teaser`, la que sale en la tarjeta del mapa), la historia y, si se quiere, un enlace a una audioguía externa.
 - La foto de cada parada con sus puntos para tocar y escuchar está en [src/data/guias.ts](src/data/guias.ts), unida a la
-  parada por su `id`. Las imágenes están en `public/img/monumentos/` (de Wikimedia Commons, con licencia libre y su
-  autoría mostrada). Los puntos se dan en píxeles de la foto y el código los pasa a porcentaje. Toda parada nueva debería
+  parada por su `id`. Las imágenes están en `public/img/monumentos/` en formato WebP (de Wikimedia Commons, con licencia
+  libre y su autoría mostrada). Para convertir una foto nueva: calidad 75 y el mismo tamaño; la proporción no debe cambiar. Los puntos se dan en píxeles de la foto y el código los pasa a porcentaje. Toda parada nueva debería
   llevar su foto y sus puntos, como el Coliseo.
 - En el mapa, al tocar una parada se abre una tarjeta con su foto, el `teaser` y los botones «Escuchar la guía» y
   «Cómo llegar».
-
-Lo que lleva «(ejemplo)» es de prueba.
-
-## Imagen de la portada
-
-La portada muestra la primera que exista en `public/personajes/`: `bienvenida.mp4` (animación), `bienvenida.png` (imagen
-fija con fondo transparente) o, si no hay ninguna, la foto de una estatua romana. Para cambiarla basta guardar el archivo
-con ese nombre. Más detalles en `public/personajes/LEEME.txt`.
 
 ## Audios
 
@@ -56,7 +48,7 @@ segundo de silencio, y escribe con letras los números y «a. C.». Con `--todo`
 
 Los podcasts descargados pesan decenas de MB, así que se comprimen antes de publicarlos:
 
-1. Guarda el original en `audios-originales/` (carpeta fuera de Git y de Vercel) con el nombre del dosier: `coliseo.m4a`,
+1. Guarda el original en `audios-originales/` (carpeta fuera de Git y del despliegue) con el nombre del dosier: `coliseo.m4a`,
    `foro-romano.m4a`...
 2. Ejecuta `python scripts/comprimir_audios.py` (hace falta ffmpeg). Cada audio se comprime una sola vez, a AAC mono
    de 48 kbps, y sale en `public/podcast/`.
@@ -90,6 +82,23 @@ Las tipografías están en el propio proyecto (paquetes `@fontsource`), no se pi
 
 La ubicación del móvil solo funciona con HTTPS, y Vercel lo da por defecto.
 
+## Publicar en un servidor propio (Docker)
+
+El proyecto incluye un [Dockerfile](Dockerfile) que construye la web y la sirve con nginx ([nginx.conf](nginx.conf), el
+equivalente de `vercel.json`), y un [docker-compose.yml](docker-compose.yml). Sirve para amd64 y arm64 (Raspberry Pi).
+
+```bash
+docker compose up -d --build
+```
+
+El contenedor no publica ningún puerto: lo espera un proxy inverso en la misma red de Docker, llamada `edge` y definida
+como externa en el compose, que le dará el HTTPS (necesario para la ubicación y el modo sin conexión). Para probarlo sin
+proxy, añade en el compose `ports: ["8080:80"]` y abre http://localhost:8080 (sin HTTPS no funcionan ni la ubicación ni el
+modo sin conexión). Para actualizar: `git pull && docker compose up -d --build`.
+
+Cada dirección de la web es un origen distinto para el navegador: lo que se descarga para usar sin conexión en una no se
+comparte con las demás.
+
 ## Cómo funciona el seguimiento
 
 - «Empezar ruta» activa el GPS y mantiene la pantalla encendida.
@@ -111,7 +120,7 @@ La ubicación del móvil solo funciona con HTTPS, y Vercel lo da por defecto.
 - Fotos de las fuentes: 182 fuentes llevan su foto real de Wikimedia Commons (categoría «Nasoni (Rome)»), emparejada
   por cercanía (a menos de 25 m). Casi todas son CC BY-SA 4.0 y algunas CC0: la tarjeta muestra el autor y la
   licencia, y hay que mantenerlos. Se cargan desde Wikimedia y, si una falla, la tarjeta usa la foto de ejemplo
-  (`public/img/nasone.jpg`, de Guretto, CC0). El nombre de la calle sale del nombre del archivo de cada foto.
+  (`public/img/nasone.webp`, de Guretto, CC0). El nombre de la calle sale del nombre del archivo de cada foto.
 - El botón «Ver la calle» de cada fuente abre Google Street View en ese punto.
 - En la vista de cada día se elige qué fuentes ver: ninguna, solo las que tienen foto real, o todas. La elección se guarda
   en el móvil.

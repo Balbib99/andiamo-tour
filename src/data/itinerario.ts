@@ -5,7 +5,6 @@ import type { Day, LatLng, Stop } from "./types";
 /**
  * Aquí se edita el viaje: los días y las paradas de cada día.
  * Las coordenadas se sacan de Google Maps (clic derecho sobre el sitio, y se copian los dos números).
- * Todo lo que lleva "(ejemplo)" es de prueba.
  */
 
 /** Punto de inicio de las rutas de cada día, con coordenadas aproximadas (a unos 100 m). */

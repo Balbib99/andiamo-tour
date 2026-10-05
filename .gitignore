@@ -5,3 +5,6 @@ dist
 .claude
 audios-originales
 .env
+tsconfig.tsbuildinfo
+__pycache__
+*.pyc
