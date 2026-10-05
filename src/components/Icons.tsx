@@ -83,6 +83,14 @@ export const PinIcon = () => (
   </svg>
 );
 
+/** Cubiertos: tenedor y cuchillo. Marca los sitios para comer o tomar algo. */
+export const EatIcon = () => (
+  <svg {...base}>
+    <path d="M5 2v5.5a2 2 0 0 0 2 2V16M3.5 2v4M6.5 2v4" />
+    <path d="M13.5 16V2c-1.8 1.2-2.8 3.4-2.8 6 0 1.3.9 2 2.8 2" />
+  </svg>
+);
+
 export const MicIcon = () => (
   <svg {...base}>
     <rect x="6.5" y="2" width="5" height="9" rx="2.5" />

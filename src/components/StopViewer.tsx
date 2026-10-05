@@ -4,7 +4,7 @@ import type { Stop } from "../data/types";
 import { audioFile, audioSrc, useAudioManifest } from "../lib/audio";
 import { mapsDirectionsUrl } from "../lib/geo";
 import { useSpeech, type Playable } from "../lib/useSpeech";
-import { ExternalIcon, MapIcon, PlayIcon, StopIcon } from "./Icons";
+import { EatIcon, ExternalIcon, MapIcon, PlayIcon, StopIcon } from "./Icons";
 import { PodcastCard } from "./PodcastCard";
 
 const wave = Array.from({ length: 40 }, (_, i) => ({
@@ -244,6 +244,58 @@ export function StopViewer({ stop }: { stop: Stop }) {
               </li>
             ))}
           </ol>
+        </section>
+      )}
+
+      {stop.eat && stop.eat.length > 0 && (
+        <section className="eat" aria-label="Para comer o tomar algo">
+          <header className="eat-head">
+            <span className="eat-badge">
+              <EatIcon />
+            </span>
+            <div>
+              <h3>Para comer o tomar algo</h3>
+              <p>Sitios cerca de esta parada. En el mapa los marca este símbolo.</p>
+            </div>
+          </header>
+          <ul className="eat-list">
+            {stop.eat.map((e) => (
+              <li className="eat-item" key={e.name}>
+                <figure className="eat-photo">
+                  <img src={e.photo.src} alt={e.photo.alt} loading="lazy" />
+                </figure>
+                <div className="eat-body">
+                  <p className="eat-kind">{e.kind}</p>
+                  <h4 className="eat-name">{e.name}</h4>
+                  <p className="eat-note">{e.note}</p>
+                  <a
+                    className="eat-go"
+                    href={mapsDirectionsUrl({ destination: e })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Abrir en Google Maps la ruta a ${e.name} desde mi ubicación`}
+                  >
+                    <MapIcon /> Cómo llegar
+                  </a>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <p className="eat-foot">Recomendados en el itinerario. Comprobad el horario antes de ir.</p>
+          <details className="eat-credits">
+            <summary>Créditos de las fotos</summary>
+            <ul>
+              {stop.eat.map((e) => (
+                <li key={e.name}>
+                  {e.name}:{" "}
+                  <a href={e.photo.page} target="_blank" rel="noopener noreferrer">
+                    foto de {e.photo.author}, {e.photo.license}
+                  </a>
+                  {e.photo.illustrative ? " (ilustrativa: enseña el tipo de plato, no el local)" : ""}
+                </li>
+              ))}
+            </ul>
+          </details>
         </section>
       )}
 

@@ -20,7 +20,7 @@ const FOUNTAIN_OPTIONS: { mode: FountainMode; label: string; help: string }[] = 
 export function DayPage() {
   const { dayId } = useParams();
   const day = findDay(dayId);
-  const { visited, resetVisited, fountainMode, setFountainMode, requestFit } = useApp();
+  const { visited, resetVisited, fountainMode, setFountainMode, showEats, setShowEats, requestFit } = useApp();
   const { status, position, followingDay, start, stop, resetAlerts, simulate, simulating, replan } = useTracking();
   const [params] = useSearchParams();
   const testMode = params.has("prueba");
@@ -188,6 +188,23 @@ export function DayPage() {
               </p>
             )}
           </fieldset>
+
+          {day.stops.some((s) => s.eat?.length) && (
+            <fieldset className="fountains">
+              <legend>Sitios para comer en el mapa</legend>
+              <div className="segmented">
+                {[
+                  { value: true, label: "Mostrar" },
+                  { value: false, label: "Ocultar" },
+                ].map((o) => (
+                  <label key={o.label} className={showEats === o.value ? "on" : ""}>
+                    <input type="radio" name="show-eats" checked={showEats === o.value} onChange={() => setShowEats(o.value)} />
+                    {o.label}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          )}
 
           {live && replanned && (
             <p className="hint hint-tight">

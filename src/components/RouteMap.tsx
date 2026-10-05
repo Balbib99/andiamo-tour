@@ -3,7 +3,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router-dom";
 import { allStops, findDay, romanNumerals, startPoint } from "../data/itinerario";
-import type { LatLng, Stop } from "../data/types";
+import type { Eat, LatLng, Stop } from "../data/types";
 import { distanceM, formatDistance, mapsDirectionsUrl, routePoints, streetViewUrl } from "../lib/geo";
 import { fetchFountains, type Fountain } from "../lib/places";
 import { useLiveRoute } from "../lib/useLiveRoute";
@@ -24,6 +24,13 @@ const pinIcon = (label: string, cls = "") =>
 const STOP_POPUP: L.PopupOptions = { className: "stop-popup", minWidth: 320, maxWidth: 320, offset: [0, -10], autoPanPaddingTopLeft: [16, 16], autoPanPaddingBottomRight: [64, 16] };
 
 const START_ICON = "&#9873;";
+
+/** Los sitios para comer se marcan con un cuadrado redondeado de color terracota y unos cubiertos, para no confundirlos con paradas (círculos verdes numerados) ni fuentes (puntos azules). */
+const EAT_SVG =
+  '<svg width="17" height="17" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 2v5.5a2 2 0 0 0 2 2V16M3.5 2v4M6.5 2v4"/><path d="M13.5 16V2c-1.8 1.2-2.8 3.4-2.8 6 0 1.3.9 2 2.8 2"/></svg>';
+const eatIcon = () =>
+  L.divIcon({ className: "", html: `<div class="eat-pin">${EAT_SVG}</div>`, iconSize: [34, 34], iconAnchor: [17, 17] });
+const EAT_POPUP: L.PopupOptions = { className: "stop-popup eat-popup", minWidth: 320, maxWidth: 320, offset: [0, -12], autoPanPaddingTopLeft: [16, 16], autoPanPaddingBottomRight: [64, 16] };
 
 /** Recorta la ruta para que empiece donde estás: la línea se va "consumiendo" a medida que avanzas. */
 function trimFrom(coords: [number, number][], pos: LatLng): [number, number][] {
@@ -104,6 +111,25 @@ function stopCard(stop: Stop, meta: string, from: LatLng | null, onGuide: () => 
   return el;
 }
 
+/** Tarjeta de un sitio para comer: foto de lo que es, qué se recomienda y cómo llegar. */
+function eatCard(eat: Eat, near: string, from: LatLng | null): HTMLElement {
+  const away = from ? ` (${formatDistance(distanceM(from, eat))})` : "";
+  const el = document.createElement("article");
+  el.className = "stop-card eat-card";
+  el.innerHTML = `<figure class="stop-photo"><img src="${esc(eat.photo.src)}" alt="${esc(eat.photo.alt)}" loading="lazy"><figcaption>${
+    eat.photo.illustrative ? "Foto ilustrativa" : "Foto del local"
+  }</figcaption></figure>
+    <div class="stop-body">
+      <p class="stop-meta">${esc(eat.kind)} · cerca de ${esc(near)}</p>
+      <h3>${esc(eat.name)}</h3>
+      <p class="stop-teaser">${esc(eat.note)}</p>
+      <div class="stop-actions">
+        <a class="btn btn-small btn-primary" href="${mapsDirectionsUrl({ destination: eat })}" target="_blank" rel="noopener noreferrer">Cómo llegar${away}</a>
+      </div>
+    </div>`;
+  return el;
+}
+
 const reducedMotion = () =>
   typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -113,7 +139,7 @@ interface Props {
 }
 
 export function RouteMap({ dayId, stopId }: Props) {
-  const { visited, fountainMode, fitSignal } = useApp();
+  const { visited, fountainMode, showEats, fitSignal } = useApp();
   const { position } = useTracking();
   const navigate = useNavigate();
 
@@ -126,6 +152,7 @@ export function RouteMap({ dayId, stopId }: Props) {
   const routeLayer = useRef<L.LayerGroup | null>(null);
   const youLayer = useRef<L.LayerGroup | null>(null);
   const fountainLayer = useRef<L.LayerGroup | null>(null);
+  const eatLayer = useRef<L.LayerGroup | null>(null);
   const applyView = useRef<() => void>(() => {});
   const you = useRef<{ dot: L.CircleMarker; halo: L.Circle } | null>(null);
   const anim = useRef<number | null>(null);
@@ -148,8 +175,9 @@ export function RouteMap({ dayId, stopId }: Props) {
       crossOrigin: true, // permite guardar los mosaicos vistos para verlos sin conexión
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(m);
-    // Orden de abajo arriba: fuentes, línea de la ruta, paradas y tu posición.
+    // Orden de abajo arriba: fuentes, sitios para comer, línea de la ruta, paradas y tu posición.
     fountainLayer.current = L.layerGroup().addTo(m);
+    eatLayer.current = L.layerGroup().addTo(m);
     lineLayer.current = L.layerGroup().addTo(m);
     routeLayer.current = L.layerGroup().addTo(m);
     youLayer.current = L.layerGroup().addTo(m);
@@ -204,6 +232,23 @@ export function RouteMap({ dayId, stopId }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [day, stops, visited, stopId]);
 
+  /* Sitios para comer o tomar algo: los de todo el día, o los de la parada abierta */
+  useEffect(() => {
+    const layer = eatLayer.current;
+    if (!layer) return;
+    layer.clearLayers();
+    if (!day || !showEats) return;
+    day.stops
+      .filter((s) => !stopId || s.id === stopId)
+      .forEach((s) =>
+        s.eat?.forEach((e) =>
+          L.marker([e.lat, e.lng], { icon: eatIcon(), title: e.name, zIndexOffset: -100 })
+            .bindPopup(() => eatCard(e, s.name, positionRef.current), EAT_POPUP)
+            .addTo(layer),
+        ),
+      );
+  }, [day, stopId, showEats]);
+
   /* Línea de la ruta. Al recorrer el día se recorta para que empiece donde estás. */
   const linePos = live ? position : null;
   useEffect(() => {
@@ -233,7 +278,14 @@ export function RouteMap({ dayId, stopId }: Props) {
       const padding: L.PointTuple = narrow ? [30, 30] : [60, 60];
       const active = stops.find((s) => s.id === stopId);
       if (active) {
-        m.flyTo([active.lat, active.lng], 17, { duration: 0.8 });
+        // Con sitios para comer cerca, se encuadran junto a la parada para que se vean en el mapa.
+        const near = showEats ? (active.eat ?? []) : [];
+        if (near.length > 0) {
+          const bounds = L.latLngBounds([[active.lat, active.lng], ...near.map((e) => [e.lat, e.lng] as L.LatLngTuple)]);
+          m.flyToBounds(bounds, { padding, maxZoom: 17, duration: 0.8 });
+        } else {
+          m.flyTo([active.lat, active.lng], 17, { duration: 0.8 });
+        }
       } else if (day && points) {
         m.fitBounds(points.map((p) => [p.lat, p.lng] as L.LatLngTuple), { padding });
       } else {

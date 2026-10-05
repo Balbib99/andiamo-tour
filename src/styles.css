@@ -20,6 +20,12 @@
   --primary-hover: #10291f;
   --shadow: 21, 32, 29; /* sombras con el verde de la web, no negro puro */
 
+  /* Sitios para comer y beber: terracota y crema, para que no se confundan con los sitios que visitar (verde y púrpura). */
+  --eat: #b4531f;
+  --eat-fill: #b4531f;
+  --eat-bg: #fbf1e5;
+  --eat-line: #ecd3b8;
+
   /* Curvas con más ímpetu que las de CSS: la respuesta se nota desde el primer fotograma. */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
@@ -43,6 +49,9 @@
     --hover: rgba(127, 209, 185, 0.12);
     --primary-hover: #3a7d6a;
     --shadow: 0, 0, 0;
+    --eat: #eba173;
+    --eat-bg: #261c15;
+    --eat-line: #4d3727;
   }
 }
 
@@ -112,7 +121,7 @@ h2 {
   display: none;
 }
 .app[data-view="stop"] .map {
-  height: 24dvh;
+  height: 32dvh; /* lo bastante alto para que quepa la tarjeta de un sitio para comer */
 }
 .panel {
   grid-area: panel;
@@ -1431,6 +1440,7 @@ a.step:hover .step-name {
   --hover: rgba(24, 58, 50, 0.08);
   --primary-hover: #10291f;
   --shadow: 21, 32, 29;
+  --eat: #b4531f;
 }
 .leaflet-popup-content-wrapper {
   background: #fff;
@@ -1642,6 +1652,181 @@ a.step:hover .step-name {
   }
 }
 
+/* ---------- Para comer o tomar algo ---------- */
+.eat {
+  margin-top: 28px;
+  padding: 18px 16px 16px;
+  border: 1.5px solid var(--eat-line);
+  border-radius: 22px;
+  background: var(--eat-bg);
+}
+.eat-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.eat-badge {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--eat-fill);
+  color: #fff;
+  transform: rotate(-4deg);
+  box-shadow: 0 6px 14px -6px rgba(var(--shadow), 0.5);
+}
+.eat-badge svg {
+  width: 22px;
+  height: 22px;
+}
+.eat-head h3 {
+  font-size: 1.3rem;
+  font-style: italic;
+  line-height: 1.15;
+  color: var(--eat);
+}
+.eat-head p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+.eat-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+}
+.eat-item {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-top: 1.5px dashed var(--eat-line);
+}
+.eat-photo {
+  flex: none;
+  width: 92px;
+  height: 92px;
+  margin: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--eat-line);
+  box-shadow: 0 8px 16px -8px rgba(var(--shadow), 0.55);
+  transform: rotate(-2deg);
+}
+.eat-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.eat-body {
+  min-width: 0;
+  flex: 1;
+}
+.eat-kind {
+  display: inline-block;
+  margin: 0;
+  padding: 1px 10px;
+  border: 1.5px solid var(--eat);
+  border-radius: 999px;
+  color: var(--eat);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.eat-name {
+  margin: 4px 0 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+.eat-note {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+.eat-go {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 4px 14px 4px 10px;
+  border-radius: 999px;
+  background: var(--eat-fill);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 160ms var(--ease-out);
+}
+.eat-go::after {
+  content: "";
+  position: absolute;
+  inset: -8px -4px;
+}
+.eat-go:active {
+  transform: scale(0.97);
+}
+.eat-foot {
+  margin: 4px 0 0;
+  padding-top: 12px;
+  border-top: 1.5px dashed var(--eat-line);
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+.eat-credits {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+.eat-credits summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+}
+.eat-credits ul {
+  margin: 0 0 6px;
+  padding-left: 18px;
+}
+.eat-credits li {
+  margin-bottom: 4px;
+}
+
+/* Marcador en el mapa: cuadrado redondeado terracota con cubiertos (distinto de las paradas y las fuentes) */
+.eat-pin {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 2.5px solid #fff;
+  border-radius: 11px;
+  background: #b4531f;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(21, 32, 29, 0.45);
+  transition: transform 160ms var(--ease-out);
+}
+.eat-pin:active {
+  transform: scale(0.94);
+}
+/* Su tarjeta, con la misma forma que la de una parada pero en terracota */
+.eat-popup .leaflet-popup-content-wrapper {
+  border-top: 4px solid #b4531f;
+}
+.eat-popup .stop-body p.stop-meta {
+  color: var(--eat);
+}
+.leaflet-container .eat-card a.btn-primary {
+  background: #b4531f;
+  border-color: #b4531f;
+  color: #fff;
+}
+
 /* Con «reducir movimiento»: sin zooms ni desplazamientos; se conservan los fundidos, que ayudan a entender el cambio. */
 @media (prefers-reduced-motion: reduce) {
   .home-hero-bg,
@@ -1678,6 +1863,8 @@ a.step:hover .step-name {
   .viator:active,
   .step-maps:active,
   .hl-maps:active,
+  .eat-go:active,
+  .eat-pin:active,
   .map-locate:active {
     transform: none;
   }

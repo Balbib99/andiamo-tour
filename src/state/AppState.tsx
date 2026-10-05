@@ -12,6 +12,9 @@ interface AppContextValue {
   resetVisited: () => void;
   fountainMode: FountainMode;
   setFountainMode: (mode: FountainMode) => void;
+  /** Si el mapa dibuja los sitios para comer o tomar algo. */
+  showEats: boolean;
+  setShowEats: (show: boolean) => void;
   /** Sube cada vez que se pide encuadrar de nuevo la ruta en el mapa. */
   fitSignal: number;
   requestFit: () => void;
@@ -32,11 +35,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const saved = load<string>("fountainMode", "off");
     return saved === "fotos" || saved === "todas" ? saved : "off";
   });
+  const [showEats, setShowEatsState] = useState<boolean>(() => load<boolean>("showEats", true) !== false);
   const [fitSignal, setFitSignal] = useState(0);
 
   const setFountainMode = useCallback((mode: FountainMode) => {
     setFountainModeState(mode);
     save("fountainMode", mode);
+  }, []);
+
+  const setShowEats = useCallback((show: boolean) => {
+    setShowEatsState(show);
+    save("showEats", show);
   }, []);
 
   const update = useCallback((next: (prev: string[]) => string[]) => {
@@ -56,10 +65,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
       resetVisited: () => update(() => []),
       fountainMode,
       setFountainMode,
+      showEats,
+      setShowEats,
       fitSignal,
       requestFit: () => setFitSignal((n) => n + 1),
     }),
-    [visited, update, fountainMode, setFountainMode, fitSignal],
+    [visited, update, fountainMode, setFountainMode, showEats, setShowEats, fitSignal],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

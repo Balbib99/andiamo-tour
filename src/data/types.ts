@@ -27,6 +27,28 @@ export interface Highlight {
   lng?: number;
 }
 
+/** Foto de un sitio para comer: casi siempre de Wikimedia Commons, con su autoría y licencia. */
+export interface EatPhoto {
+  src: string;
+  alt: string;
+  author: string;
+  license: string;
+  /** Página de la foto en Commons, para la atribución. */
+  page: string;
+  /** true si enseña el tipo de plato y no el propio local. */
+  illustrative: boolean;
+}
+
+/** Un sitio para comer o tomar algo cerca de una parada. */
+export interface Eat extends LatLng {
+  name: string;
+  /** Qué es: café, restaurante, helados... */
+  kind: string;
+  /** Qué se recomienda tomar. */
+  note: string;
+  photo: EatPhoto;
+}
+
 export interface Stop extends LatLng {
   id: string;
   name: string;
@@ -38,6 +60,8 @@ export interface Stop extends LatLng {
   audio: string;
   /** Lugares que ver dentro de la parada, en el orden en que conviene recorrerlos. */
   highlights?: Highlight[];
+  /** Sitios para comer o tomar algo cerca de la parada. */
+  eat?: Eat[];
   photo?: Photo;
   points?: PhotoPoint[];
   /** Enlace a una audioguía externa para completar la información. */
