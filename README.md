@@ -25,6 +25,8 @@ Todo el contenido está en [src/data/itinerario.ts](src/data/itinerario.ts):
   parada por su `id`. Las imágenes están en `public/img/monumentos/` en formato WebP (de Wikimedia Commons, con licencia
   libre y su autoría mostrada). Para convertir una foto nueva: calidad 75 y el mismo tamaño; la proporción no debe cambiar. Los puntos se dan en píxeles de la foto y el código los pasa a porcentaje. Toda parada nueva debería
   llevar su foto y sus puntos, como el Coliseo.
+- Los sitios que piden entrada o reserva llevan un apartado «Entradas y reservas» con el enlace a su web oficial, en
+  [src/data/entradas.ts](src/data/entradas.ts). Solo se enlazan webs oficiales y las notas no llevan precios ni horarios.
 - En el mapa, al tocar una parada se abre una tarjeta con su foto, el `teaser` y los botones «Escuchar la guía» y
   «Cómo llegar».
 

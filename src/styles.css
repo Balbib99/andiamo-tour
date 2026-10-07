@@ -2116,6 +2116,47 @@ a.step:hover .step-name {
 }
 
 /* Con «reducir movimiento»: sin zooms ni desplazamientos; se conservan los fundidos, que ayudan a entender el cambio. */
+/* Entradas y reservas: enlace a la web oficial */
+.tickets {
+  display: flex;
+  gap: 14px;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid var(--stone);
+  border-radius: 16px;
+  background: var(--card);
+  scroll-margin-top: 72px;
+}
+.tickets-badge {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--marble);
+  color: var(--accent-ink);
+}
+.tickets-body {
+  min-width: 0;
+}
+.tickets h3 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+.tickets p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+.tickets-go {
+  margin-top: 12px;
+}
+.tickets-host {
+  font-size: 0.8125rem !important;
+  overflow-wrap: anywhere;
+}
+
 /* ---------- Parada: acciones rápidas, barra de secciones y «siguiente» fija ---------- */
 .quick {
   display: grid;

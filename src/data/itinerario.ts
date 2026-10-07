@@ -1,4 +1,5 @@
 import { eats } from "./comer.ts";
+import { tickets } from "./entradas.ts";
 import { guides } from "./guias.ts";
 import type { Day, LatLng, Stop } from "./types";
 
@@ -682,11 +683,12 @@ const baseDays: Day[] = [
   },
 ];
 
-/** Une a cada parada su foto con puntos (guias.ts) y los sitios para comer cerca (comer.ts), si los tiene. */
+/** Une a cada parada su foto con puntos (guias.ts), los sitios para comer cerca (comer.ts) y la web de entradas (entradas.ts). */
 const withGuide = (stop: Stop): Stop => ({
   ...stop,
   ...guides[stop.id],
   ...(eats[stop.id] ? { eat: eats[stop.id] } : {}),
+  ...(tickets[stop.id] ? { tickets: tickets[stop.id] } : {}),
 });
 
 export const days: Day[] = baseDays.map((d) => ({ ...d, stops: d.stops.map(withGuide) }));

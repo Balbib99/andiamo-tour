@@ -4,7 +4,7 @@ import type { Stop } from "../data/types";
 import { audioFile, audioSrc, useAudioManifest } from "../lib/audio";
 import { mapsDirectionsUrl } from "../lib/geo";
 import { useSpeech, type Playable } from "../lib/useSpeech";
-import { ChevronDown, EatIcon, ExternalIcon, MapIcon, PlayIcon, StopIcon } from "./Icons";
+import { ChevronDown, EatIcon, ExternalIcon, MapIcon, PlayIcon, StopIcon, TicketIcon } from "./Icons";
 import { PodcastCard } from "./PodcastCard";
 
 const wave = Array.from({ length: 40 }, (_, i) => ({
@@ -152,6 +152,7 @@ export function StopViewer({ stop }: { stop: Stop }) {
     { id: "fotos", label: hasPhoto ? "Fotos" : "Historia" },
     ...(podcast ? [{ id: "podcast", label: "Podcast" }] : []),
     ...(stop.highlights?.length ? [{ id: "que-ver", label: "Qué ver" }] : []),
+    ...(stop.tickets ? [{ id: "entradas", label: "Entradas" }] : []),
     ...(eats.length ? [{ id: "comer", label: "Comer" }] : []),
   ];
 
@@ -320,6 +321,22 @@ export function StopViewer({ stop }: { stop: Stop }) {
             ))}
           </ol>
         </details>
+      )}
+
+      {stop.tickets && (
+        <section className="tickets" id="entradas" aria-label="Entradas y reservas">
+          <span className="tickets-badge">
+            <TicketIcon />
+          </span>
+          <div className="tickets-body">
+            <h3>Entradas y reservas</h3>
+            <p>{stop.tickets.note}</p>
+            <a className="btn btn-small tickets-go" href={stop.tickets.url} target="_blank" rel="noopener noreferrer">
+              Ir a la web oficial <ExternalIcon />
+            </a>
+            <p className="tickets-host">{new URL(stop.tickets.url).hostname.replace(/^www\./, "")}. Se abre en otra web.</p>
+          </div>
+        </section>
       )}
 
       {stop.eat && stop.eat.length > 0 && (

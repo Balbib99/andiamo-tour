@@ -49,6 +49,13 @@ export interface Eat extends LatLng {
   photo: EatPhoto;
 }
 
+/** Enlace a la web oficial donde se sacan las entradas o se hace la reserva de un sitio. */
+export interface Tickets {
+  url: string;
+  /** Qué hay que saber antes de ir a la web (si hace falta reservar, qué cubre la entrada...). Sin precios ni horarios. */
+  note: string;
+}
+
 export interface Stop extends LatLng {
   id: string;
   name: string;
@@ -64,6 +71,8 @@ export interface Stop extends LatLng {
   eat?: Eat[];
   photo?: Photo;
   points?: PhotoPoint[];
+  /** Web oficial para sacar las entradas o reservar, si el sitio lo necesita. */
+  tickets?: Tickets;
   /** Enlace a una audioguía externa para completar la información. */
   viator?: { url: string; note?: string };
 }

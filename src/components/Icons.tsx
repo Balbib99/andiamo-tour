@@ -119,3 +119,10 @@ export const ArrowRight = () => (
     <path d="M3 9h12M10.5 4.5 15 9l-4.5 4.5" />
   </svg>
 );
+
+export const TicketIcon = () => (
+  <svg {...base}>
+    <path d="M2 6.2V5a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v1.2a2.8 2.8 0 0 0 0 5.6V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1.2a2.8 2.8 0 0 0 0-5.6Z" />
+    <path d="M11.5 4.5v9" strokeDasharray="1.6 2" />
+  </svg>
+);
