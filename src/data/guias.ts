@@ -54,6 +54,9 @@ const sanPedro = on(1280, 719);
 const vaticanos = on(1280, 960);
 const castel = on(1280, 1146);
 const basilica = on(1280, 1708);
+const cupula = on(1280, 1768);
+const jardines = on(1600, 786);
+const necropolis = on(675, 462);
 
 export const guides: Record<string, Guide> = {
   trevi: {
@@ -875,6 +878,114 @@ export const guides: Record<string, Guide> = {
         1140,
         "La Cátedra de San Pedro",
         "Al fondo, entre rayos dorados y con una paloma que representa al Espíritu Santo, está la Cátedra de San Pedro, que también diseñó Bernini.",
+      ),
+    ],
+  },
+  "cupula-san-pedro": {
+    photo: photo(
+      "cupula-san-pedro",
+      1280,
+      1768,
+      "La cúpula de San Pedro vista de cerca, con el tambor de columnas pareadas, los nervios del casquete, la linterna con su balcón, la bola dorada y la cruz",
+      "Staselnik",
+      "CC BY-SA 3.0",
+    ),
+    points: [
+      cupula(
+        640,
+        150,
+        "La bola y la cruz",
+        "Desde la base hasta lo alto de la cruz, la cúpula mide unos ciento treinta y seis metros. La bola dorada y la cruz la rematan, sobre la linterna.",
+      ),
+      cupula(
+        650,
+        470,
+        "La linterna y su balcón",
+        "La linterna remata la cúpula, y en su balcón, donde se ven personas asomadas, termina la subida. Subir a pie son quinientos cincuenta y un escalones; con el ascensor quedan unos trescientos veinte.",
+      ),
+      cupula(
+        640,
+        800,
+        "Una cúpula de dos cascarones",
+        "La cúpula tiene dos cascarones, uno dentro de otro, como la de Brunelleschi en la catedral de Florencia, en la que se inspiró Miguel Ángel, aunque con unas dimensiones mucho mayores.",
+      ),
+      cupula(
+        640,
+        1250,
+        "El tambor",
+        "Miguel Ángel proyectó la cúpula, pero murió con ella construida solo hasta el tambor, la parte de columnas pareadas sobre la que se apoya. La terminaron en 1590 Giacomo della Porta y Domenico Fontana, con algunos cambios respecto a su proyecto.",
+      ),
+    ],
+  },
+  "jardines-vaticanos": {
+    photo: photo(
+      "jardines-vaticanos",
+      1280,
+      629,
+      "Vista aérea de los Jardines Vaticanos desde lo alto de San Pedro, con los edificios de los Museos Vaticanos a la derecha y Roma al fondo",
+      "Stefan Bauer",
+      "CC BY-SA 2.5",
+    ),
+    points: [
+      jardines(
+        480,
+        420,
+        "Medio Vaticano de verde",
+        "Los jardines ocupan unas veintidós hectáreas, que son la mitad del territorio del Vaticano.",
+      ),
+      jardines(
+        700,
+        405,
+        "Siglos de historia",
+        "El papa Nicolás tercero plantó el primer jardín entre 1277 y 1280. Más tarde, bajo Julio segundo, Bramante proyectó entre 1503 y 1513 el gran patio del Belvedere.",
+      ),
+      jardines(
+        1250,
+        400,
+        "Junto a los museos",
+        "A la derecha de la foto se ven los edificios de los Museos Vaticanos, que dan a los jardines.",
+      ),
+      jardines(
+        240,
+        330,
+        "El aspecto actual",
+        "Tras los Pactos de Letrán, de 1929, el arquitecto Giuseppe Momo remodeló los jardines hasta darles su configuración actual.",
+      ),
+    ],
+  },
+  "necropolis-vaticana": {
+    photo: photo(
+      "necropolis-vaticana",
+      675,
+      462,
+      "Una calle de la Necrópolis Vaticana, entre mausoleos romanos de ladrillo, camino de la supuesta tumba de San Pedro",
+      "Blue 439",
+      "CC BY-SA 3.0",
+    ),
+    points: [
+      necropolis(
+        300,
+        330,
+        "Una ciudad de tumbas",
+        "Bajo la basílica hay un cementerio romano, con calles y mausoleos, en la ladera de la colina Vaticana. Se usó entre el siglo primero y principios del cuarto.",
+      ),
+      necropolis(
+        410,
+        270,
+        "Mausoleos de ladrillo",
+        "Los edificios funerarios se alinean en dos filas, hechos de ladrillo y con el interior decorado con estucos, pinturas y mosaicos.",
+      ),
+      necropolis(
+        245,
+        310,
+        "Hacia la tumba de Pedro",
+        "Al fondo, el camino lleva a la tumba que la tradición atribuye a San Pedro, bajo el altar mayor de la basílica. Las excavaciones, entre 1939 y 1949, las impulsó Pío doce, que en 1950 anunció que la tumba había sido hallada.",
+      ),
+      necropolis(
+        560,
+        410,
+        "Antes de ir",
+        "La visita exige reserva previa en la web de la basílica y se hace siempre con un guía autorizado. Dentro no se pueden hacer fotos y hay que llevar los hombros y las rodillas cubiertos.",
       ),
     ],
   },

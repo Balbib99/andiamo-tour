@@ -517,10 +517,10 @@ const castelSantAngelo: Stop = {
 
 const basilicaSanPedro: Stop = {
   id: "basilica-san-pedro",
-  name: "Interior de la Basílica de San Pedro",
+  name: "Basílica de San Pedro",
   era: "Años 1506 a 1626",
-  lat: 41.9022,
-  lng: 12.4533,
+  lat: 41.9021667,
+  lng: 12.4539367,
   audio: "1 min",
   teaser: "Bajo la cúpula de Miguel Ángel, el baldaquino de bronce de Bernini y la Piedad.",
   text: [
@@ -530,16 +530,16 @@ const basilicaSanPedro: Stop = {
   ],
   highlights: [
     { name: "La Piedad de Miguel Ángel", note: "Está en la primera capilla de la nave derecha. La esculpió con 23 años y es la única obra que firmó." },
-    { name: "La cúpula", note: "Miguel Ángel la proyectó, pero murió con ella construida solo hasta el tambor. La terminaron en 1590 Giacomo della Porta y Domenico Fontana. Con la cruz alcanza unos 136 metros." },
+    { name: "La estatua de San Pedro", note: "Es de bronce y se atribuye tradicionalmente a Arnolfo di Cambio, del siglo XIII. El pie que sobresale está gastado por siglos de caricias de los peregrinos." },
   ],
 };
 
 const plazaSanPedro: Stop = {
   id: "plaza-san-pedro",
-  name: "Plaza y Basílica de San Pedro",
+  name: "Plaza de San Pedro",
   era: "Años 1656 a 1667",
-  lat: 41.9022,
-  lng: 12.4539,
+  lat: 41.9022267,
+  lng: 12.4563139,
   audio: "1 min",
   teaser: "La plaza de Bernini abraza a quien llega con dos brazos de columnas.",
   text: [
@@ -550,18 +550,73 @@ const plazaSanPedro: Stop = {
   viator: { url: "https://audioviator.com/audioguia/plaza-basilica-san-pedro/" },
 };
 
+const cupulaSanPedro: Stop = {
+  id: "cupula-san-pedro",
+  name: "Cúpula de la Basílica de San Pedro",
+  era: "Terminada en 1590",
+  lat: 41.9027,
+  lng: 12.4533,
+  audio: "1 min",
+  teaser: "La cúpula que proyectó Miguel Ángel domina el cielo de Roma.",
+  text: [
+    "Miguel Ángel proyectó la cúpula, pero murió con ella construida solo hasta el tambor. La terminaron en 1590 Giacomo della Porta y Domenico Fontana.",
+    "Con la cruz mide unos 136 metros de altura. Tiene dos cascarones, como la de Brunelleschi en Florencia, en la que se inspiró.",
+    "Subir a pie son 551 escalones.",
+  ],
+};
+
+const jardinesVaticanos: Stop = {
+  id: "jardines-vaticanos",
+  name: "Jardines Vaticanos",
+  era: "Desde el siglo XIII",
+  lat: 41.90306,
+  lng: 12.45056,
+  audio: "1 min",
+  teaser: "La mitad del Vaticano es un jardín que nació en el siglo XIII.",
+  text: [
+    "Los jardines ocupan unas 22 hectáreas, la mitad del territorio del Vaticano.",
+    "El papa Nicolás III plantó entre 1277 y 1280 el primer jardín. Bajo Julio II, Bramante proyectó entre 1503 y 1513 el gran patio del Belvedere.",
+  ],
+};
+
+const necropolisVaticana: Stop = {
+  id: "necropolis-vaticana",
+  name: "Necrópolis Vaticana",
+  era: "Siglos I al IV",
+  lat: 41.902301,
+  lng: 12.453293,
+  audio: "1 min",
+  teaser: "Una ciudad de tumbas romanas bajo la basílica, y el camino a la tumba de San Pedro.",
+  text: [
+    "Bajo la basílica hay un cementerio romano, con calles y mausoleos de ladrillo, que se usó entre el siglo I y principios del IV.",
+    "Las excavaciones, entre 1939 y 1949, las impulsó Pío XII, que en 1950 anunció que se había hallado la tumba de San Pedro.",
+    "La visita exige reserva previa y se hace siempre con un guía autorizado. Dentro no se pueden hacer fotos.",
+  ],
+};
+
 const museosVaticanos: Stop = {
   id: "museos-vaticanos",
   name: "Museos Vaticanos",
   era: "Desde 1506",
-  lat: 41.9065,
-  lng: 12.4536,
+  lat: 41.9057549,
+  lng: 12.4524628,
   audio: "1 min",
   teaser: "Kilómetros de arte, desde la Antigüedad hasta la Capilla Sixtina.",
   text: [
     "Los museos nacieron en 1506, cuando el papa Julio II expuso una estatua recién descubierta, el Laocoonte.",
     "El recorrido termina en la Capilla Sixtina, cuya bóveda pintó Miguel Ángel entre 1508 y 1512.",
     "Conviene reservar la entrada con antelación y llevar los hombros y las rodillas cubiertos.",
+  ],
+  highlights: [
+    { name: "La Capilla Sixtina", note: "Sixto IV la mandó construir y se consagró en 1483. Miguel Ángel pintó la bóveda entre 1508 y 1512 y el Juicio Final, que terminó en 1541. Dentro no se pueden hacer fotos." },
+    { name: "Galería de los Mapas", note: "Cuarenta mapas de Italia pintados al fresco en un pasillo de unos 120 metros. Los encargó Gregorio XIII en 1580 y los dirigió el geógrafo Ignazio Danti." },
+    { name: "Estancias de Rafael", note: "Cuatro salas que el papa Julio II eligió como residencia y que decoraron Rafael y sus discípulos entre 1508 y 1524. En la Stanza della Segnatura está La escuela de Atenas." },
+    { name: "La Escalera de Bramante", note: "Hay dos escaleras de doble hélice: la original, de Bramante, de 1505, y la que se ve al salir, la más fotografiada, que hizo Giuseppe Momo en 1932." },
+    { name: "Sala de los Tapices", note: "Tapices tejidos en Bruselas. Los de esta galería se hicieron con diseños de discípulos de Rafael, en tiempos de Clemente VII, entre 1523 y 1534. Los de Rafael, para la Sixtina, se guardan en la Pinacoteca." },
+    { name: "Galería de los Candelabros", note: "Un pasillo de unos 80 metros, dispuesto con Pío VI entre 1785 y 1788. Debe su nombre a los grandes candelabros de mármol colocados entre las columnas." },
+    { name: "Museo Gregoriano Egipcio", note: "Lo inauguró Gregorio XVI en 1839 con piezas del antiguo Egipto." },
+    { name: "Museo Gregoriano Etrusco", note: "Lo abrió Gregorio XVI en 1837, con objetos hallados en excavaciones del Estado Pontificio en el sur de Etruria." },
+    { name: "Pabellón de las Carrozas", note: "Inaugurado por Pablo VI en 1973. Guarda carrozas, sillas de manos y automóviles de los papas." },
   ],
   viator: {
     url: "https://audioviator.com/audioguia/capilla-sixtina/",
@@ -593,9 +648,18 @@ const baseDays: Day[] = [
   {
     id: "2",
     title: "Vaticano y sus museos",
-    // Orden de ruta hecho a mano, de este a oeste: el castillo, la avenida hasta la plaza, la basílica y, al final, los museos.
+    // Orden del documento de la familia (VATICANO.docx). El Castel Sant'Angelo no está en él: lo he dejado al final, de vuelta
+    // hacia el centro; basta quitarlo de esta lista para que desaparezca del día.
     fixedOrder: true,
-    stops: [castelSantAngelo, plazaSanPedro, basilicaSanPedro, museosVaticanos],
+    stops: [
+      museosVaticanos,
+      plazaSanPedro,
+      basilicaSanPedro,
+      cupulaSanPedro,
+      jardinesVaticanos,
+      necropolisVaticana,
+      castelSantAngelo,
+    ],
   },
   {
     id: "3",
