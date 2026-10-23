@@ -82,9 +82,9 @@ export function StopViewer({ stop }: { stop: Stop }) {
   const hasPhoto = Boolean(stop.photo && points.length > 0);
   const point = points[active];
 
-  // Las fotos panorámicas serían muy bajas en el móvil y los puntos se amontonarían: se dejan más anchas y se desliza.
+  // Las fotos muy panorámicas (más de 2,2 veces más anchas que altas) serían muy bajas en el móvil y los puntos se amontonarían: se dejan más anchas y se desliza.
   const [pw, ph] = (stop.photo?.ratio ?? "1 / 1").split("/").map(Number);
-  const wide = pw / ph > 2;
+  const wide = pw / ph > 2.2;
   const scroller = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const box = scroller.current;

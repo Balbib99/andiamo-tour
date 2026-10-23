@@ -868,8 +868,8 @@ export const guides: Record<string, Guide> = {
         "Bernini lo realizó entre 1624 y 1633 por encargo del papa Urbano octavo. Es de bronce y mide casi veintinueve metros de altura, como un edificio de diez plantas. Se alza sobre el altar mayor, bajo el que está, según la tradición, la tumba de San Pedro.",
       ),
       basilica(
-        860,
-        1100,
+        940,
+        1060,
         "Las columnas retorcidas",
         "Las cuatro columnas helicoidales se inspiran en las de mármol que rodeaban la tumba de San Pedro en la antigua basílica. Su forma en espiral da una sensación de movimiento a una obra enorme y pesada.",
       ),
