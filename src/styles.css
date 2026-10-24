@@ -282,11 +282,13 @@ h2 {
   font-family: var(--display);
   font-style: italic;
   font-size: clamp(1.25rem, 5vw, 1.6rem);
-  color: var(--marble);
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  /* Va sobre la foto y su degradado oscuro en los dos temas: blanco fijo (--marble se oscurece en el tema oscuro y se perdía). */
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
 }
 .home-hero-copy h1 {
   margin: 2px 0 0;
+  color: #fff;
   font-size: clamp(3rem, 15vw, 4.5rem);
   line-height: 0.98;
   text-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
