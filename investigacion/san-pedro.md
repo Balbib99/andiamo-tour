@@ -51,7 +51,7 @@ Las cifras entre paréntesis como (S1) remiten a la lista de fuentes del final. 
 
 Antes de ser el corazón de la cristiandad, la colina Vaticana era un lugar poco recomendable: allí estaba el **Circo de Nerón**, y según la tradición cristiana, **san Pedro fue martirizado y enterrado allí hacia el año 64**, bajo Nerón (S1) **[Tradición]**. **San Jerónimo** cuenta que lo **crucificaron cabeza abajo**, a petición del propio Pedro, que se consideraba indigno de morir como Jesús (S1) **[Tradición]**.
 
-**La excavación.** Desde **1939** se excavó bajo la basílica y se hallaron restos de un santuario en distintos niveles. El **23 de diciembre de 1950**, el papa **Pío XII** anunció el descubrimiento de la tumba de san Pedro, a partir de unos fragmentos de huesos envueltos en un paño de color púrpura (S1) **[Documentado que se hallaron; Debatido que sean de Pedro]**. Es un momento fascinante para el podcast: un pontífice anunciando, en plena Navidad, que la arqueología había encontrado al pescador de Galilea.
+**La excavación.** Desde **1939** se excavó bajo la basílica y se hallaron restos de un santuario en distintos niveles. El **23 de diciembre de 1950**, el papa **Pío XII** anunció que se había hallado la tumba de san Pedro, con cautela sobre si los restos eran suyos (S1) **[Documentado que se hallaron; Debatido que sean de Pedro]**. Es un momento fascinante para el podcast: un pontífice anunciando, en plena Navidad, que la arqueología había encontrado al pescador de Galilea.
 
 ### 3.2 La primera basílica, la de Constantino
 

@@ -102,7 +102,7 @@ export const guides: Record<string, Guide> = {
         650,
         490,
         "El Altar de la Patria",
-        "Al pie de la estatua de la diosa Roma está la Tumba del Soldado Desconocido, con una llama encendida y guardia de honor. Se colocó en 1921, después de la Primera Guerra Mundial, y por eso el monumento se llama también Altar de la Patria.",
+        "Al pie de la estatua de la diosa Roma está la Tumba del Soldado Desconocido, con una llama encendida y guardia de honor. Su soldado se enterró aquí en 1921, después de la Primera Guerra Mundial. El altar da nombre popular a todo el monumento: Altar de la Patria.",
       ),
       vittoriano(
         310,

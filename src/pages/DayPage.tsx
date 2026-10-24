@@ -89,8 +89,15 @@ export function DayPage() {
             )}
           </div>
 
+          {foot && !foot.exact && (
+            <p className="hint hint-small">
+              La línea del mapa es aproximada (recta entre paradas): no se ha podido calcular el camino por las calles.
+            </p>
+          )}
+
           <div className="actions">
-            {following ? (
+            {/* Sin permiso de ubicación (o sin GPS) la ruta no está en marcha: el botón sigue ofreciendo empezarla de nuevo. */}
+            {following && status !== "denied" && status !== "unsupported" ? (
               <button type="button" className="btn btn-primary btn-wide" onClick={stop}>
                 Parar ruta
               </button>

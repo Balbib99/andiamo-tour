@@ -10,8 +10,10 @@ import {
   removeDownloads,
   supportsOffline,
   totalBytes,
+  offlineReady,
   type OfflineManifest,
   type Progress,
+  type SavedPart,
   type SavedState,
 } from "../lib/offline";
 import { CheckIcon, ChevronDown } from "./Icons";
@@ -46,6 +48,8 @@ export function OfflineCard() {
   const [error, setError] = useState<string | null>(null);
   const [failed, setFailed] = useState<string | null>(null);
   const [install, setInstall] = useState<InstallPromptEvent | null>(null);
+  // false si el service worker no se ha registrado: sin él la web no abre sin conexión aunque se descargue todo.
+  const [workerOk, setWorkerOk] = useState(true);
   const abort = useRef<AbortController | null>(null);
   const online = useOnline();
 
@@ -58,6 +62,7 @@ export function OfflineCard() {
       if (!alive || !m) return;
       setManifest(m);
       void refresh(m);
+      void offlineReady().then((ok) => alive && setWorkerOk(ok));
     });
     return () => {
       alive = false;
@@ -93,9 +98,13 @@ export function OfflineCard() {
       if (!(e instanceof DOMException && e.name === "AbortError")) {
         setFailed(id);
         setError(
-          navigator.onLine
-            ? "No se pudo completar la descarga. Vuelve a intentarlo: lo que ya se bajó no se repite."
-            : "Te has quedado sin conexión. Vuelve a intentarlo con wifi: lo que ya se bajó no se repite.",
+          e instanceof DOMException && e.name === "QuotaExceededError"
+            ? "Se ha llenado el espacio del móvil. Libera espacio y vuelve a intentarlo: lo que ya se bajó no se repite."
+            : e instanceof Error && e.message === "rutas"
+              ? "Las fotos y las guías se han guardado, pero faltan las rutas por las calles (sin ellas la línea del mapa saldrá recta). Vuelve a intentarlo."
+              : navigator.onLine
+                ? "No se pudo completar la descarga. Vuelve a intentarlo: lo que ya se bajó no se repite."
+                : "Te has quedado sin conexión. Vuelve a intentarlo con wifi: lo que ya se bajó no se repite.",
         );
       }
     } finally {
@@ -111,7 +120,9 @@ export function OfflineCard() {
     void refresh(manifest);
   };
 
-  const row = (id: string, label: string, detail: string, done: boolean, bytes: number, start: () => void) => {
+  const row = (id: string, label: string, detail: string, part: SavedPart | undefined, bytes: number, start: (verify: boolean) => void) => {
+    const done = part !== undefined && part.done === part.total;
+    const stale = done && part.stale;
     const active = busy === id;
     const didFail = failed === id && !active;
     const pct = progress && progress.bytesTotal ? Math.round((progress.bytes / progress.bytesTotal) * 100) : 0;
@@ -124,7 +135,9 @@ export function OfflineCard() {
               ? `${progress.done} de ${progress.total} archivos · ${formatMB(progress.bytes)} de ${formatMB(progress.bytesTotal)}`
               : didFail
                 ? "No se pudo descargar"
-                : `${detail} · ${formatMB(bytes)}`}
+                : stale
+                  ? "Hay contenido nuevo desde la última descarga"
+                  : `${detail} · ${formatMB(bytes)}`}
           </p>
           {active && (
             <div className="offline-bar" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={label}>
@@ -136,13 +149,13 @@ export function OfflineCard() {
           <button type="button" className="btn btn-small" onClick={() => abort.current?.abort()}>
             Cancelar
           </button>
-        ) : done ? (
+        ) : done && !stale ? (
           <span className="offline-done">
             <CheckIcon /> Guardado
           </span>
         ) : (
-          <button type="button" className="btn btn-small btn-primary" disabled={busy !== null || !online} onClick={start}>
-            {didFail ? "Reintentar" : "Descargar"}
+          <button type="button" className="btn btn-small btn-primary" disabled={busy !== null || !online} onClick={() => start(stale)}>
+            {didFail ? "Reintentar" : stale ? "Actualizar" : "Descargar"}
           </button>
         )}
       </li>
@@ -154,16 +167,19 @@ export function OfflineCard() {
 
   const basicDone = saved.basico.done === saved.basico.total;
   const daysDone = manifest.dias.filter((d) => saved.dias[d.id]?.done === d.archivos.length).length;
+  const anyStale = saved.basico.stale || Object.values(saved.dias).some((d) => d.stale);
   const summary = busy
     ? "Descargando…"
-    : basicDone
-      ? daysDone === manifest.dias.length
-        ? "Todo guardado en el móvil"
-        : `Fotos y guías de voz guardadas · podcasts ${daysDone} de ${manifest.dias.length} días`
-      : "Aún sin descargar";
+    : anyStale
+      ? "Hay contenido nuevo: actualiza con wifi"
+      : basicDone
+        ? daysDone === manifest.dias.length
+          ? "Todo guardado en el móvil"
+          : `Fotos y guías de voz guardadas · podcasts ${daysDone} de ${manifest.dias.length} días`
+        : "Aún sin descargar";
 
   return (
-    <details className="offline" open={!basicDone || undefined}>
+    <details className="offline" open={!basicDone || anyStale || undefined}>
       <summary className="offline-summary">
         <span>
           <strong>Usar sin conexión</strong>
@@ -177,6 +193,12 @@ export function OfflineCard() {
         Descárgalo con wifi para no gastar datos ni depender de la cobertura. El GPS y los avisos de cercanía
         funcionan igual sin internet.
       </p>
+      {!workerOk && (
+        <p className="offline-error" role="alert">
+          Este navegador no ha activado el modo sin conexión: la web no abrirá sin internet. Abre la web una vez con
+          conexión y recarga; si sigue igual, prueba con Chrome.
+        </p>
+      )}
       {!online && <p className="offline-note">Ahora mismo no tienes conexión: solo se puede usar lo que ya está guardado.</p>}
 
       <ul className="offline-list">
@@ -184,10 +206,9 @@ export function OfflineCard() {
           "basico",
           "Lo básico",
           "Fotos, guías de voz y rutas",
-          saved.basico.done === saved.basico.total,
+          saved.basico,
           basicBytes,
-          () =>
-            run("basico", basicBytes, (p, s) => downloadBasic(manifest, p, s)),
+          (verify) => run("basico", basicBytes, (p, s) => downloadBasic(manifest, p, s, verify)),
         )}
         {manifest.dias.map((d, i) => {
           const bytes = totalBytes(d.archivos);
@@ -195,9 +216,9 @@ export function OfflineCard() {
             `dia-${d.id}`,
             `Podcasts del día ${romanNumerals[i] ?? d.id}`,
             `${d.archivos.length} podcasts`,
-            saved.dias[d.id]?.done === d.archivos.length,
+            saved.dias[d.id],
             bytes,
-            () => run(`dia-${d.id}`, bytes, (p, s) => downloadDay(manifest, d.id, p, s)),
+            (verify) => run(`dia-${d.id}`, bytes, (p, s) => downloadDay(manifest, d.id, p, s, verify)),
           );
         })}
       </ul>

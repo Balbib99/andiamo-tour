@@ -1,6 +1,7 @@
 import { days, startPoint } from "../data/itinerario";
 import { routePoints } from "./geo";
 import { footRouteUrl } from "./routing";
+import { load, save } from "./storage";
 
 /**
  * Uso de la web sin conexión. El service worker (public/sw.js) sirve lo que hay guardado; aquí está el lado de la
@@ -21,7 +22,9 @@ export interface OfflineManifest {
   version: string;
   shell: string[];
   basico: OfflineFile[];
-  dias: { id: string; title: string; archivos: OfflineFile[] }[];
+  /** Huella de `basico` y de los podcasts de cada día: si cambia respecto a la guardada, hay contenido nuevo. */
+  basicoHash?: string;
+  dias: { id: string; title: string; archivos: OfflineFile[]; hash?: string }[];
 }
 
 export interface Progress {
@@ -33,14 +36,34 @@ export interface Progress {
 
 export const supportsOffline = () => typeof caches !== "undefined" && "serviceWorker" in navigator;
 
+/** Avisa a la web cuando una versión nueva de la app ha tomado el control, para ofrecer recargar. */
+const updateListeners = new Set<() => void>();
+export function onAppUpdate(cb: () => void): () => void {
+  updateListeners.add(cb);
+  return () => {
+    updateListeners.delete(cb);
+  };
+}
+
 /** Registra el service worker. Solo en la web publicada: en desarrollo daría problemas de cachés. */
 export function registerServiceWorker(): void {
   if (!import.meta.env.PROD || !("serviceWorker" in navigator)) return;
+  // Si ya había uno al abrir, un cambio de controlador significa que se ha instalado una versión nueva.
+  const hadController = Boolean(navigator.serviceWorker.controller);
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (hadController) updateListeners.forEach((cb) => cb());
+  });
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/sw.js").catch(() => {
-      /* sin service worker la web sigue funcionando con internet */
+      /* sin service worker la web sigue funcionando con internet; la tarjeta de la portada avisa de que no hay modo sin conexión */
     });
   });
+}
+
+/** true si el service worker está registrado en este navegador. */
+export async function offlineReady(): Promise<boolean> {
+  if (!("serviceWorker" in navigator)) return false;
+  return Boolean(await navigator.serviceWorker.getRegistration());
 }
 
 let manifest: Promise<OfflineManifest | null> | null = null;
@@ -64,25 +87,65 @@ async function countSaved(cacheName: string, files: OfflineFile[]): Promise<{ do
   return { done: have.length, bytes: sum(have) };
 }
 
-export interface SavedState {
-  basico: { done: number; total: number };
-  dias: Record<string, { done: number; total: number }>;
+/** Rutas a pie previstas de cada día (las que se guardan para ver la línea por las calles sin conexión). */
+const dayRouteUrls = () => days.filter((d) => d.stops.length).map((d) => footRouteUrl(routePoints(startPoint, d.stops)));
+
+async function countRoutes(): Promise<{ done: number; total: number }> {
+  const urls = dayRouteUrls();
+  const cache = await caches.open(ROUTES_DAYS);
+  let done = 0;
+  for (const u of urls) if (await cache.match(u)) done++;
+  return { done, total: urls.length };
 }
+
+export interface SavedPart {
+  done: number;
+  total: number;
+  /** true si está todo guardado pero la web tiene contenido nuevo desde la última descarga. */
+  stale: boolean;
+}
+
+export interface SavedState {
+  basico: SavedPart;
+  dias: Record<string, SavedPart>;
+}
+
+/** Huella que había en la web cuando se descargó cada parte; se compara con la de ahora para saber si hay algo nuevo. */
+const key = (id: string) => `offline:${id}`;
 
 export async function getSavedState(m: OfflineManifest): Promise<SavedState> {
-  const basico = await countSaved(STATIC, m.basico);
+  const files = await countSaved(STATIC, m.basico);
+  const routes = await countRoutes();
+  const basico: SavedPart = { done: files.done + routes.done, total: m.basico.length + routes.total, stale: false };
+  basico.stale = basico.done === basico.total && load<string | null>(key("basico"), null) !== (m.basicoHash ?? null);
   const dias: SavedState["dias"] = {};
-  for (const d of m.dias) dias[d.id] = { done: (await countSaved(PODCASTS, d.archivos)).done, total: d.archivos.length };
-  return { basico: { done: basico.done, total: m.basico.length }, dias };
+  for (const d of m.dias) {
+    const c = await countSaved(PODCASTS, d.archivos);
+    const complete = c.done === d.archivos.length;
+    dias[d.id] = { done: c.done, total: d.archivos.length, stale: complete && load<string | null>(key(`dia-${d.id}`), null) !== (d.hash ?? null) };
+  }
+  return { basico, dias };
 }
 
-/** Descarga una lista de archivos a una caché, saltándose los que ya están. Para si se pasa la señal de cancelar. */
+/** Si lo guardado de ese archivo tiene el mismo tamaño que el que hay ahora en la web. */
+async function isCurrent(cache: Cache, f: OfflineFile): Promise<boolean> {
+  const hit = await cache.match(f.url);
+  if (!hit) return false;
+  const len = hit.headers.get("content-length");
+  return (len !== null ? Number(len) : (await hit.blob()).size) === f.size;
+}
+
+/**
+ * Descarga una lista de archivos a una caché, saltándose los que ya están. Con `verify` también vuelve a bajar los
+ * guardados cuyo tamaño ya no coincide (al actualizar). Para si se pasa la señal de cancelar.
+ */
 async function download(
   files: OfflineFile[],
   cacheName: string,
   onProgress: (p: Progress) => void,
   signal: AbortSignal,
   concurrency: number,
+  verify: boolean,
 ): Promise<void> {
   const cache = await caches.open(cacheName);
   const bytesTotal = sum(files);
@@ -99,7 +162,7 @@ async function download(
   const worker = async () => {
     for (let f = queue.shift(); f; f = queue.shift()) {
       if (signal.aborted) return;
-      if (!(await cache.match(f.url))) {
+      if (!(verify ? await isCurrent(cache, f) : await cache.match(f.url))) {
         const resp = await fetch(f.url, { signal, cache: "no-cache" });
         if (!resp.ok) throw new Error(`${resp.status} ${f.url}`);
         await cache.put(f.url, resp);
@@ -117,37 +180,45 @@ const keepSaved = () => navigator.storage?.persist?.().catch(() => false);
 /** Guarda las rutas a pie previstas de cada día, para ver la línea por las calles sin conexión. */
 async function downloadDayRoutes(signal: AbortSignal): Promise<void> {
   const cache = await caches.open(ROUTES_DAYS);
-  for (const day of days) {
-    if (!day.stops.length || signal.aborted) continue;
-    const url = footRouteUrl(routePoints(startPoint, day.stops));
+  let missing = 0;
+  for (const url of dayRouteUrls()) {
+    if (signal.aborted) return;
     if (await cache.match(url)) continue;
     try {
       const resp = await fetch(url, { signal });
       if (resp.ok) await cache.put(url, resp);
-    } catch {
-      /* si falla, la ruta se dibujará en línea recta sin conexión */
+      else missing++;
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") throw e;
+      missing++;
     }
   }
+  // Sin esas rutas la línea del mapa saldría recta: se avisa para poder reintentarlo.
+  if (missing > 0) throw new Error("rutas");
 }
 
 /** Fotos, guías de voz, datos y rutas de los días. */
-export async function downloadBasic(m: OfflineManifest, onProgress: (p: Progress) => void, signal: AbortSignal) {
+export async function downloadBasic(m: OfflineManifest, onProgress: (p: Progress) => void, signal: AbortSignal, verify = false) {
   await keepSaved();
-  await download(m.basico, STATIC, onProgress, signal, 4);
+  await download(m.basico, STATIC, onProgress, signal, 4, verify);
   await downloadDayRoutes(signal);
+  if (signal.aborted) throw new DOMException("Cancelado", "AbortError");
+  save(key("basico"), m.basicoHash ?? null);
 }
 
 /** Los podcasts de un día. */
-export async function downloadDay(m: OfflineManifest, dayId: string, onProgress: (p: Progress) => void, signal: AbortSignal) {
+export async function downloadDay(m: OfflineManifest, dayId: string, onProgress: (p: Progress) => void, signal: AbortSignal, verify = false) {
   const day = m.dias.find((d) => d.id === dayId);
   if (!day) return;
   await keepSaved();
-  await download(day.archivos, PODCASTS, onProgress, signal, 1);
+  await download(day.archivos, PODCASTS, onProgress, signal, 1, verify);
+  save(key(`dia-${dayId}`), day.hash ?? null);
 }
 
 /** Borra todo lo descargado (la app básica se vuelve a guardar sola al entrar con internet). */
 export async function removeDownloads(): Promise<void> {
   await Promise.all(CACHES.map((name) => caches.delete(name)));
+  for (const id of ["basico", ...days.map((d) => `dia-${d.id}`)]) save(key(id), null);
 }
 
 /** Espacio que queda aproximadamente, en bytes (null si el navegador no lo dice). */
@@ -158,5 +229,5 @@ export async function freeSpace(): Promise<number | null> {
 
 export const formatMB = (bytes: number) => {
   const mb = bytes / 1048576;
-  return `${mb >= 10 ? Math.round(mb) : mb.toFixed(1).replace(".", ",")} MB`; // espacio fijo: que no se parta "19 / MB"
+  return `${mb >= 10 ? Math.round(mb) : mb.toFixed(1).replace(".", ",")} MB`; // espacio fijo: que no se parta "19 / MB"
 };

@@ -1,6 +1,6 @@
 # Cómo crear los podcasts con NotebookLM
 
-Esta guía acompaña a los 18 dosieres de la carpeta `investigacion/`. Cada dosier es **un cuaderno y un podcast**.
+Esta guía acompaña a los 21 dosieres de la carpeta `investigacion/`. Cada dosier es **un cuaderno y un podcast**.
 
 ## 1. Los dosieres, por orden de viaje
 
@@ -28,6 +28,11 @@ Esta guía acompaña a los 18 dosieres de la carpeta `investigacion/`. Cada dosi
 17. `vittoriano.md`
 18. `largo-argentina-y-barrio-judio.md`
 
+**Día 2, añadidos después** (el podcast 9, «Plaza y Basílica de San Pedro», ya sirve también para la cúpula)
+19. `necropolis-vaticana.md`
+20. `jardines-vaticanos.md`
+21. `castel-sant-angelo.md`
+
 Ningún dosier habla de horarios, precios, entradas ni de cuándo visitar: el material es solo historia, mitología, arte y curiosidades.
 
 ## 2. Preparar el cuaderno
@@ -41,11 +46,11 @@ Ningún dosier habla de horarios, precios, entradas ni de cuándo visitar: el ma
 
 En la sección de resumen de audio (*Audio Overview*) de cada cuaderno, abre **Personalizar**. Si te deja elegir la duración, pon la más **corta** que ofrezca (a veces se llama "breve" o "short"); si solo hay una duración, no importa, porque el propio texto de instrucciones le pide que sea breve. Si te ofrece un formato de conversación, el de "inmersión" (*Deep Dive*) funciona bien. Los nombres exactos de las opciones cambian según la versión.
 
-Después, en el cuadro de instrucciones, pega el texto de **ese** podcast (apartado 4). Son 18 textos ya completos, listos para copiar y pegar tal cual: no hay que rellenar nada a mano.
+Después, en el cuadro de instrucciones, pega el texto de **ese** podcast (apartado 4). Son 21 textos ya completos, listos para copiar y pegar tal cual: no hay que rellenar nada a mano.
 
 **Límite de duración: 20 minutos como máximo, sin mínimo.** Si un episodio sale más largo, dímelo y te lo endurezco en el propio texto (o lo intentas de nuevo: NotebookLM no siempre da la misma duración con el mismo texto).
 
-## 4. Los 18 podcasts: nombre y texto para NotebookLM
+## 4. Los 21 podcasts: nombre y texto para NotebookLM
 
 ### 1. Santa María in Cosmedin y el Foro Boario
 
@@ -177,3 +182,15 @@ Los dosieres no incluyen horarios, precios, entradas, cómo llegar ni consejos d
 ## 8. Sobre la fiabilidad de los dosieres
 
 Los dosieres se han hecho a partir de Wikipedia (inglés e italiano) y de la web oficial del parque arqueológico del Coliseo; no se pudieron consultar ni Britannica ni los textos de los autores antiguos. En cada dosier, el apartado final "Límites de esta investigación" enumera lo que **no** se ha podido comprobar y está marcado como "de memoria". Cuando las fuentes daban cifras distintas, el dosier lo dice.
+
+### 19. Necrópolis Vaticana
+
+> Crea un episodio breve, de 20 minutos como máximo, en español de España, para dos viajeros que van a recorrer la Necrópolis Vaticana, la ciudad de los muertos que hay bajo la Basílica de San Pedro. Tono cercano y sereno, con respeto: es un tema de fe y también de arqueología, así que cuenta las dos cosas sin tomar partido. Cuenta cómo se descubrió al excavar para enterrar a un papa, la calle de mausoleos romanos paganos y cristianos, el mosaico de Cristo como sol en la tumba de los Julios, el «trofeo de Gayo» y el muro de los grafitos, la caja de huesos y la polémica entre Guarducci y los arqueólogos, y lo que dijo Pablo VI en 1968. Explica con claridad qué está demostrado, qué es interpretación de la Iglesia y qué critican los especialistas. No hables de horarios, precios, entradas, reservas, colas, cómo llegar ni de cuándo conviene visitarlo: solo historia, arte y curiosidades. Distingue siempre lo documentado de la tradición y di con claridad cuándo las fuentes no están de acuerdo. Usa únicamente lo que dicen las fuentes: si un dato no está en ellas, no lo añadas. Sé conciso: no hace falta rellenar tiempo, mejor un episodio corto y denso que uno largo con paja. Cierra con una idea sobre cómo bajo el mayor templo de la cristiandad hay una calle de tumbas romanas corrientes.
+
+### 20. Jardines Vaticanos
+
+> Crea un episodio breve, de 20 minutos como máximo, en español de España, para dos viajeros que van a recorrer los Jardines Vaticanos. Tono cercano, con humor suave. Cuenta cómo nacieron como huerto y viñedo medieval de los papas, cómo los convirtieron en jardines del Renacimiento, la Casina de Pío IV, la gruta de Lourdes, las fuentes y la torre de San Juan, y cómo conviven hoy la botánica, la historia y el arte en un territorio que es casi la mitad del Estado más pequeño del mundo. Si las fuentes dan cifras distintas (como la superficie), dilo y no elijas. No hables de horarios, precios, entradas, reservas, colas, cómo llegar ni de cuándo conviene visitarlo: solo historia, arte y curiosidades. Distingue siempre lo documentado de la tradición y di con claridad cuándo las fuentes no están de acuerdo. Usa únicamente lo que dicen las fuentes: si un dato no está en ellas, no lo añadas. Sé conciso: no hace falta rellenar tiempo, mejor un episodio corto y denso que uno largo con paja. Cierra con una idea sobre cómo un huerto de papas acabó siendo un jardín del mundo.
+
+### 21. Castel Sant'Angelo y el Ponte Sant'Angelo
+
+> Crea un episodio breve, de 20 minutos como máximo, en español de España, para dos viajeros que van a ver el Castel Sant'Angelo y el puente de los ángeles de Bernini. Tono cercano, con humor suave. Cuenta cómo un mausoleo imperial para Adriano acabó siendo fortaleza, prisión y refugio de papas, el Passetto di Borgo, el saqueo de Roma de 1527, el ángel que da nombre al castillo y la leyenda de la peste, y los ángeles del puente. Cuando las fuentes no se pongan de acuerdo en fechas (por ejemplo cuándo empezó el mausoleo, la fortaleza, el Passetto o los ángeles), dilo con claridad y no elijas una. No hables de horarios, precios, entradas, reservas, colas, cómo llegar ni de cuándo conviene visitarlo: solo historia, arte y curiosidades. Distingue siempre lo documentado de la tradición y di con claridad cuándo las fuentes no están de acuerdo. Usa únicamente lo que dicen las fuentes: si un dato no está en ellas, no lo añadas. Sé conciso: no hace falta rellenar tiempo, mejor un episodio corto y denso que uno largo con paja. Cierra con una idea sobre cómo un edificio cambió de uso durante casi dos mil años sin dejar de ser el mismo.

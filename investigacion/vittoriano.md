@@ -51,7 +51,7 @@ Para levantar el monumento se hicieron **enormes demoliciones de edificios medie
 
 ### 3.4 El Soldado Desconocido
 
-En **1921**, tras la Primera Guerra Mundial, el cuerpo de un **soldado italiano desconocido** se enterró bajo la estatua de la **diosa Roma** (V1) **[Documentado]**. Así el monumento pasó de rendir homenaje a un rey a homenajear a los muertos de la guerra, y de ahí su nombre de **Altar de la Patria**. Un soldado sin nombre representa a todos.
+En **1921**, tras la Primera Guerra Mundial, el cuerpo de un **soldado italiano desconocido** se enterró bajo la estatua de la **diosa Roma** (V1) **[Documentado]**. Así el monumento pasó de rendir homenaje a un rey a homenajear a los muertos de la guerra. El nombre «Altar de la Patria» es anterior (se usa desde la inauguración, en 1911, para el altar de la diosa Roma) y la tumba de 1921 lo reforzó y lo extendió a todo el monumento. Un soldado sin nombre representa a todos.
 
 ### 3.5 Los apodos
 

@@ -204,7 +204,7 @@ export function StopViewer({ stop }: { stop: Stop }) {
                 disabled={active === 0}
                 onClick={() => choose(active - 1)}
               >
-                Anterior
+                Punto anterior
               </button>
               <button
                 type="button"
@@ -212,7 +212,7 @@ export function StopViewer({ stop }: { stop: Stop }) {
                 disabled={active === points.length - 1}
                 onClick={() => choose(active + 1)}
               >
-                Siguiente
+                Punto siguiente
               </button>
             </div>
           </div>

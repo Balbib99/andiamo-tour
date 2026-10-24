@@ -18,9 +18,9 @@ const panteon: Stop = {
   lat: 41.8986,
   lng: 12.4769,
   audio: "1 min",
-  teaser: "El templo de todos los dioses, con la cúpula de hormigón más grande del mundo.",
+  teaser: "El templo de todos los dioses, con la mayor cúpula de hormigón sin armar del mundo.",
   text: [
-    "Agripa levantó el primer templo en el 27 a. C., pero el edificio que veis hoy lo reconstruyó el emperador Adriano hacia el año 126.",
+    "Agripa levantó el primer templo hacia el 27 a. C., pero el edificio que veis hoy lo reconstruyó el emperador Adriano hacia el año 126.",
     "Su cúpula mide 43 metros de diámetro y sigue siendo la mayor de hormigón sin armar del mundo. Por el óculo central entra la luz, y también la lluvia.",
     "Desde el año 609 es una iglesia, y eso lo salvó del expolio.",
   ],
@@ -97,7 +97,7 @@ const vittoriano: Stop = {
 const foroRomano: Stop = {
   id: "foro-romano",
   name: "Foro Romano",
-  era: "Siglo VII a. C. al siglo IV d. C.",
+  era: "Siglo VII a. C. al siglo VII d. C.",
   lat: 41.89246,
   lng: 12.48532,
   audio: "2 min",
@@ -110,7 +110,7 @@ const foroRomano: Stop = {
   ],
   viator: {
     url: "https://audioviator.com/audioguia/foros-imperiales/",
-    note: "Audioguía de los Foros Imperiales, para completar la zona.",
+    note: "Audioguía gratuita de los Foros Imperiales (servicio externo, no oficial), para completar la zona.",
   },
   highlights: [
     { name: "Templo de Venus y Roma", note: "Fue el templo más grande de la Roma antigua y lo proyectó el emperador Adriano.", lat: 41.89083, lng: 12.48998 },

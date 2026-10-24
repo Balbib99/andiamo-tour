@@ -24,6 +24,10 @@ export const podcasts: Record<string, Podcast> = {
   "acqua-paola": { file: "gianicolo", min: 23 },
   gianicolo: { file: "gianicolo", min: 23 },
   "plaza-san-pedro": { file: "san-pedro", min: 22 },
+  "basilica-san-pedro": { file: "san-pedro", min: 22 },
+  "cupula-san-pedro": { file: "san-pedro", min: 22 },
+  // Pendientes de generar con NotebookLM (dosieres en investigacion/): necropolis-vaticana, jardines-vaticanos y
+  // castel-sant-angelo. Al tener el .m4a en public/podcast, añadir aquí su parada con el mismo nombre de archivo.
   "museos-vaticanos": { file: "museos-vaticanos-y-capilla-sixtina", min: 23 },
   "piazza-navona": { file: "piazza-navona-y-campo-de-fiori", min: 20 },
   "campo-de-fiori": { file: "piazza-navona-y-campo-de-fiori", min: 20 },

@@ -40,6 +40,10 @@ const shell = [
 // Fotos, guías de voz y datos.
 const basico = [...under("/img/"), ...under("/audio/"), ...under("/data/")];
 
+// Huella de una lista de archivos (nombres y tamaños): cambia si se añade, quita o cambia algo. La web la compara con la
+// guardada al descargar para avisar de que hay contenido nuevo.
+const huella = (files) => createHash("sha1").update(JSON.stringify(files)).digest("hex").slice(0, 10);
+
 // Podcasts de cada día, sin repetir los que sirven para varias paradas.
 const dias = days.map((d) => {
   const files = [...new Set(d.stops.map((s) => podcasts[s.id]?.file).filter(Boolean))];
@@ -49,7 +53,7 @@ const dias = days.map((d) => {
     if (!f) throw new Error(`Falta el podcast ${url} en dist/`);
     return f;
   });
-  return { id: d.id, title: d.title, archivos };
+  return { id: d.id, title: d.title, archivos, hash: huella(archivos) };
 });
 
 const version = createHash("sha1")
@@ -58,7 +62,7 @@ const version = createHash("sha1")
   .digest("hex")
   .slice(0, 10);
 
-writeFileSync(join(DIST, "offline-manifest.json"), JSON.stringify({ version, shell, basico, dias }));
+writeFileSync(join(DIST, "offline-manifest.json"), JSON.stringify({ version, shell, basico, basicoHash: huella(basico), dias }));
 
 const sw = readFileSync(join(DIST, "sw.js"), "utf8");
 const marcador = 'const VERSION = "__VERSION__";';

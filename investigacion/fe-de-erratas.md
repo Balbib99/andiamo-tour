@@ -28,6 +28,7 @@ a sí mismo. Se indica en cada caso.
 | `trastevere` y `largo-argentina-y-barrio-judio` | Sinagoga de Trastevere: «980/1073» en un dosier y «1101» en el otro | Las fuentes no coinciden; **no dar fecha exacta** (siglos XI-XII) | Los dos dosieres se contradecían |
 | `piazza-navona-y-campo-de-fiori` | El estadio de Domiciano tenía «capacidad de 15.000 espectadores» | Las fuentes dan entre 15.000 y 30.000: **no dar cifra** | Wikipedia (Stadium of Domitian) dice 30.000 |
 | `aventino` | Las puertas de Santa Sabina tienen «la primera crucifixión pública conocida» | Una de las **primeras representaciones seguras**. Y santo Domingo vivió allí «1220-1221»: se le invitó en 1220 y el convento se le entregó en 1222 | Wikipedia (Santa Sabina) |
+| `san-pedro` | En 1950 Pío XII anunció la tumba «a partir de huesos envueltos en un paño púrpura» | En 1950 anunció el hallazgo de la tumba, con cautela sobre las reliquias. Los huesos con tela púrpura son de la caja que recuperó Guarducci en 1953 | Contrastado al preparar el dosier de la Necrópolis Vaticana |
 | `campidoglio-y-museos-capitolinos` | En 1471 Sixto IV donó «fragmentos colosales de Constantino» | La Wikipedia inglesa dice **Domiciano**; otras fuentes, Constantino. No afirmar ninguno | Las fuentes se contradicen |
 
 ## Errores en la web (y audios regenerados)

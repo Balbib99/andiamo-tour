@@ -719,6 +719,31 @@ h2 {
   max-width: 44ch;
 }
 
+.update-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  border: 1px solid var(--stone);
+  border-radius: 12px;
+  background: var(--paper);
+  font-size: 0.9375rem;
+}
+
+.error-box {
+  margin: 40px 0;
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+.error-box p {
+  margin: 0;
+  color: var(--muted);
+  max-width: 40ch;
+}
+
 /* ---------- Día y ruta ---------- */
 .back {
   display: inline-flex;
@@ -2253,7 +2278,10 @@ a.step:hover .step-name {
   text-transform: uppercase;
 }
 .next-info strong {
-  display: block;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
   font-weight: 600;
   line-height: 1.25;
 }

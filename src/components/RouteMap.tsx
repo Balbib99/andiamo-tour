@@ -187,7 +187,7 @@ export function RouteMap({ dayId, stopId }: Props) {
     // El mapa está oculto en la portada en móvil: al mostrarse hay que recalcular su tamaño.
     let wasHidden = false;
     const observer = new ResizeObserver(() => {
-      const hidden = !box.current || box.current.clientWidth === 0;
+      const hidden = !box.current || box.current.clientWidth === 0 || box.current.clientHeight === 0;
       if (hidden) {
         wasHidden = true;
         return;
@@ -274,7 +274,9 @@ export function RouteMap({ dayId, stopId }: Props) {
   useEffect(() => {
     const view = () => {
       const m = map.current;
-      if (!m || !box.current || box.current.clientWidth === 0) return;
+      // Con el mapa sin tamaño (oculto, o aún sin altura al montar la parada) Leaflet calcula NaN y rompe la pantalla.
+      if (!m || !box.current || box.current.clientWidth === 0 || box.current.clientHeight === 0) return;
+      m.invalidateSize();
       const narrow = box.current.clientWidth < 600;
       const padding: L.PointTuple = narrow ? [30, 30] : [60, 60];
       const active = stops.find((s) => s.id === stopId);
